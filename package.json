@@ -1,0 +1,21 @@
+{
+  "name": "tanks",
+  "version": "0.0.1",
+  "description": "pixi.js tanks",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KlimMalgin/tanks.git"
+  },
+  "author": "KlimMalgin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KlimMalgin/tanks/issues"
+  },
+  "homepage": "https://github.com/KlimMalgin/tanks#readme",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
