@@ -1,0 +1,48 @@
+{"frames": {
+
+"blue-tank.png":
+{
+	"frame": {"x":0,"y":0,"w":86,"h":86},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":86,"h":86},
+	"sourceSize": {"w":86,"h":86},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"fire.png":
+{
+	"frame": {"x":0,"y":86,"w":85,"h":84},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":85,"h":84},
+	"sourceSize": {"w":85,"h":84},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"green-tank.png":
+{
+	"frame": {"x":0,"y":170,"w":86,"h":85},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":86,"h":85},
+	"sourceSize": {"w":86,"h":85},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"tile.png":
+{
+	"frame": {"x":0,"y":255,"w":84,"h":84},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":84,"h":84},
+	"sourceSize": {"w":84,"h":84},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "tanks.sprite.png",
+	"format": "RGBA8888",
+	"size": {"w":86,"h":339},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:e9e0bef74f5ce7fd5402688a27a0467a:efe20606af33ded4be478dd4dea37a79:6c4326bc77539486cc6f1f70d7249e97$"
+}
+}
