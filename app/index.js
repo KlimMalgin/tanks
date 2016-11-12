@@ -4,7 +4,8 @@ var Container = PIXI.Container,
     autoDetectRenderer = PIXI.autoDetectRenderer,
     loader = PIXI.loader,
     resources = PIXI.loader.resources,
-    Sprite = PIXI.Sprite;
+    Sprite = PIXI.Sprite,
+    TextureCache = PIXI.utils.TextureCache;
 
 //Create the renderer
 var renderer = autoDetectRenderer(
@@ -19,13 +20,13 @@ document.body.appendChild(renderer.view);
 var stage = new Container();
 
 loader
-  .add("public/tanks.sprite.png")
+  .add("public/tanks.sprite.json")
   .load(setup);
 
 function setup() {
-    var sprite = new PIXI.Sprite(
-        resources["public/tanks.sprite.png"].texture
-    );
+
+    var texture = resources["public/tanks.sprite.json"].textures["blue-tank.png"],
+        sprite = new Sprite(texture);
 
     stage.addChild(sprite);
   
