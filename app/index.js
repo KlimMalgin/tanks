@@ -23,6 +23,8 @@ loader
   .add("public/tanks.sprite.json")
   .load(setup);
 
+var spriteBlueTank;
+
 function setup() {
 
     var tileW = 84,
@@ -44,12 +46,18 @@ function setup() {
     }
 
 
-    var texture = resources["public/tanks.sprite.json"].textures["blue-tank.png"],
-        sprite = new Sprite(texture);
+    var textureBlueTank = resources["public/tanks.sprite.json"].textures["blue-tank.png"];
+        
+    spriteBlueTank = new Sprite(textureBlueTank);
 
-    stage.addChild(sprite);
+    stage.addChild(spriteBlueTank);
     
-    
+    gameLoop();
   
-    renderer.render(stage);  
+}
+
+function gameLoop() {
+    requestAnimationFrame(gameLoop);
+    spriteBlueTank.x += 1;
+    renderer.render(stage);
 }
