@@ -46,6 +46,8 @@ function initSprites() {
 }
 
 function keyboardSetup() {
+    var velocity = 2;
+    
     left = keyboard(37),
     up = keyboard(38),
     right = keyboard(39),
@@ -56,7 +58,7 @@ function keyboardSetup() {
   left.press = function() {
 
     //Change the cat's velocity when the key is pressed
-    spriteBlueTank.vx = -5;
+    spriteBlueTank.vx = -velocity;
     spriteBlueTank.vy = 0;
   };
 
@@ -73,7 +75,7 @@ function keyboardSetup() {
 
   //Up
   up.press = function() {
-    spriteBlueTank.vy = -5;
+    spriteBlueTank.vy = -velocity;
     spriteBlueTank.vx = 0;
   };
   up.release = function() {
@@ -84,7 +86,7 @@ function keyboardSetup() {
 
   //Right
   right.press = function() {
-    spriteBlueTank.vx = 5;
+    spriteBlueTank.vx = velocity;
     spriteBlueTank.vy = 0;
   };
   right.release = function() {
@@ -95,7 +97,7 @@ function keyboardSetup() {
 
   //Down
   down.press = function() {
-    spriteBlueTank.vy = 5;
+    spriteBlueTank.vy = velocity;
     spriteBlueTank.vx = 0;
   };
   down.release = function() {
