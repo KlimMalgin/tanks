@@ -1,4 +1,4 @@
-/* global PIXI, keyboard */
+/* global PIXI, keyboard, createFireBall, fireBallProcess */
 
 var Container = PIXI.Container,
     autoDetectRenderer = PIXI.autoDetectRenderer,
@@ -24,10 +24,12 @@ loader
   .load(setup);
 
 // Спрайт голубого танка для глобального доступа
-var spriteBlueTank, spriteFireBall;
+var spriteBlueTank;
+
+var fireBalls = [];
 
 // Переменные для работы с клавиатурой
-var left, up, right, down;
+var left, up, right, down, space;
 
 function setup() {
     fillGameField();
@@ -57,21 +59,6 @@ function initSprites() {
     spriteBlueTank.anchor.x = 0.5;
     spriteBlueTank.anchor.y = 0.5;
     
-    /**
-     * Fire ball
-     */
-    var textureFireBall = resources["public/tanks.sprite.json"].textures["fire.png"];
-    
-    spriteFireBall = new Sprite(textureFireBall);
-    
-    spriteFireBall.vx = 0;
-    spriteFireBall.vy = 0;
-    
-    spriteFireBall.x = 132;
-    spriteFireBall.y = 32;
-    
-    spriteFireBall.width = 64;
-    spriteFireBall.height = 64;
 }
 
 function keyboardSetup() {
@@ -81,7 +68,8 @@ function keyboardSetup() {
     left = keyboard(37),
     up = keyboard(38),
     right = keyboard(39),
-    down = keyboard(40);
+    down = keyboard(40),
+    space = keyboard(32);
     
     
 //Left arrow key `press` method
@@ -142,6 +130,19 @@ function keyboardSetup() {
       spriteBlueTank.vy = 0;
     }
   };
+  
+  //Space
+  space.press = function() {
+      
+      var options = {
+        x: spriteBlueTank.x,
+        y: spriteBlueTank.y,
+        direction: spriteBlueTank.rotatePosition
+    };
+    console.log('press space %o', options);
+    
+    fireBalls.push(createFireBall(options));
+  };
 }
 
 function gameLoop() {
@@ -151,7 +152,9 @@ function gameLoop() {
     spriteBlueTank.y += spriteBlueTank.vy;
     
     stage.addChild(spriteBlueTank);
-    stage.addChild(spriteFireBall);
+    
+    // 
+    fireBalls.forEach(fireBallProcess, stage);
     
     renderer.render(stage);
 }
