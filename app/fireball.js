@@ -1,4 +1,4 @@
-/* global resources, Sprite */
+/* global resources, Sprite, FIELD_SIZE, fireBallsForDestroy, fireBalls */
 
 function createFireBall(options) {
     
@@ -51,6 +51,18 @@ function fireBallProcess (fireball) {
             // code
     }
     
-    this.addChild(fireball);
+    if (0 < fireball.x && fireball.x < FIELD_SIZE &&
+        0 < fireball.y && fireball.y < FIELD_SIZE) {
+        this.addChild(fireball);    
+    } else {
+        fireBallsForDestroy.push(fireball);
+    }
+}
+
+function fireBallDestroy() {
+    fireBallsForDestroy.forEach(function (item) {
+        fireBalls.splice(item, 1);
+    });
     
+    fireBallsForDestroy = [];
 }

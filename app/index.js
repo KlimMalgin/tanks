@@ -1,4 +1,4 @@
-/* global PIXI, keyboard, createFireBall, fireBallProcess */
+/* global PIXI, keyboard, createFireBall, fireBallProcess, fireBallDestroy */
 
 var Container = PIXI.Container,
     autoDetectRenderer = PIXI.autoDetectRenderer,
@@ -7,9 +7,11 @@ var Container = PIXI.Container,
     Sprite = PIXI.Sprite,
     TextureCache = PIXI.utils.TextureCache;
 
+var FIELD_SIZE = 588;
+
 //Create the renderer
 var renderer = autoDetectRenderer(
-    588, 588,
+    FIELD_SIZE, FIELD_SIZE,
     {antialias: false, transparent: false, resolution: 1}
 );
 
@@ -26,7 +28,8 @@ loader
 // Спрайт голубого танка для глобального доступа
 var spriteBlueTank;
 
-var fireBalls = [];
+var fireBalls = [],
+    fireBallsForDestroy = [];
 
 // Переменные для работы с клавиатурой
 var left, up, right, down, space;
@@ -155,6 +158,7 @@ function gameLoop() {
     
     // 
     fireBalls.forEach(fireBallProcess, stage);
+    fireBallDestroy();
     
     renderer.render(stage);
 }
