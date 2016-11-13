@@ -1,4 +1,4 @@
-/* global PIXI */
+/* global PIXI, keyboard */
 
 var Container = PIXI.Container,
     autoDetectRenderer = PIXI.autoDetectRenderer,
@@ -23,11 +23,16 @@ loader
   .add("public/tanks.sprite.json")
   .load(setup);
 
+// Спрайт голубого танка для глобального доступа
 var spriteBlueTank;
+
+// Переменные для работы с клавиатурой
+var left, up, right, down;
 
 function setup() {
     fillGameField();
     initSprites();
+    keyboardSetup();
     gameLoop();
 }
 
@@ -40,11 +45,68 @@ function initSprites() {
     spriteBlueTank.vy = 0;
 }
 
+function keyboardSetup() {
+    left = keyboard(37),
+    up = keyboard(38),
+    right = keyboard(39),
+    down = keyboard(40);
+    
+    
+//Left arrow key `press` method
+  left.press = function() {
+
+    //Change the cat's velocity when the key is pressed
+    spriteBlueTank.vx = -5;
+    spriteBlueTank.vy = 0;
+  };
+
+  //Left arrow key `release` method
+  left.release = function() {
+
+    //If the left arrow has been released, and the right arrow isn't down,
+    //and the cat isn't moving vertically:
+    //Stop the cat
+    if (!right.isDown && spriteBlueTank.vy === 0) {
+      spriteBlueTank.vx = 0;
+    }
+  };
+
+  //Up
+  up.press = function() {
+    spriteBlueTank.vy = -5;
+    spriteBlueTank.vx = 0;
+  };
+  up.release = function() {
+    if (!down.isDown && spriteBlueTank.vx === 0) {
+      spriteBlueTank.vy = 0;
+    }
+  };
+
+  //Right
+  right.press = function() {
+    spriteBlueTank.vx = 5;
+    spriteBlueTank.vy = 0;
+  };
+  right.release = function() {
+    if (!left.isDown && spriteBlueTank.vy === 0) {
+      spriteBlueTank.vx = 0;
+    }
+  };
+
+  //Down
+  down.press = function() {
+    spriteBlueTank.vy = 5;
+    spriteBlueTank.vx = 0;
+  };
+  down.release = function() {
+    if (!up.isDown && spriteBlueTank.vx === 0) {
+      spriteBlueTank.vy = 0;
+    }
+  };
+}
+
 function gameLoop() {
     requestAnimationFrame(gameLoop);
-    
-    spriteBlueTank.vx = 1;
-    spriteBlueTank.vy = 1;
 
     spriteBlueTank.x += spriteBlueTank.vx;
     spriteBlueTank.y += spriteBlueTank.vy;
