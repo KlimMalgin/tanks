@@ -43,10 +43,22 @@ function initSprites() {
     
     spriteBlueTank.vx = 0;
     spriteBlueTank.vy = 0;
+    
+    spriteBlueTank.x = 32;
+    spriteBlueTank.y = 32;
+    
+    spriteBlueTank.width = 64;
+    spriteBlueTank.height = 64;
+    
+    spriteBlueTank.anchor.x = 0.5;
+    spriteBlueTank.anchor.y = 0.5;
+    
+    spriteBlueTank.rotation = 0.5;
 }
 
 function keyboardSetup() {
-    var velocity = 2;
+    var velocity = 2,
+        rotateAngle = Math.PI / 2;
     
     left = keyboard(37),
     up = keyboard(38),
@@ -56,7 +68,7 @@ function keyboardSetup() {
     
 //Left arrow key `press` method
   left.press = function() {
-
+    spriteBlueTank.rotation = rotateAngle * -1;
     //Change the cat's velocity when the key is pressed
     spriteBlueTank.vx = -velocity;
     spriteBlueTank.vy = 0;
@@ -75,6 +87,7 @@ function keyboardSetup() {
 
   //Up
   up.press = function() {
+    spriteBlueTank.rotation = rotateAngle * 0;
     spriteBlueTank.vy = -velocity;
     spriteBlueTank.vx = 0;
   };
@@ -86,6 +99,7 @@ function keyboardSetup() {
 
   //Right
   right.press = function() {
+    spriteBlueTank.rotation = rotateAngle * 1;
     spriteBlueTank.vx = velocity;
     spriteBlueTank.vy = 0;
   };
@@ -97,6 +111,7 @@ function keyboardSetup() {
 
   //Down
   down.press = function() {
+    spriteBlueTank.rotation = rotateAngle * -2;
     spriteBlueTank.vy = velocity;
     spriteBlueTank.vx = 0;
   };
