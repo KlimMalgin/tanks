@@ -24,7 +24,7 @@ loader
   .load(setup);
 
 // Спрайт голубого танка для глобального доступа
-var spriteBlueTank;
+var spriteBlueTank, spriteFireBall;
 
 // Переменные для работы с клавиатурой
 var left, up, right, down;
@@ -37,6 +37,10 @@ function setup() {
 }
 
 function initSprites() {
+    
+    /**
+     * Blue Tank
+     */
     var textureBlueTank = resources["public/tanks.sprite.json"].textures["blue-tank.png"];
         
     spriteBlueTank = new Sprite(textureBlueTank);
@@ -53,7 +57,21 @@ function initSprites() {
     spriteBlueTank.anchor.x = 0.5;
     spriteBlueTank.anchor.y = 0.5;
     
-    spriteBlueTank.rotation = 0.5;
+    /**
+     * Fire ball
+     */
+    var textureFireBall = resources["public/tanks.sprite.json"].textures["fire.png"];
+    
+    spriteFireBall = new Sprite(textureFireBall);
+    
+    spriteFireBall.vx = 0;
+    spriteFireBall.vy = 0;
+    
+    spriteFireBall.x = 132;
+    spriteFireBall.y = 32;
+    
+    spriteFireBall.width = 64;
+    spriteFireBall.height = 64;
 }
 
 function keyboardSetup() {
@@ -69,6 +87,7 @@ function keyboardSetup() {
 //Left arrow key `press` method
   left.press = function() {
     spriteBlueTank.rotation = rotateAngle * -1;
+    spriteBlueTank.rotatePosition = 'left';
     //Change the cat's velocity when the key is pressed
     spriteBlueTank.vx = -velocity;
     spriteBlueTank.vy = 0;
@@ -88,6 +107,7 @@ function keyboardSetup() {
   //Up
   up.press = function() {
     spriteBlueTank.rotation = rotateAngle * 0;
+    spriteBlueTank.rotatePosition = 'up';
     spriteBlueTank.vy = -velocity;
     spriteBlueTank.vx = 0;
   };
@@ -100,6 +120,7 @@ function keyboardSetup() {
   //Right
   right.press = function() {
     spriteBlueTank.rotation = rotateAngle * 1;
+    spriteBlueTank.rotatePosition = 'right';
     spriteBlueTank.vx = velocity;
     spriteBlueTank.vy = 0;
   };
@@ -112,6 +133,7 @@ function keyboardSetup() {
   //Down
   down.press = function() {
     spriteBlueTank.rotation = rotateAngle * -2;
+    spriteBlueTank.rotatePosition = 'down';
     spriteBlueTank.vy = velocity;
     spriteBlueTank.vx = 0;
   };
@@ -129,6 +151,7 @@ function gameLoop() {
     spriteBlueTank.y += spriteBlueTank.vy;
     
     stage.addChild(spriteBlueTank);
+    stage.addChild(spriteFireBall);
     
     renderer.render(stage);
 }
