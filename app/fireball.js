@@ -51,8 +51,11 @@ function fireBallProcess (fireball) {
             // code
     }
     
-    if (0 < fireball.x && fireball.x < FIELD_SIZE &&
-        0 < fireball.y && fireball.y < FIELD_SIZE) {
+    if (testCollision(fireball, spriteGreenTank)) {
+        fireBallsForDestroy.push(fireball);
+    } 
+    else if (0 < fireball.x && fireball.x < FIELD_SIZE &&
+            0 < fireball.y && fireball.y < FIELD_SIZE) {
         this.addChild(fireball);    
     } else {
         fireBallsForDestroy.push(fireball);
@@ -61,7 +64,8 @@ function fireBallProcess (fireball) {
 
 function fireBallDestroy() {
     fireBallsForDestroy.forEach(function (item) {
-        fireBalls.splice(item, 1);
+        var destroyed = fireBalls.splice(item, 1);
+        destroyed[0].destroy();
     });
     
     fireBallsForDestroy = [];
