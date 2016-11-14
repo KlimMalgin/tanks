@@ -26,10 +26,11 @@ loader
   .load(setup);
 
 // Спрайт голубого танка для глобального доступа
-var spriteBlueTank;
+var spriteBlueTank, spriteGreenTank;
 
 var fireBalls = [],
-    fireBallsForDestroy = [];
+    fireBallsForDestroy = [],
+    units = [];
 
 // Переменные для работы с клавиатурой
 var left, up, right, down, space;
@@ -61,6 +62,25 @@ function initSprites() {
     
     spriteBlueTank.anchor.x = 0.5;
     spriteBlueTank.anchor.y = 0.5;
+    
+    /**
+     * Green Tank
+     */
+    var textureGreenTank = resources["public/tanks.sprite.json"].textures["green-tank.png"];
+        
+    spriteGreenTank = new Sprite(textureGreenTank);
+    
+    spriteGreenTank.vx = 0;
+    spriteGreenTank.vy = 0;
+    
+    spriteGreenTank.x = 332;
+    spriteGreenTank.y = 432;
+    
+    spriteGreenTank.width = 64;
+    spriteGreenTank.height = 64;
+    
+    spriteGreenTank.anchor.x = 0.5;
+    spriteGreenTank.anchor.y = 0.5;
     
 }
 
@@ -155,6 +175,9 @@ function gameLoop() {
     spriteBlueTank.y += spriteBlueTank.vy;
     
     stage.addChild(spriteBlueTank);
+    stage.addChild(spriteGreenTank);
+    
+    units.push(spriteGreenTank);
     
     // 
     fireBalls.forEach(fireBallProcess, stage);
