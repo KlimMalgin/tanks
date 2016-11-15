@@ -175,9 +175,12 @@ function gameLoop() {
     spriteBlueTank.y += spriteBlueTank.vy;
     
     stage.addChild(spriteBlueTank);
-    stage.addChild(spriteGreenTank);
     
-    units.push(spriteGreenTank);
+    
+    spriteGreenTank && units.push(spriteGreenTank);
+    units.forEach(function (item) {
+      stage.addChild(item);
+    });
     
     // 
     fireBalls.forEach(fireBallProcess, stage);
