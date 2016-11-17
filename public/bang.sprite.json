@@ -1,0 +1,39 @@
+{"frames": {
+
+"bang1.png":
+{
+	"frame": {"x":0,"y":0,"w":78,"h":81},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":78,"h":81},
+	"sourceSize": {"w":78,"h":81},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"bang2.png":
+{
+	"frame": {"x":78,"y":0,"w":83,"h":81},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":83,"h":81},
+	"sourceSize": {"w":83,"h":81},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"bang3.png":
+{
+	"frame": {"x":161,"y":0,"w":85,"h":81},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":85,"h":81},
+	"sourceSize": {"w":85,"h":81},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "bang.sprite.png",
+	"format": "RGBA8888",
+	"size": {"w":246,"h":81},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:50db64add17ee865edc2d1c8da6db895:5c962baf4223e02b708de1e65004d7d3:34698690b3c2eda091913de3d4188cbe$"
+}
+}

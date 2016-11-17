@@ -32,6 +32,8 @@ var fireBalls = [],
     fireBallsForDestroy = [],
     units = [];
 
+var movie;
+
 // Переменные для работы с клавиатурой
 var left, up, right, down, space;
 
@@ -82,6 +84,7 @@ function initSprites() {
     spriteGreenTank.anchor.x = 0.5;
     spriteGreenTank.anchor.y = 0.5;
     
+    initBang ();
 }
 
 function keyboardSetup() {
