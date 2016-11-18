@@ -51,19 +51,7 @@ function fireBallProcess (fireball) {
             // code
     }
     
-    
-    for (var i = 0; i<units.length; i++) {
-        // Уничтожение юнита и снаряда, если они столкнулись
-        if (testCollision(fireball, units[i])) {
-            fireBallsForDestroy.push(fireball);
-            units[i].destroy();
-            // :(
-            spriteGreenTank = null;
-            units = [];
-            break;
-        }
-    }
-    
+    destroyTankIfCollision(fireball);
     
     if (0 < fireball.x && fireball.x < FIELD_SIZE &&
             0 < fireball.y && fireball.y < FIELD_SIZE) {
@@ -80,4 +68,17 @@ function fireBallDestroy() {
     });
     
     fireBallsForDestroy = [];
+}
+
+function destroyTankIfCollision(fireball) {
+    if (spriteGreenTank && testCollision(fireball, spriteGreenTank)) {
+        fireBallsForDestroy.push(fireball);
+        spriteGreenTank.destroy();
+        spriteGreenTank = null;
+    }
+    
+    if (movie && testCollision(fireball, movie)) {
+        fireBallsForDestroy.push(fireball);
+        movie.play();
+    }
 }

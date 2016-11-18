@@ -2,6 +2,7 @@
 
 function initBang () {
     loader
+        //.add('public/tanks.sprite.json')
         .add('public/bang.sprite.json')
         .load(onBangLoaded);
 }
@@ -11,6 +12,7 @@ function onBangLoaded() {
     // create an array of textures from an image path
     var frames = [];
 
+    frames.push(PIXI.Texture.fromFrame('green-tank.png'));
     frames.push(PIXI.Texture.fromFrame('bang1.png'));
     frames.push(PIXI.Texture.fromFrame('bang2.png'));
     frames.push(PIXI.Texture.fromFrame('bang3.png'));
@@ -22,14 +24,21 @@ function onBangLoaded() {
      * A MovieClip inherits all the properties of a PIXI sprite
      * so you can change its position, its anchor, mask it, etc
      */
-    movie.position.set(200);
+    movie.x = 200;
+    movie.y = 400;
 
     movie.anchor.set(0.5);
-    movie.animationSpeed = 0.17;
+    movie.animationSpeed = 0.21;
 
     movie.loop = false;
+    
+    movie.width = 64;
+    movie.height = 64;
 
-    movie.play();
+    movie.onComplete = function() {
+        movie.destroy();
+        movie = null;    
+    };
 
     stage.addChild(movie);
     
