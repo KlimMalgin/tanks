@@ -5,6 +5,7 @@ var host = process.env.IP;
 var port = process.env.PORT || 8080;
 
 app.use('/public', express.static('public'));
+app.use('/build', express.static('build'));
 app.use(express.static('libs'));
 app.use(express.static('app'));
 
