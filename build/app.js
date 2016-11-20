@@ -37902,8 +37902,8 @@
 	 * @exports ScaledContainer
 	 */
 
-	var ScaledContainer = function (_PIXI$Container) {
-	  _inherits(ScaledContainer, _PIXI$Container);
+	var ScaledContainer = function (_Container) {
+	  _inherits(ScaledContainer, _Container);
 
 	  /**
 	   * Set target size
@@ -37939,13 +37939,13 @@
 	      var Xratio = rw / tw;
 	      var Yratio = rh / th;
 	      var scaleRatio = rw > rh ? Xratio : Yratio;
-	      var scale = new PIXI.Point(scaleRatio, scaleRatio);
+	      var scale = new _pixi.Point(scaleRatio, scaleRatio);
 	      var offsetX = rw / 2 - tw * scaleRatio / 2;
 	      var offsetY = rh / 2 - th * scaleRatio / 2;
 
 	      if (th * scaleRatio < rh) {
 	        scaleRatio = Yratio;
-	        scale = new PIXI.Point(scaleRatio, scaleRatio);
+	        scale = new _pixi.Point(scaleRatio, scaleRatio);
 	        offsetX = rw / 2 - tw * scaleRatio / 2;
 	        offsetY = rh / 2 - th * scaleRatio / 2;
 	      }
@@ -37957,7 +37957,7 @@
 	  }]);
 
 	  return ScaledContainer;
-	}(PIXI.Container);
+	}(_pixi.Container);
 
 	exports.default = ScaledContainer;
 
@@ -37987,21 +37987,21 @@
 	 * @exports Background
 	 * @extends Container
 	 */
-	var Background = function (_PIXI$Container) {
-	  _inherits(Background, _PIXI$Container);
+	var Background = function (_Container) {
+	  _inherits(Background, _Container);
 
 	  function Background() {
 	    _classCallCheck(this, Background);
 
 	    return _possibleConstructorReturn(this, (Background.__proto__ || Object.getPrototypeOf(Background)).call(this));
 
-	    //var bg = PIXI.Sprite.fromImage(TEXTURE);
+	    //var bg = Sprite.fromImage(TEXTURE);
 
 	    //this.addChild(bg);
 	  }
 
 	  return Background;
-	}(PIXI.Container);
+	}(_pixi.Container);
 
 	exports.default = Background;
 

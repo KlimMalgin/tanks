@@ -1,4 +1,4 @@
-import { Container } from 'pixi.js';
+import { Container, Sprite } from 'pixi.js';
 //import TEXTURE from './diagnostic.png';
 
 /**
@@ -7,12 +7,12 @@ import { Container } from 'pixi.js';
  * @exports Background
  * @extends Container
  */
-export default class Background extends PIXI.Container {
+export default class Background extends Container {
 
   constructor() {
     super();
 
-    //var bg = PIXI.Sprite.fromImage(TEXTURE);
+    //var bg = Sprite.fromImage(TEXTURE);
 
     //this.addChild(bg);
   }
