@@ -1,4 +1,4 @@
-import PIXI from 'pixi.js';
+import { WebGLRenderer, Point } from 'pixi.js';
 import RendererStore from '../stores/RendererStore';
 import AnimationStore from '../stores/AnimationStore';
 
@@ -12,7 +12,7 @@ let renderables = new Set();
  * @exports Renderer
  * @extends WebGLRenderer
  */
-export default class Renderer extends PIXI.WebGLRenderer {
+export default class Renderer extends WebGLRenderer {
 
   constructor(...args) {
 
@@ -25,7 +25,7 @@ export default class Renderer extends PIXI.WebGLRenderer {
     RendererStore.set('resolution', this.resolution);
     RendererStore.set('stageWidth', args[0]);
     RendererStore.set('stageHeight', args[1]);
-    RendererStore.set('stageCenter', new PIXI.Point(args[0] / 2, args[1] / 2));
+    RendererStore.set('stageCenter', new Point(args[0] / 2, args[1] / 2));
 
     this.setStore();
 

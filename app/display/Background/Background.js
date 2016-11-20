@@ -1,5 +1,5 @@
-import PIXI from 'pixi.js';
-import TEXTURE from './diagnostic.png';
+import { Container } from 'pixi.js';
+//import TEXTURE from './diagnostic.png';
 
 /**
  * Loads the adds the diagnostic image
@@ -12,9 +12,9 @@ export default class Background extends PIXI.Container {
   constructor() {
     super();
 
-    var bg = PIXI.Sprite.fromImage(TEXTURE);
+    //var bg = PIXI.Sprite.fromImage(TEXTURE);
 
-    this.addChild(bg);
+    //this.addChild(bg);
   }
 
 }

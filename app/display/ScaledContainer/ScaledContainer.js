@@ -1,4 +1,4 @@
-import PIXI from 'pixi.js';
+import { Container, Point } from 'pixi.js';
 import RendererStore from '../../stores/RendererStore.js';
 import { RESIZE } from '../../constants/AppConstants.js';
 

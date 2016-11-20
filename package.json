@@ -1,0 +1,39 @@
+{
+  "name": "tanks",
+  "version": "0.0.1",
+  "description": "pixi.js tanks",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "config": {
+    "buildDir": "./build",
+    "stageWidth": 1920,
+    "stageHeight": 1080
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KlimMalgin/tanks.git"
+  },
+  "author": "KlimMalgin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KlimMalgin/tanks/issues"
+  },
+  "homepage": "https://github.com/KlimMalgin/tanks#readme",
+  "dependencies": {
+    "brfs": "^1.4.3",
+    "express": "^4.14.0",
+    "json-loader": "^0.5.4",
+    "pixi.js": "^4.2.2",
+    "transform-loader": "^0.2.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.18.2",
+    "babel-loader": "^6.2.8",
+    "babel-preset-latest": "^6.16.0",
+    "css-loader": "^0.26.0",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.3"
+  }
+}
