@@ -7,8 +7,8 @@
   },
   "config": {
     "buildDir": "./build",
-    "stageWidth": 1920,
-    "stageHeight": 1080
+    "stageWidth": 800,
+    "stageHeight": 600
   },
   "repository": {
     "type": "git",

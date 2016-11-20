@@ -76,7 +76,6 @@
 
 	//import './index.html';
 	var renderer = new _Renderer2.default(_package.config.stageWidth, _package.config.stageHeight);
-	var app = new _App2.default(_package.config.stageWidth, _package.config.stageHeight);
 
 	document.body.appendChild(renderer.view);
 
@@ -84,13 +83,13 @@
 
 	console.log('Start resource loading...');
 	_Resources2.default.load(function () {
+	  var app = new _App2.default(_package.config.stageWidth, _package.config.stageHeight);
 	  renderer.addRenderable(app);
 	  renderer.start();
 
-	  console.log('Game start!');
+	  console.log('bg: w: %o, h: %o', app.width, app.height);
 
-	  var txt = _Resources2.default.getTexture("blue-tank.png");
-	  debugger;
+	  console.log('Game start!');
 	});
 
 /***/ },
@@ -106,8 +105,8 @@
 		},
 		"config": {
 			"buildDir": "./build",
-			"stageWidth": 1920,
-			"stageHeight": 1080
+			"stageWidth": 800,
+			"stageHeight": 600
 		},
 		"repository": {
 			"type": "git",
@@ -37833,17 +37832,20 @@
 	  function App() {
 	    var _ref;
 
-	    _classCallCheck(this, App);
-
-	    var bg = new _Background2.default();
-
 	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	      args[_key] = arguments[_key];
 	    }
 
+	    _classCallCheck(this, App);
+
+	    var bg = new _Background2.default();
+
 	    var _this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args)));
 
 	    _this.addChild(bg);
+
+	    //console.log('App: w: %o, h: %o', this.width, this.height);
+	    console.log('App: ', arguments);
 
 	    //this.addBunnies();
 
@@ -37879,7 +37881,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -37915,60 +37917,71 @@
 	 */
 
 	var ScaledContainer = function (_Container) {
-	  _inherits(ScaledContainer, _Container);
+	    _inherits(ScaledContainer, _Container);
 
-	  /**
-	   * Set target size
-	   * @param  {Number} target_w width
-	   * @param  {number} target_h height
-	   * @return {null}
-	   */
-	  function ScaledContainer(target_w, target_h) {
-	    _classCallCheck(this, ScaledContainer);
+	    /**
+	    * Set target size
+	    * @param  {Number} target_w width
+	    * @param  {number} target_h height
+	    * @return {null}
+	    */
+	    function ScaledContainer(target_w, target_h) {
+	        _classCallCheck(this, ScaledContainer);
 
-	    var _this = _possibleConstructorReturn(this, (ScaledContainer.__proto__ || Object.getPrototypeOf(ScaledContainer)).call(this));
+	        var _this = _possibleConstructorReturn(this, (ScaledContainer.__proto__ || Object.getPrototypeOf(ScaledContainer)).call(this));
 
-	    tw = target_w || _RendererStore2.default.get('target_width');
-	    th = target_h || _RendererStore2.default.get('target_height');
+	        tw = target_w || _RendererStore2.default.get('target_width');
+	        th = target_h || _RendererStore2.default.get('target_height');
 
-	    _RendererStore2.default.addChangeListener(_this.resizeHandler.bind(_this));
+	        _RendererStore2.default.addChangeListener(_this.resizeHandler.bind(_this));
 
-	    _this.resizeHandler();
-	    return _this;
-	  }
-
-	  /**
-	   * Scales and positions Container to best-fit to farget dimensions
-	   * @return {null}
-	   */
-
-
-	  _createClass(ScaledContainer, [{
-	    key: 'resizeHandler',
-	    value: function resizeHandler() {
-	      var rw = _RendererStore2.default.get('width');
-	      var rh = _RendererStore2.default.get('height');
-	      var Xratio = rw / tw;
-	      var Yratio = rh / th;
-	      var scaleRatio = rw > rh ? Xratio : Yratio;
-	      var scale = new _pixi.Point(scaleRatio, scaleRatio);
-	      var offsetX = rw / 2 - tw * scaleRatio / 2;
-	      var offsetY = rh / 2 - th * scaleRatio / 2;
-
-	      if (th * scaleRatio < rh) {
-	        scaleRatio = Yratio;
-	        scale = new _pixi.Point(scaleRatio, scaleRatio);
-	        offsetX = rw / 2 - tw * scaleRatio / 2;
-	        offsetY = rh / 2 - th * scaleRatio / 2;
-	      }
-
-	      this.position.x = offsetX;
-	      this.position.y = offsetY;
-	      this.scale = scale;
+	        _this.resizeHandler();
+	        return _this;
 	    }
-	  }]);
 
-	  return ScaledContainer;
+	    /*
+	    resizeHandler() {
+	        const rw = RendererStore.get('width');
+	        const rh = RendererStore.get('height');
+	         console.log('ScaledContainer::resizeHandler: ', rw, rh, this.scale);
+	    }
+	    */
+
+	    /**
+	    * Пропорциональное масштабирование сторон со смещением правого верхнего угла
+	    * за пределы экрана при нарушении пропорций
+	    * @return {null}
+	    */
+
+
+	    _createClass(ScaledContainer, [{
+	        key: 'resizeHandler',
+	        value: function resizeHandler() {
+	            var rw = _RendererStore2.default.get('width');
+	            var rh = _RendererStore2.default.get('height');
+	            var Xratio = rw / tw;
+	            var Yratio = rh / th;
+	            var scaleRatio = rw > rh ? Xratio : Yratio;
+	            var scale = new _pixi.Point(scaleRatio, scaleRatio);
+	            var offsetX = rw / 2 - tw * scaleRatio / 2;
+	            var offsetY = rh / 2 - th * scaleRatio / 2;
+
+	            if (th * scaleRatio < rh) {
+	                scaleRatio = Yratio;
+	                scale = new _pixi.Point(scaleRatio, scaleRatio);
+	                offsetX = rw / 2 - tw * scaleRatio / 2;
+	                offsetY = rh / 2 - th * scaleRatio / 2;
+	            }
+
+	            this.position.x = 0; //this.position.x = offsetX;
+	            this.position.y = 0; //this.position.y = offsetY;
+	            this.scale = scale;
+
+	            console.log('ScaledContainer::resizeHandler', rw, rh, offsetX, offsetY, scale);
+	        }
+	    }]);
+
+	    return ScaledContainer;
 	}(_pixi.Container);
 
 	exports.default = ScaledContainer;
@@ -37980,18 +37993,24 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _pixi = __webpack_require__(3);
+
+	var _Resources = __webpack_require__(187);
+
+	var _Resources2 = _interopRequireDefault(_Resources);
+
+	var _package = __webpack_require__(1);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	//import TEXTURE from './diagnostic.png';
 
 	/**
 	 * Loads the adds the diagnostic image
@@ -38000,19 +38019,39 @@
 	 * @extends Container
 	 */
 	var Background = function (_Container) {
-	  _inherits(Background, _Container);
+	    _inherits(Background, _Container);
 
-	  function Background() {
-	    _classCallCheck(this, Background);
+	    function Background() {
+	        _classCallCheck(this, Background);
 
-	    return _possibleConstructorReturn(this, (Background.__proto__ || Object.getPrototypeOf(Background)).call(this));
+	        var _this = _possibleConstructorReturn(this, (Background.__proto__ || Object.getPrototypeOf(Background)).call(this));
 
-	    //var bg = Sprite.fromImage(TEXTURE);
+	        var tileW = void 0,
+	            tileH = void 0,
+	            tileCountX = void 0,
+	            tileCountY = void 0;
+	        var tileTexture = _Resources2.default.getTexture("tile.png");
+	        var bg = new _pixi.Sprite(tileTexture),
+	            tile = null;
 
-	    //this.addChild(bg);
-	  }
+	        tileW = bg.width = bg.width / 2;
+	        tileH = bg.height = bg.height / 2;
 
-	  return Background;
+	        tileCountX = _package.config.stageWidth / tileW;
+	        tileCountY = _package.config.stageHeight / tileH;
+
+	        for (var x = 0; x < tileCountX; x++) {
+	            for (var y = 0; y < tileCountY; y++) {
+	                tile = new _pixi.Sprite(tileTexture);
+	                tile.position.set(tileW * x, tileH * y);
+	                _this.addChild(tile);
+	            }
+	        }
+
+	        return _this;
+	    }
+
+	    return Background;
 	}(_pixi.Container);
 
 	exports.default = Background;

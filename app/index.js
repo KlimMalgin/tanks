@@ -16,7 +16,6 @@ import Resources from './resources/Resources';
 
 
 const renderer = new Renderer(config.stageWidth, config.stageHeight);
-const app = new App(config.stageWidth, config.stageHeight);
 
 document.body.appendChild(renderer.view);
 
@@ -24,11 +23,12 @@ document.body.appendChild(renderer.view);
 
 console.log('Start resource loading...');
 Resources.load(() => {
+    const app = new App(config.stageWidth, config.stageHeight);
     renderer.addRenderable(app);
     renderer.start();
 
+    console.log('bg: w: %o, h: %o', app.width, app.height);
+
     console.log('Game start!');
 
-    let txt = Resources.getTexture("blue-tank.png");
-    debugger;
 });

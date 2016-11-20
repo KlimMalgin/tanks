@@ -1,5 +1,6 @@
 import { Container, Sprite } from 'pixi.js';
-//import TEXTURE from './diagnostic.png';
+import Resources from '../../resources/Resources';
+import { config } from '../../../package.json';
 
 /**
  * Loads the adds the diagnostic image
@@ -9,12 +10,28 @@ import { Container, Sprite } from 'pixi.js';
  */
 export default class Background extends Container {
 
-  constructor() {
-    super();
+    constructor() {
+        super();
 
-    //var bg = Sprite.fromImage(TEXTURE);
+        let tileW, tileH, tileCountX, tileCountY;
+        let tileTexture = Resources.getTexture("tile.png");
+        let bg = new Sprite(tileTexture),
+            tile = null;
 
-    //this.addChild(bg);
-  }
+        tileW = bg.width = bg.width / 2;
+        tileH = bg.height = bg.height / 2;
+
+        tileCountX = config.stageWidth / tileW;
+        tileCountY = config.stageHeight / tileH;
+
+        for (let x = 0; x < tileCountX; x++) {
+            for (let y = 0; y < tileCountY; y++) {
+                tile = new Sprite(tileTexture);
+                tile.position.set(tileW * x, tileH * y);
+                this.addChild(tile);
+            }
+        }
+
+    }
 
 }

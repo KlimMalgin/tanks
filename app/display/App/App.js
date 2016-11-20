@@ -20,6 +20,10 @@ export default class App extends ScaledContainer {
 
     this.addChild(bg);
 
+
+    //console.log('App: w: %o, h: %o', this.width, this.height);
+    console.log('App: ', arguments);
+
     //this.addBunnies();
 
   }
