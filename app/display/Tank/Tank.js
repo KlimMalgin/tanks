@@ -6,6 +6,12 @@ export default class Tank extends Sprite {
     constructor(name) {
         super(Resources.getTexture(name));
 
+        this.anchor.x = 0.5;
+        this.anchor.y = 0.5;
+
+        this.width = this.width / 2;
+        this.height = this.height / 2;
+
         /**
          * Текущий угол поворота танка
          */

@@ -37792,7 +37792,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _ScaledContainer2 = __webpack_require__(185);
@@ -37803,9 +37803,9 @@
 
 	var _Background2 = _interopRequireDefault(_Background);
 
-	var _RendererStore = __webpack_require__(180);
+	var _Tank = __webpack_require__(188);
 
-	var _RendererStore2 = _interopRequireDefault(_RendererStore);
+	var _Tank2 = _interopRequireDefault(_Tank);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -37817,6 +37817,8 @@
 	//import BunnyGroup from '../BunnyGroup/BunnyGroup.js';
 	//import Bunny from '../Bunny/Bunny.js';
 
+	//import RendererStore from '../../stores/RendererStore.js';
+
 
 	/**
 	 * Main App Display Object
@@ -37827,49 +37829,54 @@
 	 * @extends ScaledContainer
 	 */
 	var App = function (_ScaledContainer) {
-	  _inherits(App, _ScaledContainer);
+	    _inherits(App, _ScaledContainer);
 
-	  function App() {
-	    var _ref;
+	    function App() {
+	        var _ref;
 
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        _classCallCheck(this, App);
+
+	        var bg = new _Background2.default();
+
+	        var _this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args)));
+
+	        _this.addChild(bg);
+
+	        //console.log('App: w: %o, h: %o', this.width, this.height);
+	        console.log('App: ', arguments);
+
+	        //this.addBunnies();
+
+	        var tank = new _Tank2.default("blue-tank.png");
+
+	        tank.position.set(100, 100);
+
+	        _this.addChild(tank);
+	        return _this;
 	    }
 
-	    _classCallCheck(this, App);
+	    // addBunnies() {
+	    //   const cx = RendererStore.get('stageCenter').x;
+	    //   const cy = RendererStore.get('stageCenter').y;
 
-	    var bg = new _Background2.default();
+	    //   let group1 = new BunnyGroup();
+	    //   let b1 = new Bunny();
 
-	    var _this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args)));
+	    //   b1.position.x = cx;
+	    //   b1.position.y = cy;
 
-	    _this.addChild(bg);
+	    //   group1.position.x = cx;
+	    //   group1.position.y = cy + (RendererStore.get('stageHeight')*.25);
 
-	    //console.log('App: w: %o, h: %o', this.width, this.height);
-	    console.log('App: ', arguments);
+	    //   this.addChild(b1);
+	    //   this.addChild(group1);
+	    // }
 
-	    //this.addBunnies();
-
-	    return _this;
-	  }
-
-	  // addBunnies() {
-	  //   const cx = RendererStore.get('stageCenter').x;
-	  //   const cy = RendererStore.get('stageCenter').y;
-
-	  //   let group1 = new BunnyGroup();
-	  //   let b1 = new Bunny();
-
-	  //   b1.position.x = cx;
-	  //   b1.position.y = cy;
-
-	  //   group1.position.x = cx;
-	  //   group1.position.y = cy + (RendererStore.get('stageHeight')*.25);
-
-	  //   this.addChild(b1);
-	  //   this.addChild(group1);
-	  // }
-
-	  return App;
+	    return App;
 	}(_ScaledContainer3.default);
 
 	exports.default = App;
@@ -38114,6 +38121,129 @@
 	}();
 
 	exports.default = new Resources();
+
+/***/ },
+/* 188 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _pixi = __webpack_require__(3);
+
+	var _Resources = __webpack_require__(187);
+
+	var _Resources2 = _interopRequireDefault(_Resources);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Tank = function (_Sprite) {
+	    _inherits(Tank, _Sprite);
+
+	    function Tank(name) {
+	        _classCallCheck(this, Tank);
+
+	        var _this = _possibleConstructorReturn(this, (Tank.__proto__ || Object.getPrototypeOf(Tank)).call(this, _Resources2.default.getTexture(name)));
+
+	        _this.anchor.x = 0.5;
+	        _this.anchor.y = 0.5;
+
+	        _this.width = _this.width / 2;
+	        _this.height = _this.height / 2;
+
+	        /**
+	         * Текущий угол поворота танка
+	         */
+	        _this.rotation = 0;
+
+	        /**
+	         * Текущее направление
+	         */
+	        _this.rotatePosition = 'up';
+
+	        /**
+	         * Ускорение при движении по горизонтали
+	         */
+	        _this.vx = 0;
+
+	        /**
+	         * Ускорение при движении по вертикали
+	         */
+	        _this.vy = 0;
+	        return _this;
+	    }
+
+	    /**
+	     * Перемещает танк в указанном направлении с заданным ускорением
+	     * @param {String} direction Направление перемещения {'up','down','left','right'}
+	     * @param {Number} velocity Ускорение. По умолчанию == 2
+	     */
+
+
+	    _createClass(Tank, [{
+	        key: 'go',
+	        value: function go(direction) {
+	            var velocity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+
+	            var rotateAngle = Math.PI / 2;
+	            switch (direction) {
+	                case 'up':
+	                    this.rotation = rotateAngle * 0;
+	                    this.rotatePosition = direction;
+	                    this.vx = 0;
+	                    this.vy = velocity;
+	                    break;
+
+	                case 'down':
+	                    this.rotation = rotateAngle * -2;
+	                    this.rotatePosition = direction;
+	                    this.vx = 0;
+	                    this.vy = velocity;
+	                    break;
+
+	                case 'left':
+	                    this.rotation = rotateAngle * -1;
+	                    this.rotatePosition = direction;
+	                    this.vx = velocity;
+	                    this.vy = 0;
+	                    break;
+
+	                case 'right':
+	                    this.rotation = rotateAngle * 1;
+	                    this.rotatePosition = direction;
+	                    this.vx = velocity;
+	                    this.vy = 0;
+	                    break;
+	            }
+	        }
+
+	        /**
+	         * Действия которые должны выполниться с объектов при перерисовке сцены
+	         */
+
+	    }, {
+	        key: 'onDraw',
+	        value: function onDraw() {
+	            this.x += this.vx;
+	            this.y += this.vy;
+	        }
+	    }]);
+
+	    return Tank;
+	}(_pixi.Sprite);
+
+	exports.default = Tank;
 
 /***/ }
 /******/ ]);
