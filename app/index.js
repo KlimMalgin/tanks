@@ -1,18 +1,25 @@
+/**
+ * Index.js
+ *
+ * The main entry point, appends PIXI to the DOM
+ * and starts a render and animation loop
+ *
+ */
 
-import { test } from './test'
+//import './index.html';
+import {config} from '../package.json';
+import Renderer from './Renderer/Renderer';
+import App from './display/App/App';
+//import AnimationStore from './stores/AnimationStore';
+//import TWEEN from 'tween.js';
 
-class Game { 
-  constructor () {
-    console.log('Game constructor');
-  }
-  
-  test() {
-    console.assert(true == true, 'test assert');
-  }
-};
 
-let tanks = new Game();
+const renderer = new Renderer(config.stageWidth, config.stageHeight);
+const app = new App(config.stageWidth, config.stageHeight);
 
-tanks.test();
+document.body.appendChild(renderer.view);
 
-test.test();
+//AnimationStore.addChangeListener(() => TWEEN.update());
+
+renderer.addRenderable(app);
+renderer.start();
