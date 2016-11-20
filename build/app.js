@@ -56,30 +56,42 @@
 
 	var _App2 = _interopRequireDefault(_App);
 
+	var _Resources = __webpack_require__(187);
+
+	var _Resources2 = _interopRequireDefault(_Resources);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	//import AnimationStore from './stores/AnimationStore';
 	//import TWEEN from 'tween.js';
 
 
-	var renderer = new _Renderer2.default(_package.config.stageWidth, _package.config.stageHeight); /**
-	                                                                                                 * Index.js
-	                                                                                                 *
-	                                                                                                 * The main entry point, appends PIXI to the DOM
-	                                                                                                 * and starts a render and animation loop
-	                                                                                                 *
-	                                                                                                 */
+	/**
+	 * Index.js
+	 *
+	 * The main entry point, appends PIXI to the DOM
+	 * and starts a render and animation loop
+	 *
+	 */
 
 	//import './index.html';
-
+	var renderer = new _Renderer2.default(_package.config.stageWidth, _package.config.stageHeight);
 	var app = new _App2.default(_package.config.stageWidth, _package.config.stageHeight);
 
 	document.body.appendChild(renderer.view);
 
 	//AnimationStore.addChangeListener(() => TWEEN.update());
 
-	renderer.addRenderable(app);
-	renderer.start();
+	console.log('Start resource loading...');
+	_Resources2.default.load(function () {
+	  renderer.addRenderable(app);
+	  renderer.start();
+
+	  console.log('Game start!');
+
+	  var txt = _Resources2.default.getTexture("blue-tank.png");
+	  debugger;
+	});
 
 /***/ },
 /* 1 */
@@ -38004,6 +38016,65 @@
 	}(_pixi.Container);
 
 	exports.default = Background;
+
+/***/ },
+/* 187 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _pixi = __webpack_require__(3);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	//import textures from './sprotes.js';    // <-- sprotes.js -> textures.js
+
+	var resources = _pixi.loader.resources;
+
+	var Resources = function () {
+	    function Resources() {
+	        _classCallCheck(this, Resources);
+
+	        // TODO: Пока работает только с одним файлом спрайта
+	        this.resources = ["public/tanks.sprite.json"];
+	    }
+
+	    _createClass(Resources, [{
+	        key: 'load',
+	        value: function load(callback) {
+	            var _this = this;
+
+	            this.resources.forEach(function (item) {
+	                _pixi.loader.add(item);
+	            });
+
+	            _pixi.loader.load(function () {
+	                _this._onLoadResources.apply(_this, arguments);
+	                callback();
+	            });
+	        }
+	    }, {
+	        key: '_onLoadResources',
+	        value: function _onLoadResources() {
+	            console.log('resources is loaded!', arguments);
+	        }
+	    }, {
+	        key: 'getTexture',
+	        value: function getTexture(name) {
+	            return resources["public/tanks.sprite.json"].textures[name];
+	        }
+	    }]);
+
+	    return Resources;
+	}();
+
+	exports.default = new Resources();
 
 /***/ }
 /******/ ]);
