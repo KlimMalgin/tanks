@@ -37850,9 +37850,9 @@
 	            tank2 = new _Tank2.default("green-tank.png"),
 	            tank3 = new _Tank2.default("green-tank.png");
 
-	        tank.position.set(100, 100);
+	        tank.position.set(10, 100);
 	        tank2.position.set(310, 250);
-	        tank3.position.set(400, 180);
+	        tank3.position.set(800, 180);
 
 	        _this.addChild(tank);
 	        _this.addChild(tank2);
@@ -38132,6 +38132,8 @@
 
 	var _AnimationStore2 = _interopRequireDefault(_AnimationStore);
 
+	var _package = __webpack_require__(1);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -38201,14 +38203,12 @@
 	                case 'up':
 	                    this.rotation = rotateAngle * 0;
 	                    this.rotatePosition = direction;
-	                    //this.vx = 0;
 	                    this.vy -= velocity;
 	                    break;
 
 	                case 'down':
 	                    this.rotation = rotateAngle * -2;
 	                    this.rotatePosition = direction;
-	                    //this.vx = 0;
 	                    this.vy += velocity;
 	                    break;
 
@@ -38216,14 +38216,12 @@
 	                    this.rotation = rotateAngle * -1;
 	                    this.rotatePosition = direction;
 	                    this.vx -= velocity;
-	                    //this.vy = 0;
 	                    break;
 
 	                case 'right':
 	                    this.rotation = rotateAngle * 1;
 	                    this.rotatePosition = direction;
 	                    this.vx += velocity;
-	                    //this.vy = 0;
 	                    break;
 	            }
 	        }
@@ -38246,8 +38244,7 @@
 	    }, {
 	        key: 'onDraw',
 	        value: function onDraw() {
-	            this.x += this.vx;
-	            this.y += this.vy;
+	            this._checkAndMove();
 	        }
 	    }, {
 	        key: 'listenKeyboard',
@@ -38278,6 +38275,33 @@
 	                _this2.go('right');
 	            });
 	            _Keyboard2.default.on('rightRelease', onRelease);
+	        }
+
+	        /**
+	         * Проверяет расположение танка и передвигает его, если это возможно
+	         */
+
+	    }, {
+	        key: '_checkAndMove',
+	        value: function _checkAndMove() {
+	            var x = this.x + this.vx,
+	                y = this.y + this.vy,
+	                wd2 = this.width / 2,
+	                hd2 = this.height / 2;
+
+	            // Разрешен только выезд на поле из-за его пределов, если танк вдруг там оказался
+	            if (wd2 > x && x > this.x || _package.config.stageWidth - wd2 < x && x < this.x) {
+	                this.x = x;
+	            }
+	            // Аналогично
+	            else if (hd2 > y && y > this.y || _package.config.stageHeight - hd2 < y && y < this.y) {
+	                    this.y = y;
+	                }
+	                // Когда танк находится в пределах поля - можно перемещаться в любых направлениях
+	                else if (wd2 <= x && _package.config.stageWidth - wd2 >= x && hd2 <= y && _package.config.stageHeight - hd2 >= y) {
+	                        this.y = y;
+	                        this.x = x;
+	                    }
 	        }
 	    }]);
 

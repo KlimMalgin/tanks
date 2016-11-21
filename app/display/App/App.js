@@ -27,9 +27,9 @@ export default class App extends ScaledContainer {
             tank2 = new Tank("green-tank.png"),
             tank3 = new Tank("green-tank.png");
 
-        tank.position.set(100, 100);
+        tank.position.set(10, 100);
         tank2.position.set(310, 250);
-        tank3.position.set(400, 180);
+        tank3.position.set(800, 180);
 
         this.addChild(tank);
         this.addChild(tank2);

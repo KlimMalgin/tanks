@@ -2,6 +2,7 @@ import { Sprite } from 'pixi.js';
 import Resources from '../../resources/Resources.js';
 import Keyboard from '../../Keyboard/Keyboard';
 import AnimationStore from '../../stores/AnimationStore';
+import { config } from '../../../package.json';
 
 export default class Tank extends Sprite {
 
@@ -54,14 +55,12 @@ export default class Tank extends Sprite {
             case 'up':
                 this.rotation = rotateAngle * 0;
                 this.rotatePosition = direction;
-                //this.vx = 0;
                 this.vy -= velocity;
                 break;
 
             case 'down':
                 this.rotation = rotateAngle * -2;
                 this.rotatePosition = direction;
-                //this.vx = 0;
                 this.vy += velocity;
                 break;
 
@@ -69,14 +68,12 @@ export default class Tank extends Sprite {
                 this.rotation = rotateAngle * -1;
                 this.rotatePosition = direction;
                 this.vx -= velocity;
-                //this.vy = 0;
                 break;
 
             case 'right':
                 this.rotation = rotateAngle * 1;
                 this.rotatePosition = direction;
                 this.vx += velocity;
-                //this.vy = 0;
                 break;
         }
     }
@@ -93,8 +90,7 @@ export default class Tank extends Sprite {
      * Действия которые должны выполниться с объектов при перерисовке сцены
      */
     onDraw() {
-        this.x += this.vx;
-        this.y += this.vy;
+        this._checkAndMove();
     }
 
     listenKeyboard() {
@@ -115,4 +111,31 @@ export default class Tank extends Sprite {
         Keyboard.on('right', () => { this.go('right'); });
         Keyboard.on('rightRelease', onRelease);
     }
+
+    /**
+     * Проверяет расположение танка и передвигает его, если это возможно
+     */
+    _checkAndMove() {
+        let x = this.x + this.vx,
+            y = this.y + this.vy,
+            wd2 = this.width / 2,
+            hd2 = this.height / 2;
+
+
+        // Разрешен только выезд на поле из-за его пределов, если танк вдруг там оказался
+        if ((wd2 > x && x > this.x) || ((config.stageWidth - wd2) < x && x < this.x)) {
+            this.x = x;
+        }
+        // Аналогично
+        else if ((hd2 > y && y > this.y) || ((config.stageHeight - hd2) < y && y < this.y)) {
+            this.y = y;
+        }
+        // Когда танк находится в пределах поля - можно перемещаться в любых направлениях
+        else if (wd2 <= x && (config.stageWidth - wd2) >= x && hd2 <= y && (config.stageHeight - hd2) >= y) {
+            this.y = y;
+            this.x = x;
+        }
+
+    }
+
 }
