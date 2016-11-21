@@ -5,3 +5,11 @@ pixi.js tanks
 
 https://github.com/edwinwebb/pixi-seed
 https://github.com/kittykatattack/learningPixi#introduction
+
+
+### Todo
+
+- Стрельба
+- Коллизии
+- Взрыв
+- Препятствия
