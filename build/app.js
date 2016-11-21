@@ -37834,47 +37834,31 @@
 	    function App() {
 	        var _ref;
 
-	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	            args[_key] = arguments[_key];
-	        }
-
 	        _classCallCheck(this, App);
 
 	        var bg = new _Background2.default();
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
 
 	        var _this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args)));
 
 	        _this.addChild(bg);
 
-	        //console.log('App: w: %o, h: %o', this.width, this.height);
-	        console.log('App: ', arguments);
-
-	        //this.addBunnies();
-
-	        var tank = new _Tank2.default("blue-tank.png");
+	        var tank = new _Tank2.default("blue-tank.png", true),
+	            tank2 = new _Tank2.default("green-tank.png"),
+	            tank3 = new _Tank2.default("green-tank.png");
 
 	        tank.position.set(100, 100);
+	        tank2.position.set(310, 250);
+	        tank3.position.set(400, 180);
 
 	        _this.addChild(tank);
+	        _this.addChild(tank2);
+	        _this.addChild(tank3);
 	        return _this;
 	    }
-
-	    // addBunnies() {
-	    //   const cx = RendererStore.get('stageCenter').x;
-	    //   const cy = RendererStore.get('stageCenter').y;
-
-	    //   let group1 = new BunnyGroup();
-	    //   let b1 = new Bunny();
-
-	    //   b1.position.x = cx;
-	    //   b1.position.y = cy;
-
-	    //   group1.position.x = cx;
-	    //   group1.position.y = cy + (RendererStore.get('stageHeight')*.25);
-
-	    //   this.addChild(b1);
-	    //   this.addChild(group1);
-	    // }
 
 	    return App;
 	}(_ScaledContainer3.default);
@@ -38159,7 +38143,11 @@
 	var Tank = function (_Sprite) {
 	    _inherits(Tank, _Sprite);
 
-	    function Tank(name) {
+	    /**
+	     * @param {String} name Текстовое наименование спрайта
+	     * @param {Boolean} managed Управляемый танк или нет {true|false}
+	     */
+	    function Tank(name, managed) {
 	        _classCallCheck(this, Tank);
 
 	        var _this = _possibleConstructorReturn(this, (Tank.__proto__ || Object.getPrototypeOf(Tank)).call(this, _Resources2.default.getTexture(name)));
@@ -38190,7 +38178,7 @@
 	         */
 	        _this.vy = 0;
 
-	        _this.listenKeyboard();
+	        managed && _this.listenKeyboard();
 	        _AnimationStore2.default.addChangeListener(_this.onDraw.bind(_this));
 	        return _this;
 	    }

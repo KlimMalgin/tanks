@@ -4,7 +4,12 @@ import Keyboard from '../../Keyboard/Keyboard';
 import AnimationStore from '../../stores/AnimationStore';
 
 export default class Tank extends Sprite {
-    constructor(name) {
+
+    /**
+     * @param {String} name Текстовое наименование спрайта
+     * @param {Boolean} managed Управляемый танк или нет {true|false}
+     */
+    constructor(name, managed) {
         super(Resources.getTexture(name));
 
         this.anchor.x = 0.5;
@@ -33,7 +38,7 @@ export default class Tank extends Sprite {
          */
         this.vy = 0;
 
-        this.listenKeyboard();
+        managed && this.listenKeyboard();
         AnimationStore.addChangeListener(this.onDraw.bind(this));
     }
 

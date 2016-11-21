@@ -23,33 +23,17 @@ export default class App extends ScaledContainer {
         this.addChild(bg);
 
 
-        //console.log('App: w: %o, h: %o', this.width, this.height);
-        console.log('App: ', arguments);
-
-        //this.addBunnies();
-
-        let tank = new Tank("blue-tank.png");
+        let tank = new Tank("blue-tank.png", true),
+            tank2 = new Tank("green-tank.png"),
+            tank3 = new Tank("green-tank.png");
 
         tank.position.set(100, 100);
+        tank2.position.set(310, 250);
+        tank3.position.set(400, 180);
 
         this.addChild(tank);
+        this.addChild(tank2);
+        this.addChild(tank3);
     }
-
-    // addBunnies() {
-    //   const cx = RendererStore.get('stageCenter').x;
-    //   const cy = RendererStore.get('stageCenter').y;
-
-    //   let group1 = new BunnyGroup();
-    //   let b1 = new Bunny();
-
-    //   b1.position.x = cx;
-    //   b1.position.y = cy;
-
-    //   group1.position.x = cx;
-    //   group1.position.y = cy + (RendererStore.get('stageHeight')*.25);
-
-    //   this.addChild(b1);
-    //   this.addChild(group1);
-    // }
 
 }
