@@ -18,36 +18,36 @@ class Keyboard extends EventEmitter {
         };
 
         this.left.release = function() {
-            if (!self._isDown('right', 'up', 'down')) {
-                self.emit('leftRelease', {});
-            }
+            self.emit('leftRelease', {
+                isDown: self._whatIsDown('right', 'up', 'down')
+            });
         };
 
         this.up.press = function() {
             self.emit('up', {});
         };
         this.up.release = function() {
-            if (!self._isDown('right', 'left', 'down')) {
-                self.emit('upRelease', {});
-            }
+            self.emit('upRelease', {
+                isDown: self._whatIsDown('right', 'left', 'down')
+            });
         };
 
         this.right.press = function() {
             self.emit('right', {});
         };
         this.right.release = function() {
-            if (!self._isDown('left', 'up', 'down')) {
-                self.emit('rightRelease', {});
-            }
+            self.emit('rightRelease', {
+                isDown: self._whatIsDown('left', 'up', 'down')
+            });
         };
 
         this.down.press = function() {
             self.emit('down', {});
         };
         this.down.release = function() {
-            if (!self._isDown('right', 'up', 'left')) {
-                self.emit('downRelease', {});
-            }
+            self.emit('downRelease', {
+                isDown: self._whatIsDown('right', 'up', 'left')
+            });
         };
 
         this.space.press = function() {
@@ -67,6 +67,16 @@ class Keyboard extends EventEmitter {
         return args.reduce((prev, item) => {
             return this[item].isDown || prev;
         }, false);
+    }
+
+    /**
+     * Определит какая клавиша из заданных нажата и вернет ее наименование
+     * Клавиши для анализа указываются перечислением параметров
+     */
+    _whatIsDown(...args) {
+        return args.reduce((prev, item) => {
+            return this[item].isDown ? item : prev;
+        }, '');
     }
 
     /*

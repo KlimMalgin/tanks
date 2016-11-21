@@ -38266,44 +38266,30 @@
 	        value: function listenKeyboard() {
 	            var _this2 = this;
 
-	            var hStop = function hStop() {
-	                if (_this2.vx === 0) {
-	                    _this2.stop();
-	                }
-	            },
-	                vStop = function vStop() {
-	                if (_this2.vy === 0) {
-	                    _this2.stop();
-	                }
+	            var onRelease = function onRelease(params) {
+	                _this2.stop();
+	                !!params.isDown && _this2.go(params.isDown);
 	            };
 
 	            _Keyboard2.default.on('down', function () {
 	                _this2.go('down');
 	            });
-	            _Keyboard2.default.on('downRelease', function () {
-	                _this2.stop();
-	            });
+	            _Keyboard2.default.on('downRelease', onRelease);
 
 	            _Keyboard2.default.on('up', function () {
 	                _this2.go('up');
 	            });
-	            _Keyboard2.default.on('upRelease', function () {
-	                _this2.stop();
-	            });
+	            _Keyboard2.default.on('upRelease', onRelease);
 
 	            _Keyboard2.default.on('left', function () {
 	                _this2.go('left');
 	            });
-	            _Keyboard2.default.on('leftRelease', function () {
-	                _this2.stop();
-	            });
+	            _Keyboard2.default.on('leftRelease', onRelease);
 
 	            _Keyboard2.default.on('right', function () {
 	                _this2.go('right');
 	            });
-	            _Keyboard2.default.on('rightRelease', function () {
-	                _this2.stop();
-	            });
+	            _Keyboard2.default.on('rightRelease', onRelease);
 	        }
 	    }]);
 
@@ -38363,36 +38349,36 @@
 	        };
 
 	        _this.left.release = function () {
-	            if (!self._isDown('right', 'up', 'down')) {
-	                self.emit('leftRelease', {});
-	            }
+	            self.emit('leftRelease', {
+	                isDown: self._whatIsDown('right', 'up', 'down')
+	            });
 	        };
 
 	        _this.up.press = function () {
 	            self.emit('up', {});
 	        };
 	        _this.up.release = function () {
-	            if (!self._isDown('right', 'left', 'down')) {
-	                self.emit('upRelease', {});
-	            }
+	            self.emit('upRelease', {
+	                isDown: self._whatIsDown('right', 'left', 'down')
+	            });
 	        };
 
 	        _this.right.press = function () {
 	            self.emit('right', {});
 	        };
 	        _this.right.release = function () {
-	            if (!self._isDown('left', 'up', 'down')) {
-	                self.emit('rightRelease', {});
-	            }
+	            self.emit('rightRelease', {
+	                isDown: self._whatIsDown('left', 'up', 'down')
+	            });
 	        };
 
 	        _this.down.press = function () {
 	            self.emit('down', {});
 	        };
 	        _this.down.release = function () {
-	            if (!self._isDown('right', 'up', 'left')) {
-	                self.emit('downRelease', {});
-	            }
+	            self.emit('downRelease', {
+	                isDown: self._whatIsDown('right', 'up', 'left')
+	            });
 	        };
 
 	        _this.space.press = function () {
@@ -38423,6 +38409,25 @@
 	            return args.reduce(function (prev, item) {
 	                return _this2[item].isDown || prev;
 	            }, false);
+	        }
+
+	        /**
+	         * Определит какая клавиша из заданных нажата и вернет ее наименование
+	         * Клавиши для анализа указываются перечислением параметров
+	         */
+
+	    }, {
+	        key: '_whatIsDown',
+	        value: function _whatIsDown() {
+	            var _this3 = this;
+
+	            for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+	                args[_key3] = arguments[_key3];
+	            }
+
+	            return args.reduce(function (prev, item) {
+	                return _this3[item].isDown ? item : prev;
+	            }, '');
 	        }
 
 	        /*
