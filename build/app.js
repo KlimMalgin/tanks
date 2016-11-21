@@ -38140,6 +38140,14 @@
 
 	var _Resources2 = _interopRequireDefault(_Resources);
 
+	var _Keyboard = __webpack_require__(189);
+
+	var _Keyboard2 = _interopRequireDefault(_Keyboard);
+
+	var _AnimationStore = __webpack_require__(183);
+
+	var _AnimationStore2 = _interopRequireDefault(_AnimationStore);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -38181,6 +38189,9 @@
 	         * Ускорение при движении по вертикали
 	         */
 	        _this.vy = 0;
+
+	        _this.listenKeyboard();
+	        _AnimationStore2.default.addChangeListener(_this.onDraw.bind(_this));
 	        return _this;
 	    }
 
@@ -38202,30 +38213,41 @@
 	                    this.rotation = rotateAngle * 0;
 	                    this.rotatePosition = direction;
 	                    this.vx = 0;
-	                    this.vy = velocity;
+	                    this.vy -= velocity;
 	                    break;
 
 	                case 'down':
 	                    this.rotation = rotateAngle * -2;
 	                    this.rotatePosition = direction;
 	                    this.vx = 0;
-	                    this.vy = velocity;
+	                    this.vy += velocity;
 	                    break;
 
 	                case 'left':
 	                    this.rotation = rotateAngle * -1;
 	                    this.rotatePosition = direction;
-	                    this.vx = velocity;
+	                    this.vx -= velocity;
 	                    this.vy = 0;
 	                    break;
 
 	                case 'right':
 	                    this.rotation = rotateAngle * 1;
 	                    this.rotatePosition = direction;
-	                    this.vx = velocity;
+	                    this.vx += velocity;
 	                    this.vy = 0;
 	                    break;
 	            }
+	        }
+
+	        /**
+	         * Прекращает движение танка
+	         */
+
+	    }, {
+	        key: 'stop',
+	        value: function stop() {
+	            this.vx = 0;
+	            this.vy = 0;
 	        }
 
 	        /**
@@ -38238,12 +38260,211 @@
 	            this.x += this.vx;
 	            this.y += this.vy;
 	        }
+	    }, {
+	        key: 'listenKeyboard',
+	        value: function listenKeyboard() {
+	            var _this2 = this;
+
+	            _Keyboard2.default.on('down', function () {
+	                _this2.go('down');
+	            });
+	            _Keyboard2.default.on('downRelease', function () {
+	                _this2.stop();
+	            });
+
+	            _Keyboard2.default.on('up', function () {
+	                _this2.go('up');
+	            });
+	            _Keyboard2.default.on('upRelease', function () {
+	                _this2.stop();
+	            });
+
+	            _Keyboard2.default.on('left', function () {
+	                _this2.go('left');
+	            });
+	            _Keyboard2.default.on('leftRelease', function () {
+	                _this2.stop();
+	            });
+
+	            _Keyboard2.default.on('right', function () {
+	                _this2.go('right');
+	            });
+	            _Keyboard2.default.on('rightRelease', function () {
+	                _this2.stop();
+	            });
+	        }
 	    }]);
 
 	    return Tank;
 	}(_pixi.Sprite);
 
 	exports.default = Tank;
+
+/***/ },
+/* 189 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _events = __webpack_require__(181);
+
+	var _events2 = _interopRequireDefault(_events);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Keyboard = function (_EventEmitter) {
+	    _inherits(Keyboard, _EventEmitter);
+
+	    function Keyboard() {
+	        var _ref;
+
+	        _classCallCheck(this, Keyboard);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        var _this = _possibleConstructorReturn(this, (_ref = Keyboard.__proto__ || Object.getPrototypeOf(Keyboard)).call.apply(_ref, [this].concat(args)));
+
+	        var left = Keyboard.keyboard(37),
+	            up = Keyboard.keyboard(38),
+	            right = Keyboard.keyboard(39),
+	            down = Keyboard.keyboard(40),
+	            space = Keyboard.keyboard(32);
+
+	        var self = _this;
+
+	        left.press = function () {
+	            self.emit('left', {});
+	        };
+
+	        left.release = function () {
+	            if (!right.isDown) {
+	                self.emit('leftRelease', {});
+	            }
+	        };
+
+	        up.press = function () {
+	            self.emit('up', {});
+	        };
+	        up.release = function () {
+	            if (!down.isDown) {
+	                self.emit('upRelease', {});
+	            }
+	        };
+
+	        right.press = function () {
+	            self.emit('right', {});
+	        };
+	        right.release = function () {
+	            if (!left.isDown) {
+	                self.emit('rightRelease', {});
+	            }
+	        };
+
+	        down.press = function () {
+	            self.emit('down', {});
+	        };
+	        down.release = function () {
+	            if (!up.isDown) {
+	                self.emit('downRelease', {});
+	            }
+	        };
+
+	        space.press = function () {
+	            self.emit('space', {});
+	        };
+	        space.release = function () {
+	            self.emit('spaceRelease', {});
+	        };
+
+	        return _this;
+	    }
+
+	    /*
+	    How to use:
+	         var keyObject = keyboard(asciiKeyCodeNumber);
+	        keyObject.press = function() {
+	            //key object pressed
+	        };
+	        keyObject.release = function() {
+	            //key object released
+	        };
+	         //Capture the keyboard arrow keys
+	        var left = keyboard(37),
+	            up = keyboard(38),
+	            right = keyboard(39),
+	            down = keyboard(40);
+	         //Left arrow key `press` method
+	        left.press = function() {
+	             //Change the cat's velocity when the key is pressed
+	            cat.vx = -5;
+	            cat.vy = 0;
+	        };
+	         //Left arrow key `release` method
+	        left.release = function() {
+	             //If the left arrow has been released, and the right arrow isn't down,
+	            //and the cat isn't moving vertically:
+	            //Stop the cat
+	            if (!right.isDown && cat.vy === 0) {
+	              cat.vx = 0;
+	            }
+	        };
+	     */
+
+
+	    _createClass(Keyboard, null, [{
+	        key: 'keyboard',
+	        value: function keyboard(keyCode) {
+	            var key = {};
+	            key.code = keyCode;
+	            key.isDown = false;
+	            key.isUp = true;
+	            key.press = undefined;
+	            key.release = undefined;
+	            //The `downHandler`
+	            key.downHandler = function (event) {
+	                if (event.keyCode === key.code) {
+	                    if (key.isUp && key.press) key.press();
+	                    key.isDown = true;
+	                    key.isUp = false;
+	                }
+	                event.preventDefault();
+	            };
+
+	            //The `upHandler`
+	            key.upHandler = function (event) {
+	                if (event.keyCode === key.code) {
+	                    if (key.isDown && key.release) key.release();
+	                    key.isDown = false;
+	                    key.isUp = true;
+	                }
+	                event.preventDefault();
+	            };
+
+	            //Attach event listeners
+	            window.addEventListener("keydown", key.downHandler.bind(key), false);
+	            window.addEventListener("keyup", key.upHandler.bind(key), false);
+	            return key;
+	        }
+	    }]);
+
+	    return Keyboard;
+	}(_events2.default);
+
+	exports.default = new Keyboard();
 
 /***/ }
 /******/ ]);
