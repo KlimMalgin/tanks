@@ -44,18 +44,19 @@ export default class Tank extends Sprite {
      */
     go(direction, velocity = 2) {
         var rotateAngle = Math.PI / 2;
+        this.stop();
         switch (direction) {
             case 'up':
                 this.rotation = rotateAngle * 0;
                 this.rotatePosition = direction;
-                this.vx = 0;
+                //this.vx = 0;
                 this.vy -= velocity;
                 break;
 
             case 'down':
                 this.rotation = rotateAngle * -2;
                 this.rotatePosition = direction;
-                this.vx = 0;
+                //this.vx = 0;
                 this.vy += velocity;
                 break;
 
@@ -63,14 +64,14 @@ export default class Tank extends Sprite {
                 this.rotation = rotateAngle * -1;
                 this.rotatePosition = direction;
                 this.vx -= velocity;
-                this.vy = 0;
+                //this.vy = 0;
                 break;
 
             case 'right':
                 this.rotation = rotateAngle * 1;
                 this.rotatePosition = direction;
                 this.vx += velocity;
-                this.vy = 0;
+                //this.vy = 0;
                 break;
         }
     }
@@ -96,15 +97,15 @@ export default class Tank extends Sprite {
               vStop = () => { if (this.vy === 0) { this.stop(); } };
 
         Keyboard.on('down', () => { this.go('down'); });
-        Keyboard.on('downRelease', hStop);
+        Keyboard.on('downRelease', () => { this.stop(); });
 
         Keyboard.on('up', () => { this.go('up'); });
-        Keyboard.on('upRelease', hStop);
+        Keyboard.on('upRelease', () => { this.stop(); });
 
         Keyboard.on('left', () => { this.go('left'); });
-        Keyboard.on('leftRelease', vStop);
+        Keyboard.on('leftRelease', () => { this.stop(); });
 
         Keyboard.on('right', () => { this.go('right'); });
-        Keyboard.on('rightRelease', vStop);
+        Keyboard.on('rightRelease', () => { this.stop(); });
     }
 }

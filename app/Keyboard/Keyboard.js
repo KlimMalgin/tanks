@@ -5,58 +5,68 @@ class Keyboard extends EventEmitter {
 
     constructor(...args) {
         super(...args);
-        var left = Keyboard.keyboard(37),
-            up = Keyboard.keyboard(38),
-            right = Keyboard.keyboard(39),
-            down = Keyboard.keyboard(40),
-            space = Keyboard.keyboard(32);
+        this.left = Keyboard.keyboard(37);
+        this.up = Keyboard.keyboard(38);
+        this.right = Keyboard.keyboard(39);
+        this.down = Keyboard.keyboard(40);
+        this.space = Keyboard.keyboard(32);
 
         var self = this;
 
-        left.press = function() {
+        this.left.press = function() {
             self.emit('left', {});
         };
 
-        left.release = function() {
-            if (!right.isDown) {
+        this.left.release = function() {
+            if (!self._isDown('right', 'up', 'down')) {
                 self.emit('leftRelease', {});
             }
         };
 
-        up.press = function() {
+        this.up.press = function() {
             self.emit('up', {});
         };
-        up.release = function() {
-            if (!down.isDown) {
+        this.up.release = function() {
+            if (!self._isDown('right', 'left', 'down')) {
                 self.emit('upRelease', {});
             }
         };
 
-        right.press = function() {
+        this.right.press = function() {
             self.emit('right', {});
         };
-        right.release = function() {
-            if (!left.isDown) {
+        this.right.release = function() {
+            if (!self._isDown('left', 'up', 'down')) {
                 self.emit('rightRelease', {});
             }
         };
 
-        down.press = function() {
+        this.down.press = function() {
             self.emit('down', {});
         };
-        down.release = function() {
-            if (!up.isDown) {
+        this.down.release = function() {
+            if (!self._isDown('right', 'up', 'left')) {
                 self.emit('downRelease', {});
             }
         };
 
-        space.press = function() {
+        this.space.press = function() {
             self.emit('space', {});
         };
-        space.release = function() {
+        this.space.release = function() {
             self.emit('spaceRelease', {});
         };
 
+    }
+
+    /**
+     * Проверит находятся ли перечисленные в args кнопки в нажатом состоянии.
+     * Если состояние isDown хоть одной из кнопок ...args === true - будет возвращено true
+     */
+    _isDown(...args) {
+        return args.reduce((prev, item) => {
+            return this[item].isDown || prev;
+        }, false);
     }
 
     /*

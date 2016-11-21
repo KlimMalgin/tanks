@@ -38208,18 +38208,19 @@
 	            var velocity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
 
 	            var rotateAngle = Math.PI / 2;
+	            this.stop();
 	            switch (direction) {
 	                case 'up':
 	                    this.rotation = rotateAngle * 0;
 	                    this.rotatePosition = direction;
-	                    this.vx = 0;
+	                    //this.vx = 0;
 	                    this.vy -= velocity;
 	                    break;
 
 	                case 'down':
 	                    this.rotation = rotateAngle * -2;
 	                    this.rotatePosition = direction;
-	                    this.vx = 0;
+	                    //this.vx = 0;
 	                    this.vy += velocity;
 	                    break;
 
@@ -38227,14 +38228,14 @@
 	                    this.rotation = rotateAngle * -1;
 	                    this.rotatePosition = direction;
 	                    this.vx -= velocity;
-	                    this.vy = 0;
+	                    //this.vy = 0;
 	                    break;
 
 	                case 'right':
 	                    this.rotation = rotateAngle * 1;
 	                    this.rotatePosition = direction;
 	                    this.vx += velocity;
-	                    this.vy = 0;
+	                    //this.vy = 0;
 	                    break;
 	            }
 	        }
@@ -38279,22 +38280,30 @@
 	            _Keyboard2.default.on('down', function () {
 	                _this2.go('down');
 	            });
-	            _Keyboard2.default.on('downRelease', hStop);
+	            _Keyboard2.default.on('downRelease', function () {
+	                _this2.stop();
+	            });
 
 	            _Keyboard2.default.on('up', function () {
 	                _this2.go('up');
 	            });
-	            _Keyboard2.default.on('upRelease', hStop);
+	            _Keyboard2.default.on('upRelease', function () {
+	                _this2.stop();
+	            });
 
 	            _Keyboard2.default.on('left', function () {
 	                _this2.go('left');
 	            });
-	            _Keyboard2.default.on('leftRelease', vStop);
+	            _Keyboard2.default.on('leftRelease', function () {
+	                _this2.stop();
+	            });
 
 	            _Keyboard2.default.on('right', function () {
 	                _this2.go('right');
 	            });
-	            _Keyboard2.default.on('rightRelease', vStop);
+	            _Keyboard2.default.on('rightRelease', function () {
+	                _this2.stop();
+	            });
 	        }
 	    }]);
 
@@ -38341,94 +38350,113 @@
 
 	        var _this = _possibleConstructorReturn(this, (_ref = Keyboard.__proto__ || Object.getPrototypeOf(Keyboard)).call.apply(_ref, [this].concat(args)));
 
-	        var left = Keyboard.keyboard(37),
-	            up = Keyboard.keyboard(38),
-	            right = Keyboard.keyboard(39),
-	            down = Keyboard.keyboard(40),
-	            space = Keyboard.keyboard(32);
+	        _this.left = Keyboard.keyboard(37);
+	        _this.up = Keyboard.keyboard(38);
+	        _this.right = Keyboard.keyboard(39);
+	        _this.down = Keyboard.keyboard(40);
+	        _this.space = Keyboard.keyboard(32);
 
 	        var self = _this;
 
-	        left.press = function () {
+	        _this.left.press = function () {
 	            self.emit('left', {});
 	        };
 
-	        left.release = function () {
-	            if (!right.isDown) {
+	        _this.left.release = function () {
+	            if (!self._isDown('right', 'up', 'down')) {
 	                self.emit('leftRelease', {});
 	            }
 	        };
 
-	        up.press = function () {
+	        _this.up.press = function () {
 	            self.emit('up', {});
 	        };
-	        up.release = function () {
-	            if (!down.isDown) {
+	        _this.up.release = function () {
+	            if (!self._isDown('right', 'left', 'down')) {
 	                self.emit('upRelease', {});
 	            }
 	        };
 
-	        right.press = function () {
+	        _this.right.press = function () {
 	            self.emit('right', {});
 	        };
-	        right.release = function () {
-	            if (!left.isDown) {
+	        _this.right.release = function () {
+	            if (!self._isDown('left', 'up', 'down')) {
 	                self.emit('rightRelease', {});
 	            }
 	        };
 
-	        down.press = function () {
+	        _this.down.press = function () {
 	            self.emit('down', {});
 	        };
-	        down.release = function () {
-	            if (!up.isDown) {
+	        _this.down.release = function () {
+	            if (!self._isDown('right', 'up', 'left')) {
 	                self.emit('downRelease', {});
 	            }
 	        };
 
-	        space.press = function () {
+	        _this.space.press = function () {
 	            self.emit('space', {});
 	        };
-	        space.release = function () {
+	        _this.space.release = function () {
 	            self.emit('spaceRelease', {});
 	        };
 
 	        return _this;
 	    }
 
-	    /*
-	    How to use:
-	         var keyObject = keyboard(asciiKeyCodeNumber);
-	        keyObject.press = function() {
-	            //key object pressed
-	        };
-	        keyObject.release = function() {
-	            //key object released
-	        };
-	         //Capture the keyboard arrow keys
-	        var left = keyboard(37),
-	            up = keyboard(38),
-	            right = keyboard(39),
-	            down = keyboard(40);
-	         //Left arrow key `press` method
-	        left.press = function() {
-	             //Change the cat's velocity when the key is pressed
-	            cat.vx = -5;
-	            cat.vy = 0;
-	        };
-	         //Left arrow key `release` method
-	        left.release = function() {
-	             //If the left arrow has been released, and the right arrow isn't down,
-	            //and the cat isn't moving vertically:
-	            //Stop the cat
-	            if (!right.isDown && cat.vy === 0) {
-	              cat.vx = 0;
-	            }
-	        };
+	    /**
+	     * Проверит находятся ли перечисленные в args кнопки в нажатом состоянии.
+	     * Если состояние isDown хоть одной из кнопок ...args === true - будет возвращено true
 	     */
 
 
-	    _createClass(Keyboard, null, [{
+	    _createClass(Keyboard, [{
+	        key: '_isDown',
+	        value: function _isDown() {
+	            var _this2 = this;
+
+	            for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+	                args[_key2] = arguments[_key2];
+	            }
+
+	            return args.reduce(function (prev, item) {
+	                return _this2[item].isDown || prev;
+	            }, false);
+	        }
+
+	        /*
+	        How to use:
+	             var keyObject = keyboard(asciiKeyCodeNumber);
+	            keyObject.press = function() {
+	                //key object pressed
+	            };
+	            keyObject.release = function() {
+	                //key object released
+	            };
+	             //Capture the keyboard arrow keys
+	            var left = keyboard(37),
+	                up = keyboard(38),
+	                right = keyboard(39),
+	                down = keyboard(40);
+	             //Left arrow key `press` method
+	            left.press = function() {
+	                 //Change the cat's velocity when the key is pressed
+	                cat.vx = -5;
+	                cat.vy = 0;
+	            };
+	             //Left arrow key `release` method
+	            left.release = function() {
+	                 //If the left arrow has been released, and the right arrow isn't down,
+	                //and the cat isn't moving vertically:
+	                //Stop the cat
+	                if (!right.isDown && cat.vy === 0) {
+	                  cat.vx = 0;
+	                }
+	            };
+	         */
+
+	    }], [{
 	        key: 'keyboard',
 	        value: function keyboard(keyCode) {
 	            var key = {};
