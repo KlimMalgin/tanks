@@ -92,16 +92,19 @@ export default class Tank extends Sprite {
     }
 
     listenKeyboard() {
+        const hStop = () => { if (this.vx === 0) { this.stop(); } },
+              vStop = () => { if (this.vy === 0) { this.stop(); } };
+
         Keyboard.on('down', () => { this.go('down'); });
-        Keyboard.on('downRelease', () => { this.stop(); });
+        Keyboard.on('downRelease', hStop);
 
         Keyboard.on('up', () => { this.go('up'); });
-        Keyboard.on('upRelease', () => { this.stop(); });
+        Keyboard.on('upRelease', hStop);
 
         Keyboard.on('left', () => { this.go('left'); });
-        Keyboard.on('leftRelease', () => { this.stop(); });
+        Keyboard.on('leftRelease', vStop);
 
         Keyboard.on('right', () => { this.go('right'); });
-        Keyboard.on('rightRelease', () => { this.stop(); });
+        Keyboard.on('rightRelease', vStop);
     }
 }

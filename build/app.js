@@ -38265,33 +38265,36 @@
 	        value: function listenKeyboard() {
 	            var _this2 = this;
 
+	            var hStop = function hStop() {
+	                if (_this2.vx === 0) {
+	                    _this2.stop();
+	                }
+	            },
+	                vStop = function vStop() {
+	                if (_this2.vy === 0) {
+	                    _this2.stop();
+	                }
+	            };
+
 	            _Keyboard2.default.on('down', function () {
 	                _this2.go('down');
 	            });
-	            _Keyboard2.default.on('downRelease', function () {
-	                _this2.stop();
-	            });
+	            _Keyboard2.default.on('downRelease', hStop);
 
 	            _Keyboard2.default.on('up', function () {
 	                _this2.go('up');
 	            });
-	            _Keyboard2.default.on('upRelease', function () {
-	                _this2.stop();
-	            });
+	            _Keyboard2.default.on('upRelease', hStop);
 
 	            _Keyboard2.default.on('left', function () {
 	                _this2.go('left');
 	            });
-	            _Keyboard2.default.on('leftRelease', function () {
-	                _this2.stop();
-	            });
+	            _Keyboard2.default.on('leftRelease', vStop);
 
 	            _Keyboard2.default.on('right', function () {
 	                _this2.go('right');
 	            });
-	            _Keyboard2.default.on('rightRelease', function () {
-	                _this2.stop();
-	            });
+	            _Keyboard2.default.on('rightRelease', vStop);
 	        }
 	    }]);
 
