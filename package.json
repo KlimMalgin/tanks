@@ -8,7 +8,10 @@
   "config": {
     "buildDir": "./build",
     "stageWidth": 800,
-    "stageHeight": 600
+    "stageHeight": 600,
+    "ammo": {
+      "bullet": "fire.png"
+    }
   },
   "repository": {
     "type": "git",
