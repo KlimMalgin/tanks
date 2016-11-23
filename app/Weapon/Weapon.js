@@ -13,6 +13,7 @@ export default class Weapon {
      * @param {String} type Разновидность патрона
      * @param {String} direction Направление выстрела
      * @param {Number} speed Скорость патрона
+     * @param {Object} startPosition Содержит координаты стартовой позиции пули
      */
     static fire(type, ...args) {
         switch (type) {

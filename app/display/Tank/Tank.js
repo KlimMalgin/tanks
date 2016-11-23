@@ -3,6 +3,7 @@ import Resources from '../../resources/Resources.js';
 import Keyboard from '../../Keyboard/Keyboard';
 import AnimationStore from '../../stores/AnimationStore';
 import { config } from '../../../package.json';
+import Weapon from '../../Weapon';
 
 export default class Tank extends Sprite {
 
@@ -110,6 +111,10 @@ export default class Tank extends Sprite {
 
         Keyboard.on('right', () => { this.go('right'); });
         Keyboard.on('rightRelease', onRelease);
+
+        Keyboard.on('space', () => {
+            Weapon.fire('Bullet', 'right', 8, { x: this.x, y: this.y });
+        });
     }
 
     /**

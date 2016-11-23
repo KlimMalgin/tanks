@@ -32,5 +32,42 @@ export default class Bullet extends Sprite {
          */
         this.vy = 0;
 
+        /**
+         * Начальное позиционирование относительно стрелявшего юнита
+         */
+        this.x = startPosition.x;
+        this.y = startPosition.y;
+
+        /**
+         * Задаем направление движения
+         */
+        this._setDirection(direction, speed);
+    }
+
+    /**
+     * Установить направление движения в сторону direction с ускорением speed
+     */
+    _setDirection(direction, speed) {
+        switch(direction) {
+            case 'up':
+                this.vx = -speed;
+                break;
+
+            case 'down':
+                this.vx = speed;
+                break;
+
+            case 'left':
+                this.vy = -speed;
+                break;
+
+            case 'right':
+                this.vy = speed;
+                break;
+
+            default:
+                this.vy = -speed;
+                break;
+        }
     }
 }
