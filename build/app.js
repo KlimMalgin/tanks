@@ -37818,7 +37818,7 @@
 
 	var _Tank2 = _interopRequireDefault(_Tank);
 
-	var _DisplayStore = __webpack_require__(194);
+	var _DisplayStore = __webpack_require__(193);
 
 	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
 
@@ -38148,9 +38148,7 @@
 
 	var _Resources2 = _interopRequireDefault(_Resources);
 
-	var _Keyboard = __webpack_require__(189);
-
-	var _Keyboard2 = _interopRequireDefault(_Keyboard);
+	var _utils = __webpack_require__(194);
 
 	var _AnimationStore = __webpack_require__(183);
 
@@ -38158,11 +38156,11 @@
 
 	var _package = __webpack_require__(1);
 
-	var _Weapon = __webpack_require__(190);
+	var _Weapon = __webpack_require__(189);
 
 	var _Weapon2 = _interopRequireDefault(_Weapon);
 
-	var _DisplayStore = __webpack_require__(194);
+	var _DisplayStore = __webpack_require__(193);
 
 	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
 
@@ -38288,27 +38286,27 @@
 	                !!params.isDown && _this2.go(params.isDown);
 	            };
 
-	            _Keyboard2.default.on('down', function () {
+	            _utils.Keyboard.on('down', function () {
 	                _this2.go('down');
 	            });
-	            _Keyboard2.default.on('downRelease', onRelease);
+	            _utils.Keyboard.on('downRelease', onRelease);
 
-	            _Keyboard2.default.on('up', function () {
+	            _utils.Keyboard.on('up', function () {
 	                _this2.go('up');
 	            });
-	            _Keyboard2.default.on('upRelease', onRelease);
+	            _utils.Keyboard.on('upRelease', onRelease);
 
-	            _Keyboard2.default.on('left', function () {
+	            _utils.Keyboard.on('left', function () {
 	                _this2.go('left');
 	            });
-	            _Keyboard2.default.on('leftRelease', onRelease);
+	            _utils.Keyboard.on('leftRelease', onRelease);
 
-	            _Keyboard2.default.on('right', function () {
+	            _utils.Keyboard.on('right', function () {
 	                _this2.go('right');
 	            });
-	            _Keyboard2.default.on('rightRelease', onRelease);
+	            _utils.Keyboard.on('rightRelease', onRelease);
 
-	            _Keyboard2.default.on('space', function () {
+	            _utils.Keyboard.on('space', function () {
 	                var bullet = _Weapon2.default.fire('Bullet', _this2.rotatePosition, 8, _this2._weaponStartPosition(_this2.rotatePosition));
 	                if (bullet) {
 	                    _DisplayStore2.default.create(bullet);
@@ -38370,6 +38368,364 @@
 
 /***/ },
 /* 189 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _Weapon = __webpack_require__(190);
+
+	var _Weapon2 = _interopRequireDefault(_Weapon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _Weapon2.default;
+
+/***/ },
+/* 190 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Класс, который отвечает за работу с оружием в целом.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Все вызовы идут через этот класс.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+
+	var _Ammo = __webpack_require__(191);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Weapon = function () {
+	    function Weapon() {
+	        _classCallCheck(this, Weapon);
+	    }
+
+	    _createClass(Weapon, null, [{
+	        key: 'fire',
+
+
+	        /**
+	         * Сгенерирует выстрел. Создаст экземпляр заданного патрона, его скорость,
+	         * направление и прочее. И Разместит патрон на игровом поле.
+	         * @param {String} type Разновидность патрона
+	         * @param {String} direction Направление выстрела
+	         * @param {Number} speed Скорость патрона
+	         * @param {Object} startPosition Содержит координаты стартовой позиции пули
+	         */
+	        value: function fire(type) {
+	            switch (type) {
+	                case 'Bullet':
+	                    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	                        args[_key - 1] = arguments[_key];
+	                    }
+
+	                    return new (Function.prototype.bind.apply(_Ammo.Bullet, [null].concat(args)))();
+
+	                default:
+	                    console.error('Такого снаряда не существует!');
+	            }
+
+	            return null;
+	        }
+	    }]);
+
+	    return Weapon;
+	}();
+
+	exports.default = Weapon;
+
+/***/ },
+/* 191 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.Bullet = undefined;
+
+	var _Bullet = __webpack_require__(192);
+
+	var _Bullet2 = _interopRequireDefault(_Bullet);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.Bullet = _Bullet2.default;
+
+/***/ },
+/* 192 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _pixi = __webpack_require__(3);
+
+	var _Resources = __webpack_require__(187);
+
+	var _Resources2 = _interopRequireDefault(_Resources);
+
+	var _package = __webpack_require__(1);
+
+	var _AnimationStore = __webpack_require__(183);
+
+	var _AnimationStore2 = _interopRequireDefault(_AnimationStore);
+
+	var _DisplayStore = __webpack_require__(193);
+
+	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Класс описывает одну из разновидностей снарядов - простую пулю.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+	var Bullet = function (_Sprite) {
+	    _inherits(Bullet, _Sprite);
+
+	    /**
+	     * Конструктор для пули
+	     * @param {String} direction Направление выстрела
+	     * @param {Number} speed Скорость патрона
+	     * @param {Object} startPosition Содержит координаты стартовой позиции пули
+	     */
+	    function Bullet(direction, speed, startPosition) {
+	        _classCallCheck(this, Bullet);
+
+	        var _this = _possibleConstructorReturn(this, (Bullet.__proto__ || Object.getPrototypeOf(Bullet)).call(this, _Resources2.default.getTexture(_package.config.ammo.bullet)));
+
+	        _this.anchor.x = 0.5;
+	        _this.anchor.y = 0.5;
+
+	        _this.width = _this.width / 2;
+	        _this.height = _this.height / 2;
+
+	        /**
+	         * Ускорение при движении по горизонтали
+	         */
+	        _this.vx = 0;
+
+	        /**
+	         * Ускорение при движении по вертикали
+	         */
+	        _this.vy = 0;
+
+	        /**
+	         * Начальное позиционирование относительно стрелявшего юнита
+	         */
+	        _this.x = startPosition.x;
+	        _this.y = startPosition.y;
+
+	        /**
+	         * Задаем направление движения
+	         */
+	        _this._setDirection(direction, speed);
+
+	        /**
+	         * Создаем постоянную onDraw-функцию с привязанным контекстом для
+	         * дальнейшего добавления/удаления её в сторе
+	         */
+	        _this.onDrawWrapper = _this.onDraw.bind(_this);
+
+	        _AnimationStore2.default.addChangeListener(_this.onDrawWrapper);
+	        return _this;
+	    }
+
+	    /**
+	     * Деструктор для подготовки класса снаряда к удалению из памяти
+	     */
+
+
+	    _createClass(Bullet, [{
+	        key: 'destructor',
+	        value: function destructor() {
+	            _AnimationStore2.default.removeChangeListener(this.onDrawWrapper);
+	        }
+	    }, {
+	        key: 'onDraw',
+	        value: function onDraw() {
+	            this.x += this.vx;
+	            this.y += this.vy;
+	            this._checkForDestroy();
+	        }
+
+	        /**
+	         * Установить направление движения в сторону direction с ускорением speed
+	         */
+
+	    }, {
+	        key: '_setDirection',
+	        value: function _setDirection(direction, speed) {
+	            switch (direction) {
+	                case 'up':
+	                    this.vy = -speed;
+	                    break;
+
+	                case 'down':
+	                    this.vy = speed;
+	                    break;
+
+	                case 'left':
+	                    this.vx = -speed;
+	                    break;
+
+	                case 'right':
+	                    this.vx = speed;
+	                    break;
+
+	                default:
+	                    this.vy = -speed;
+	                    break;
+	            }
+	        }
+
+	        /**
+	         * Провери пора ли удалять патрон с игрового поля.
+	         * Если пора - сгенерирует соответствующее событие
+	         * для DisplayStore.
+	         */
+
+	    }, {
+	        key: '_checkForDestroy',
+	        value: function _checkForDestroy() {
+	            if (this.x < 0 || this.x > _package.config.stageWidth || this.y < 0 || this.y > _package.config.stageHeight) {
+	                //console.log('destroy: %o', this);
+	                _DisplayStore2.default.destroy(this);
+	            }
+	        }
+	    }]);
+
+	    return Bullet;
+	}(_pixi.Sprite);
+
+	exports.default = Bullet;
+
+/***/ },
+/* 193 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _events = __webpack_require__(181);
+
+	var _events2 = _interopRequireDefault(_events);
+
+	var _AppConstants = __webpack_require__(182);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	 * В DisplayStore регистрируются обработчики, которые добавляют
+	 * и удаляют DisplayObjects с канвы
+	 */
+	var DisplayStore = function (_EventEmitter) {
+	    _inherits(DisplayStore, _EventEmitter);
+
+	    function DisplayStore() {
+	        var _ref;
+
+	        _classCallCheck(this, DisplayStore);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _possibleConstructorReturn(this, (_ref = DisplayStore.__proto__ || Object.getPrototypeOf(DisplayStore)).call.apply(_ref, [this].concat(args)));
+	    }
+
+	    /**
+	     * Генерирует событие создания объекта
+	     * @param {Object} objectInstance Экземпляр создаваемого объекта
+	     */
+
+
+	    _createClass(DisplayStore, [{
+	        key: 'create',
+	        value: function create(objectInstance) {
+	            this.emit(_AppConstants.CREATE_OBJECT, objectInstance);
+	        }
+
+	        /**
+	         * Генерирует событие уничтожения объекта
+	         * @param {Object} objectInstance Экземпляр объекта, который нужно удалить с карты и уничтожить
+	         */
+
+	    }, {
+	        key: 'destroy',
+	        value: function destroy(objectInstance) {
+	            this.emit(_AppConstants.DESTROY_OBJECT, objectInstance);
+	        }
+	    }, {
+	        key: 'addCreateListener',
+	        value: function addCreateListener(callback) {
+	            this.on(_AppConstants.CREATE_OBJECT, callback);
+	        }
+	    }, {
+	        key: 'addDestroyListener',
+	        value: function addDestroyListener(callback) {
+	            this.on(_AppConstants.DESTROY_OBJECT, callback);
+	        }
+	    }]);
+
+	    return DisplayStore;
+	}(_events2.default);
+
+	exports.default = new DisplayStore();
+
+/***/ },
+/* 194 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.Keyboard = undefined;
+
+	var _Keyboard = __webpack_require__(195);
+
+	var _Keyboard2 = _interopRequireDefault(_Keyboard);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.Keyboard = _Keyboard2.default;
+
+/***/ },
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38571,345 +38927,6 @@
 	}(_events2.default);
 
 	exports.default = new Keyboard();
-
-/***/ },
-/* 190 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _Weapon = __webpack_require__(191);
-
-	var _Weapon2 = _interopRequireDefault(_Weapon);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _Weapon2.default;
-
-/***/ },
-/* 191 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Класс, который отвечает за работу с оружием в целом.
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Все вызовы идут через этот класс.
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
-
-
-	var _Ammo = __webpack_require__(192);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var Weapon = function () {
-	    function Weapon() {
-	        _classCallCheck(this, Weapon);
-	    }
-
-	    _createClass(Weapon, null, [{
-	        key: 'fire',
-
-
-	        /**
-	         * Сгенерирует выстрел. Создаст экземпляр заданного патрона, его скорость,
-	         * направление и прочее. И Разместит патрон на игровом поле.
-	         * @param {String} type Разновидность патрона
-	         * @param {String} direction Направление выстрела
-	         * @param {Number} speed Скорость патрона
-	         * @param {Object} startPosition Содержит координаты стартовой позиции пули
-	         */
-	        value: function fire(type) {
-	            switch (type) {
-	                case 'Bullet':
-	                    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-	                        args[_key - 1] = arguments[_key];
-	                    }
-
-	                    return new (Function.prototype.bind.apply(_Ammo.Bullet, [null].concat(args)))();
-
-	                default:
-	                    console.error('Такого снаряда не существует!');
-	            }
-
-	            return null;
-	        }
-	    }]);
-
-	    return Weapon;
-	}();
-
-	exports.default = Weapon;
-
-/***/ },
-/* 192 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.Bullet = undefined;
-
-	var _Bullet = __webpack_require__(193);
-
-	var _Bullet2 = _interopRequireDefault(_Bullet);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.Bullet = _Bullet2.default;
-
-/***/ },
-/* 193 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _pixi = __webpack_require__(3);
-
-	var _Resources = __webpack_require__(187);
-
-	var _Resources2 = _interopRequireDefault(_Resources);
-
-	var _package = __webpack_require__(1);
-
-	var _AnimationStore = __webpack_require__(183);
-
-	var _AnimationStore2 = _interopRequireDefault(_AnimationStore);
-
-	var _DisplayStore = __webpack_require__(194);
-
-	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Класс описывает одну из разновидностей снарядов - простую пулю.
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-
-
-	var Bullet = function (_Sprite) {
-	    _inherits(Bullet, _Sprite);
-
-	    /**
-	     * Конструктор для пули
-	     * @param {String} direction Направление выстрела
-	     * @param {Number} speed Скорость патрона
-	     * @param {Object} startPosition Содержит координаты стартовой позиции пули
-	     */
-	    function Bullet(direction, speed, startPosition) {
-	        _classCallCheck(this, Bullet);
-
-	        var _this = _possibleConstructorReturn(this, (Bullet.__proto__ || Object.getPrototypeOf(Bullet)).call(this, _Resources2.default.getTexture(_package.config.ammo.bullet)));
-
-	        _this.anchor.x = 0.5;
-	        _this.anchor.y = 0.5;
-
-	        _this.width = _this.width / 2;
-	        _this.height = _this.height / 2;
-
-	        /**
-	         * Ускорение при движении по горизонтали
-	         */
-	        _this.vx = 0;
-
-	        /**
-	         * Ускорение при движении по вертикали
-	         */
-	        _this.vy = 0;
-
-	        /**
-	         * Начальное позиционирование относительно стрелявшего юнита
-	         */
-	        _this.x = startPosition.x;
-	        _this.y = startPosition.y;
-
-	        /**
-	         * Задаем направление движения
-	         */
-	        _this._setDirection(direction, speed);
-
-	        /**
-	         * Создаем постоянную onDraw-функцию с привязанным контекстом для
-	         * дальнейшего добавления/удаления её в сторе
-	         */
-	        _this.onDrawWrapper = _this.onDraw.bind(_this);
-
-	        _AnimationStore2.default.addChangeListener(_this.onDrawWrapper);
-	        return _this;
-	    }
-
-	    /**
-	     * Деструктор для подготовки класса снаряда к удалению из памяти
-	     */
-
-
-	    _createClass(Bullet, [{
-	        key: 'destructor',
-	        value: function destructor() {
-	            _AnimationStore2.default.removeChangeListener(this.onDrawWrapper);
-	        }
-	    }, {
-	        key: 'onDraw',
-	        value: function onDraw() {
-	            this.x += this.vx;
-	            this.y += this.vy;
-	            this._checkForDestroy();
-	        }
-
-	        /**
-	         * Установить направление движения в сторону direction с ускорением speed
-	         */
-
-	    }, {
-	        key: '_setDirection',
-	        value: function _setDirection(direction, speed) {
-	            switch (direction) {
-	                case 'up':
-	                    this.vy = -speed;
-	                    break;
-
-	                case 'down':
-	                    this.vy = speed;
-	                    break;
-
-	                case 'left':
-	                    this.vx = -speed;
-	                    break;
-
-	                case 'right':
-	                    this.vx = speed;
-	                    break;
-
-	                default:
-	                    this.vy = -speed;
-	                    break;
-	            }
-	        }
-
-	        /**
-	         * Провери пора ли удалять патрон с игрового поля.
-	         * Если пора - сгенерирует соответствующее событие
-	         * для DisplayStore.
-	         */
-
-	    }, {
-	        key: '_checkForDestroy',
-	        value: function _checkForDestroy() {
-	            if (this.x < 0 || this.x > _package.config.stageWidth || this.y < 0 || this.y > _package.config.stageHeight) {
-	                //console.log('destroy: %o', this);
-	                _DisplayStore2.default.destroy(this);
-	            }
-	        }
-	    }]);
-
-	    return Bullet;
-	}(_pixi.Sprite);
-
-	exports.default = Bullet;
-
-/***/ },
-/* 194 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _events = __webpack_require__(181);
-
-	var _events2 = _interopRequireDefault(_events);
-
-	var _AppConstants = __webpack_require__(182);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	/**
-	 * В DisplayStore регистрируются обработчики, которые добавляют
-	 * и удаляют DisplayObjects с канвы
-	 */
-	var DisplayStore = function (_EventEmitter) {
-	    _inherits(DisplayStore, _EventEmitter);
-
-	    function DisplayStore() {
-	        var _ref;
-
-	        _classCallCheck(this, DisplayStore);
-
-	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	            args[_key] = arguments[_key];
-	        }
-
-	        return _possibleConstructorReturn(this, (_ref = DisplayStore.__proto__ || Object.getPrototypeOf(DisplayStore)).call.apply(_ref, [this].concat(args)));
-	    }
-
-	    /**
-	     * Генерирует событие создания объекта
-	     * @param {Object} objectInstance Экземпляр создаваемого объекта
-	     */
-
-
-	    _createClass(DisplayStore, [{
-	        key: 'create',
-	        value: function create(objectInstance) {
-	            this.emit(_AppConstants.CREATE_OBJECT, objectInstance);
-	        }
-
-	        /**
-	         * Генерирует событие уничтожения объекта
-	         * @param {Object} objectInstance Экземпляр объекта, который нужно удалить с карты и уничтожить
-	         */
-
-	    }, {
-	        key: 'destroy',
-	        value: function destroy(objectInstance) {
-	            this.emit(_AppConstants.DESTROY_OBJECT, objectInstance);
-	        }
-	    }, {
-	        key: 'addCreateListener',
-	        value: function addCreateListener(callback) {
-	            this.on(_AppConstants.CREATE_OBJECT, callback);
-	        }
-	    }, {
-	        key: 'addDestroyListener',
-	        value: function addDestroyListener(callback) {
-	            this.on(_AppConstants.DESTROY_OBJECT, callback);
-	        }
-	    }]);
-
-	    return DisplayStore;
-	}(_events2.default);
-
-	exports.default = new DisplayStore();
 
 /***/ }
 /******/ ]);
