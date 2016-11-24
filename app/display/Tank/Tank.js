@@ -4,6 +4,7 @@ import Keyboard from '../../Keyboard/Keyboard';
 import AnimationStore from '../../stores/AnimationStore';
 import { config } from '../../../package.json';
 import Weapon from '../../Weapon';
+import DisplayStore from '../../stores/DisplayStore';
 
 export default class Tank extends Sprite {
 
@@ -113,7 +114,12 @@ export default class Tank extends Sprite {
         Keyboard.on('rightRelease', onRelease);
 
         Keyboard.on('space', () => {
-            Weapon.fire('Bullet', 'right', 8, { x: this.x, y: this.y });
+            var bullet = Weapon.fire('Bullet', this.rotatePosition, 8, { x: this.x, y: this.y });
+            if (bullet) {
+                DisplayStore.create(bullet);
+            } else {
+                console.log('Снаряд не создан');
+            }
         });
     }
 

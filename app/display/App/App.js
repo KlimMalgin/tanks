@@ -4,6 +4,7 @@ import ScaledContainer from '../ScaledContainer/ScaledContainer.js';
 import Background from '../Background/Background.js';
 //import RendererStore from '../../stores/RendererStore.js';
 import Tank from '../Tank/Tank';
+import DisplayStore from '../../stores/DisplayStore';
 
 /**
  * Main App Display Object
@@ -34,6 +35,13 @@ export default class App extends ScaledContainer {
         this.addChild(tank);
         this.addChild(tank2);
         this.addChild(tank3);
+
+        DisplayStore.addCreateListener( objectInstance => this.addChild(objectInstance) );
+        DisplayStore.addDestroyListener((objectInstance) => {
+            this.removeChild(objectInstance);
+            objectInstance.destructor();
+            objectInstance.destroy();
+        });
     }
 
 }

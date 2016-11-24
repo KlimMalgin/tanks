@@ -4,6 +4,8 @@
 import { Sprite } from 'pixi.js';
 import Resources from '../../resources/Resources.js';
 import { config } from '../../../package.json';
+import AnimationStore from '../../stores/AnimationStore';
+import DisplayStore from '../../stores/DisplayStore';
 
 export default class Bullet extends Sprite {
 
@@ -42,6 +44,20 @@ export default class Bullet extends Sprite {
          * Задаем направление движения
          */
         this._setDirection(direction, speed);
+
+        this.onDrawWrapper = this.onDraw.bind(this);
+
+        AnimationStore.addChangeListener(this.onDrawWrapper);
+    }
+
+    destructor() {
+        AnimationStore.removeChangeListener(this.onDrawWrapper);
+    }
+
+    onDraw() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this._checkForDestroy();
     }
 
     /**
@@ -50,24 +66,36 @@ export default class Bullet extends Sprite {
     _setDirection(direction, speed) {
         switch(direction) {
             case 'up':
-                this.vx = -speed;
-                break;
-
-            case 'down':
-                this.vx = speed;
-                break;
-
-            case 'left':
                 this.vy = -speed;
                 break;
 
-            case 'right':
+            case 'down':
                 this.vy = speed;
+                break;
+
+            case 'left':
+                this.vx = -speed;
+                break;
+
+            case 'right':
+                this.vx = speed;
                 break;
 
             default:
                 this.vy = -speed;
                 break;
+        }
+    }
+
+    /**
+     * Провери пора ли удалять патрон с игрового поля.
+     * Если пора - сгенерирует соответствующее событие
+     * для DisplayStore.
+     */
+    _checkForDestroy() {
+        if (this.x < 0 || this.x > config.stageWidth || this.y < 0 || this.y > config.stageHeight) {
+            console.log('destroy: %o', this);
+            DisplayStore.destroy(this);
         }
     }
 }
