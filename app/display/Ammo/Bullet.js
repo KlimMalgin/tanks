@@ -45,11 +45,18 @@ export default class Bullet extends Sprite {
          */
         this._setDirection(direction, speed);
 
+        /**
+         * Создаем постоянную onDraw-функцию с привязанным контекстом для
+         * дальнейшего добавления/удаления её в сторе
+         */
         this.onDrawWrapper = this.onDraw.bind(this);
 
         AnimationStore.addChangeListener(this.onDrawWrapper);
     }
 
+    /**
+     * Деструктор для подготовки класса снаряда к удалению из памяти
+     */
     destructor() {
         AnimationStore.removeChangeListener(this.onDrawWrapper);
     }
@@ -94,7 +101,7 @@ export default class Bullet extends Sprite {
      */
     _checkForDestroy() {
         if (this.x < 0 || this.x > config.stageWidth || this.y < 0 || this.y > config.stageHeight) {
-            console.log('destroy: %o', this);
+            //console.log('destroy: %o', this);
             DisplayStore.destroy(this);
         }
     }

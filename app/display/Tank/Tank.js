@@ -114,7 +114,7 @@ export default class Tank extends Sprite {
         Keyboard.on('rightRelease', onRelease);
 
         Keyboard.on('space', () => {
-            var bullet = Weapon.fire('Bullet', this.rotatePosition, 8, { x: this.x, y: this.y });
+            var bullet = Weapon.fire('Bullet', this.rotatePosition, 8, this._weaponStartPosition(this.rotatePosition));
             if (bullet) {
                 DisplayStore.create(bullet);
             } else {
@@ -147,6 +147,22 @@ export default class Tank extends Sprite {
             this.x = x;
         }
 
+    }
+
+    _weaponStartPosition(direction) {
+        switch (direction) {
+            case 'up':
+                return { x: this.x, y: this.y - Math.round(this.height / 2) };
+
+            case 'down':
+                return { x: this.x, y: this.y + Math.round(this.height / 2) };
+
+            case 'left':
+                return { x: this.x - Math.round(this.height / 2), y: this.y };
+
+            case 'right':
+                return { x: this.x + Math.round(this.height / 2), y: this.y };
+        }
     }
 
 }

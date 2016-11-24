@@ -38309,7 +38309,7 @@
 	            _Keyboard2.default.on('rightRelease', onRelease);
 
 	            _Keyboard2.default.on('space', function () {
-	                var bullet = _Weapon2.default.fire('Bullet', _this2.rotatePosition, 8, { x: _this2.x, y: _this2.y });
+	                var bullet = _Weapon2.default.fire('Bullet', _this2.rotatePosition, 8, _this2._weaponStartPosition(_this2.rotatePosition));
 	                if (bullet) {
 	                    _DisplayStore2.default.create(bullet);
 	                } else {
@@ -38343,6 +38343,23 @@
 	                        this.y = y;
 	                        this.x = x;
 	                    }
+	        }
+	    }, {
+	        key: '_weaponStartPosition',
+	        value: function _weaponStartPosition(direction) {
+	            switch (direction) {
+	                case 'up':
+	                    return { x: this.x, y: this.y - Math.round(this.height / 2) };
+
+	                case 'down':
+	                    return { x: this.x, y: this.y + Math.round(this.height / 2) };
+
+	                case 'left':
+	                    return { x: this.x - Math.round(this.height / 2), y: this.y };
+
+	                case 'right':
+	                    return { x: this.x + Math.round(this.height / 2), y: this.y };
+	            }
 	        }
 	    }]);
 
@@ -38731,11 +38748,20 @@
 	         */
 	        _this._setDirection(direction, speed);
 
+	        /**
+	         * Создаем постоянную onDraw-функцию с привязанным контекстом для
+	         * дальнейшего добавления/удаления её в сторе
+	         */
 	        _this.onDrawWrapper = _this.onDraw.bind(_this);
 
 	        _AnimationStore2.default.addChangeListener(_this.onDrawWrapper);
 	        return _this;
 	    }
+
+	    /**
+	     * Деструктор для подготовки класса снаряда к удалению из памяти
+	     */
+
 
 	    _createClass(Bullet, [{
 	        key: 'destructor',
@@ -38790,7 +38816,7 @@
 	        key: '_checkForDestroy',
 	        value: function _checkForDestroy() {
 	            if (this.x < 0 || this.x > _package.config.stageWidth || this.y < 0 || this.y > _package.config.stageHeight) {
-	                console.log('destroy: %o', this);
+	                //console.log('destroy: %o', this);
 	                _DisplayStore2.default.destroy(this);
 	            }
 	        }
@@ -38827,6 +38853,10 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	/**
+	 * В DisplayStore регистрируются обработчики, которые добавляют
+	 * и удаляют DisplayObjects с канвы
+	 */
 	var DisplayStore = function (_EventEmitter) {
 	    _inherits(DisplayStore, _EventEmitter);
 

@@ -1,6 +1,10 @@
 import EventEmitter from 'events';
 import { CREATE_OBJECT, DESTROY_OBJECT, ANIMATE, RESIZE } from '../constants/AppConstants';
 
+/**
+ * В DisplayStore регистрируются обработчики, которые добавляют
+ * и удаляют DisplayObjects с канвы
+ */
 class DisplayStore extends EventEmitter {
     constructor(...args) {
         super(...args);
