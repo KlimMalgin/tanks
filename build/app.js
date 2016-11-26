@@ -38231,16 +38231,23 @@
 	         */
 	        _this.vy = 0;
 
+	        /**
+	         * Создаем постоянную onDraw-функцию с привязанным контекстом для
+	         * дальнейшего добавления/удаления её в сторе
+	         */
+	        _this.onDrawWrapper = _this.onDraw.bind(_this);
+
 	        _utils.CollisionManager.add(_this);
 
 	        managed && _this.listenKeyboard();
-	        _AnimationStore2.default.addChangeListener(_this.onDraw.bind(_this));
+	        _AnimationStore2.default.addChangeListener(_this.onDrawWrapper);
 	        return _this;
 	    }
 
 	    _createClass(Tank, [{
 	        key: 'destructor',
 	        value: function destructor() {
+	            _AnimationStore2.default.removeChangeListener(this.onDrawWrapper);
 	            _utils.CollisionManager.remove(this);
 	        }
 
@@ -38920,7 +38927,10 @@
 
 	            if (collisionList.length) {
 	                console.log('>>> Есть коллизия: ', collisionList);
-	                debugger;
+	                collisionList.forEach(function (item) {
+	                    _DisplayStore2.default.destroy(item);
+	                });
+	                _DisplayStore2.default.destroy(this);
 	            }
 	        }
 	    }]);

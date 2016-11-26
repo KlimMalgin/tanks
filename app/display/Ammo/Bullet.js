@@ -126,7 +126,10 @@ export default class Bullet extends Sprite {
 
         if (collisionList.length) {
             console.log('>>> Есть коллизия: ', collisionList);
-            debugger;
+            collisionList.forEach((item) => {
+                DisplayStore.destroy(item);
+            });
+            DisplayStore.destroy(this);
         }
     }
 }

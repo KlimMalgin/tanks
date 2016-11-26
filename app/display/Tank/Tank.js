@@ -46,13 +46,20 @@ export default class Tank extends Sprite {
          */
         this.vy = 0;
 
+        /**
+         * Создаем постоянную onDraw-функцию с привязанным контекстом для
+         * дальнейшего добавления/удаления её в сторе
+         */
+        this.onDrawWrapper = this.onDraw.bind(this);
+
         CollisionManager.add(this);
 
         managed && this.listenKeyboard();
-        AnimationStore.addChangeListener(this.onDraw.bind(this));
+        AnimationStore.addChangeListener(this.onDrawWrapper);
     }
 
     destructor() {
+        AnimationStore.removeChangeListener(this.onDrawWrapper);
         CollisionManager.remove(this);
     }
 
