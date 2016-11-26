@@ -23,7 +23,24 @@ export default class App extends ScaledContainer {
 
         this.addChild(bg);
 
+        /**
+         * При создании Display-объекта - добавляем его на канву
+         */
+        DisplayStore.addCreateListener( objectInstance => this.addChild(objectInstance) );
 
+        /**
+         * При уничтожении Display-объекта - удаляем его с канвы
+         */
+        DisplayStore.addDestroyListener((objectInstance) => {
+            this.removeChild(objectInstance);
+            objectInstance.destructor();
+            objectInstance.destroy();
+        });
+
+        this.addTanks();
+    }
+
+    addTanks() {
         let tank = new Tank("blue-tank.png", true),
             tank2 = new Tank("green-tank.png"),
             tank3 = new Tank("green-tank.png");
@@ -32,16 +49,9 @@ export default class App extends ScaledContainer {
         tank2.position.set(310, 250);
         tank3.position.set(800, 180);
 
-        this.addChild(tank);
-        this.addChild(tank2);
-        this.addChild(tank3);
-
-        DisplayStore.addCreateListener( objectInstance => this.addChild(objectInstance) );
-        DisplayStore.addDestroyListener((objectInstance) => {
-            this.removeChild(objectInstance);
-            objectInstance.destructor();
-            objectInstance.destroy();
-        });
+        DisplayStore.create(tank);
+        DisplayStore.create(tank2);
+        DisplayStore.create(tank3);
     }
 
 }

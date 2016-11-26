@@ -37806,6 +37806,8 @@
 	    value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _ScaledContainer2 = __webpack_require__(185);
 
 	var _ScaledContainer3 = _interopRequireDefault(_ScaledContainer2);
@@ -37861,28 +37863,42 @@
 
 	        _this.addChild(bg);
 
-	        var tank = new _Tank2.default("blue-tank.png", true),
-	            tank2 = new _Tank2.default("green-tank.png"),
-	            tank3 = new _Tank2.default("green-tank.png");
-
-	        tank.position.set(10, 100);
-	        tank2.position.set(310, 250);
-	        tank3.position.set(800, 180);
-
-	        _this.addChild(tank);
-	        _this.addChild(tank2);
-	        _this.addChild(tank3);
-
+	        /**
+	         * При создании Display-объекта - добавляем его на канву
+	         */
 	        _DisplayStore2.default.addCreateListener(function (objectInstance) {
 	            return _this.addChild(objectInstance);
 	        });
+
+	        /**
+	         * При уничтожении Display-объекта - удаляем его с канвы
+	         */
 	        _DisplayStore2.default.addDestroyListener(function (objectInstance) {
 	            _this.removeChild(objectInstance);
 	            objectInstance.destructor();
 	            objectInstance.destroy();
 	        });
+
+	        _this.addTanks();
 	        return _this;
 	    }
+
+	    _createClass(App, [{
+	        key: 'addTanks',
+	        value: function addTanks() {
+	            var tank = new _Tank2.default("blue-tank.png", true),
+	                tank2 = new _Tank2.default("green-tank.png"),
+	                tank3 = new _Tank2.default("green-tank.png");
+
+	            tank.position.set(10, 100);
+	            tank2.position.set(310, 250);
+	            tank3.position.set(800, 180);
+
+	            _DisplayStore2.default.create(tank);
+	            _DisplayStore2.default.create(tank2);
+	            _DisplayStore2.default.create(tank3);
+	        }
+	    }]);
 
 	    return App;
 	}(_ScaledContainer3.default);
