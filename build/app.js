@@ -38199,8 +38199,10 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Tank = function (_Sprite) {
-	    _inherits(Tank, _Sprite);
+	var AnimatedSprite = _pixi.extras.AnimatedSprite;
+
+	var Tank = function (_AnimatedSprite) {
+	    _inherits(Tank, _AnimatedSprite);
 
 	    /**
 	     * @param {String} name Текстовое наименование спрайта
@@ -38209,7 +38211,16 @@
 	    function Tank(name, managed) {
 	        _classCallCheck(this, Tank);
 
-	        var _this = _possibleConstructorReturn(this, (Tank.__proto__ || Object.getPrototypeOf(Tank)).call(this, _Resources2.default.getTexture(name)));
+	        var frames = [];
+
+	        frames.push(_Resources2.default.getTexture(name));
+	        frames.push(_Resources2.default.getTexture('bang1.png'));
+	        frames.push(_Resources2.default.getTexture('bang2.png'));
+	        frames.push(_Resources2.default.getTexture('bang3.png'));
+
+	        //console.log('>> ', extras);
+
+	        var _this = _possibleConstructorReturn(this, (Tank.__proto__ || Object.getPrototypeOf(Tank)).call(this, frames));
 
 	        _this.type = 'tank';
 
@@ -38218,6 +38229,9 @@
 
 	        _this.anchor.x = 0.5;
 	        _this.anchor.y = 0.5;
+
+	        _this.loop = false;
+	        _this.animationSpeed = 0.21;
 
 	        _this.width = _this.width / 2;
 	        _this.height = _this.height / 2;
@@ -38250,8 +38264,10 @@
 
 	        _utils.CollisionManager.add(_this);
 
-	        managed && _this.listenKeyboard();
+	        managed && _this._listenKeyboard();
 	        _AnimationStore2.default.addChangeListener(_this.onDrawWrapper);
+
+	        _this.onComplete = _this._afterAnimation;
 	        return _this;
 	    }
 
@@ -38322,9 +38338,31 @@
 	        value: function onDraw() {
 	            this._checkAndMove();
 	        }
+
+	        /**
+	         * Запустит анимацию уничтожения, по окончанию которой объект будет уничтожен
+	         */
+
 	    }, {
-	        key: 'listenKeyboard',
-	        value: function listenKeyboard() {
+	        key: 'animatedDestroy',
+	        value: function animatedDestroy() {
+	            this.play();
+	        }
+
+	        /**
+	         * onComplete колбек, который вызывается по окончании анимации текущего спрайта
+	         */
+
+	    }, {
+	        key: '_afterAnimation',
+	        value: function _afterAnimation() {
+	            console.warn('animation complete ', this);
+	            this.onComplete = null;
+	            _DisplayStore2.default.destroy(this);
+	        }
+	    }, {
+	        key: '_listenKeyboard',
+	        value: function _listenKeyboard() {
 	            var _this2 = this;
 
 	            var onRelease = function onRelease(params) {
@@ -38353,6 +38391,7 @@
 	            _utils.Keyboard.on('rightRelease', onRelease);
 
 	            _utils.Keyboard.on('space', function () {
+	                // TODO: Рефакторинг! Сделать Weapon.create, который будет вызывать DisplayStore
 	                var bullet = _Weapon2.default.fire('Bullet', _this2.rotatePosition, 8, _this2._weaponStartPosition(_this2.rotatePosition), _this2);
 	                if (bullet) {
 	                    _DisplayStore2.default.create(bullet);
@@ -38388,6 +38427,11 @@
 	                        this.x = x;
 	                    }
 	        }
+
+	        /**
+	         * Вычисляем стартовую позицию для пущеного снаряда
+	         */
+
 	    }, {
 	        key: '_weaponStartPosition',
 	        value: function _weaponStartPosition(direction) {
@@ -38408,7 +38452,7 @@
 	    }]);
 
 	    return Tank;
-	}(_pixi.Sprite);
+	}(AnimatedSprite);
 
 	exports.default = Tank;
 
@@ -38880,8 +38924,7 @@
 	        value: function onDraw() {
 	            this.x += this.vx;
 	            this.y += this.vy;
-	            this._checkCollision();
-	            this._checkForDestroy();
+	            this._checkCollision() && this._checkForDestroy();
 	        }
 
 	        /**
@@ -38932,16 +38975,21 @@
 	        value: function _checkCollision() {
 	            /**
 	             * Проверить столкновение текущего патрона со всеми танками на поле
+	             * @return {Boolean} Продолжать после выполнения этой функции проверять необходимость уничтожения (true) патрона или нет (false)
 	             */
 	            var collisionList = _utils.CollisionManager.checkAll(this, 'tank', [this.parentUnit]);
 
 	            if (collisionList.length) {
 	                console.log('>>> Есть коллизия: ', collisionList);
 	                collisionList.forEach(function (item) {
-	                    _DisplayStore2.default.destroy(item);
+	                    //DisplayStore.destroy(item);
+	                    item.animatedDestroy();
 	                });
 	                _DisplayStore2.default.destroy(this);
+	                return false;
 	            }
+
+	            return true;
 	        }
 	    }]);
 

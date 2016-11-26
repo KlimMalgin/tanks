@@ -75,8 +75,7 @@ export default class Bullet extends Sprite {
     onDraw() {
         this.x += this.vx;
         this.y += this.vy;
-        this._checkCollision();
-        this._checkForDestroy();
+        this._checkCollision() && this._checkForDestroy();
     }
 
     /**
@@ -120,15 +119,20 @@ export default class Bullet extends Sprite {
     _checkCollision() {
         /**
          * Проверить столкновение текущего патрона со всеми танками на поле
+         * @return {Boolean} Продолжать после выполнения этой функции проверять необходимость уничтожения (true) патрона или нет (false)
          */
         let collisionList = CollisionManager.checkAll(this, 'tank', [this.parentUnit]);
 
         if (collisionList.length) {
             console.log('>>> Есть коллизия: ', collisionList);
             collisionList.forEach((item) => {
-                DisplayStore.destroy(item);
+                //DisplayStore.destroy(item);
+                item.animatedDestroy();
             });
             DisplayStore.destroy(this);
+            return false;
         }
+
+        return true;
     }
 }

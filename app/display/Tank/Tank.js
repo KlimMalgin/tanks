@@ -1,4 +1,4 @@
-import { Sprite } from 'pixi.js';
+import { extras } from 'pixi.js';
 import Resources from '../../resources/Resources.js';
 import { Keyboard, guid, CollisionManager } from '../../utils';
 import AnimationStore from '../../stores/AnimationStore';
@@ -6,14 +6,25 @@ import { config } from '../../../package.json';
 import Weapon from '../../Weapon';
 import DisplayStore from '../../stores/DisplayStore';
 
-export default class Tank extends Sprite {
+let { AnimatedSprite } = extras;
+
+export default class Tank extends AnimatedSprite {
 
     /**
      * @param {String} name Текстовое наименование спрайта
      * @param {Boolean} managed Управляемый танк или нет {true|false}
      */
     constructor(name, managed) {
-        super(Resources.getTexture(name));
+        let frames = [];
+
+        frames.push(Resources.getTexture(name));
+        frames.push(Resources.getTexture('bang1.png'));
+        frames.push(Resources.getTexture('bang2.png'));
+        frames.push(Resources.getTexture('bang3.png'));
+
+        super(frames);
+
+        //console.log('>> ', extras);
 
         this.type = 'tank';
 
@@ -22,6 +33,9 @@ export default class Tank extends Sprite {
 
         this.anchor.x = 0.5;
         this.anchor.y = 0.5;
+
+        this.loop = false;
+        this.animationSpeed = 0.21;
 
         this.width = this.width / 2;
         this.height = this.height / 2;
@@ -54,8 +68,10 @@ export default class Tank extends Sprite {
 
         CollisionManager.add(this);
 
-        managed && this.listenKeyboard();
+        managed && this._listenKeyboard();
         AnimationStore.addChangeListener(this.onDrawWrapper);
+
+        this.onComplete = this._afterAnimation;
     }
 
     destructor() {
@@ -113,7 +129,23 @@ export default class Tank extends Sprite {
         this._checkAndMove();
     }
 
-    listenKeyboard() {
+    /**
+     * Запустит анимацию уничтожения, по окончанию которой объект будет уничтожен
+     */
+    animatedDestroy() {
+        this.play();
+    }
+
+    /**
+     * onComplete колбек, который вызывается по окончании анимации текущего спрайта
+     */
+    _afterAnimation() {
+        console.warn('animation complete ', this);
+        this.onComplete = null;
+        DisplayStore.destroy(this);
+    }
+
+    _listenKeyboard() {
         const onRelease = (params) => {
                   this.stop();
                   !!params.isDown && this.go(params.isDown);
@@ -132,6 +164,7 @@ export default class Tank extends Sprite {
         Keyboard.on('rightRelease', onRelease);
 
         Keyboard.on('space', () => {
+            // TODO: Рефакторинг! Сделать Weapon.create, который будет вызывать DisplayStore
             var bullet = Weapon.fire('Bullet', this.rotatePosition, 8, this._weaponStartPosition(this.rotatePosition), this);
             if (bullet) {
                 DisplayStore.create(bullet);
@@ -167,6 +200,9 @@ export default class Tank extends Sprite {
 
     }
 
+    /**
+     * Вычисляем стартовую позицию для пущеного снаряда
+     */
     _weaponStartPosition(direction) {
         switch (direction) {
             case 'up':
