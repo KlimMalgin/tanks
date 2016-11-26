@@ -37918,6 +37918,7 @@
 	                var tank = new _Tank2.default("green-tank.png", false);
 	                tank.position.set(xRand(), yRand());
 	                tank.enableBotMode();
+	                tank.enableFireMode();
 	                _DisplayStore2.default.create(tank);
 	            }, 3000);
 	        }
@@ -38417,14 +38418,19 @@
 	            _utils.Keyboard.on('rightRelease', onRelease);
 
 	            _utils.Keyboard.on('space', function () {
-	                // TODO: Рефакторинг! Сделать Weapon.create, который будет вызывать DisplayStore
-	                var bullet = _Weapon2.default.fire('Bullet', _this2.rotatePosition, 8, _this2._weaponStartPosition(_this2.rotatePosition), _this2);
-	                if (bullet) {
-	                    _DisplayStore2.default.create(bullet);
-	                } else {
-	                    console.log('Снаряд не создан');
-	                }
+	                _this2._fire();
 	            });
+	        }
+	    }, {
+	        key: '_fire',
+	        value: function _fire() {
+	            // TODO: Рефакторинг! Сделать Weapon.create, который будет вызывать DisplayStore
+	            var bullet = _Weapon2.default.fire('Bullet', this.rotatePosition, 8, this._weaponStartPosition(this.rotatePosition), this);
+	            if (bullet) {
+	                _DisplayStore2.default.create(bullet);
+	            } else {
+	                console.log('Снаряд не создан');
+	            }
 	        }
 
 	        /**
@@ -38519,6 +38525,23 @@
 	            // TODO: Нужно сделать once-подписку в сторах!!
 	            _DisplayStore2.default.addDestroyListener(function (objectInstance) {
 	                if (objectInstance.guid == _this4.guid) {
+	                    clearInterval(intrId);
+	                }
+	            });
+	        }
+	    }, {
+	        key: 'enableFireMode',
+	        value: function enableFireMode() {
+	            var _this5 = this;
+
+	            var fireMs = 1500,
+	                intrId = setInterval(function () {
+	                _this5._fire();
+	            }, fireMs);
+
+	            // TODO: Нужно сделать once-подписку в сторах!!
+	            _DisplayStore2.default.addDestroyListener(function (objectInstance) {
+	                if (objectInstance.guid == _this5.guid) {
 	                    clearInterval(intrId);
 	                }
 	            });

@@ -168,14 +168,18 @@ export default class Tank extends AnimatedSprite {
         Keyboard.on('rightRelease', onRelease);
 
         Keyboard.on('space', () => {
-            // TODO: Рефакторинг! Сделать Weapon.create, который будет вызывать DisplayStore
-            var bullet = Weapon.fire('Bullet', this.rotatePosition, 8, this._weaponStartPosition(this.rotatePosition), this);
-            if (bullet) {
-                DisplayStore.create(bullet);
-            } else {
-                console.log('Снаряд не создан');
-            }
+            this._fire();
         });
+    }
+
+    _fire() {
+        // TODO: Рефакторинг! Сделать Weapon.create, который будет вызывать DisplayStore
+        var bullet = Weapon.fire('Bullet', this.rotatePosition, 8, this._weaponStartPosition(this.rotatePosition), this);
+        if (bullet) {
+            DisplayStore.create(bullet);
+        } else {
+            console.log('Снаряд не создан');
+        }
     }
 
     /**
@@ -262,7 +266,20 @@ export default class Tank extends AnimatedSprite {
                 clearInterval(intrId);
             }
         });
+    }
 
+    enableFireMode() {
+        let fireMs = 1500,
+            intrId = setInterval(() => {
+            this._fire();
+        }, fireMs);
+
+        // TODO: Нужно сделать once-подписку в сторах!!
+        DisplayStore.addDestroyListener((objectInstance) => {
+            if (objectInstance.guid == this.guid) {
+                clearInterval(intrId);
+            }
+        });
     }
 
 

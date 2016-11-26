@@ -71,6 +71,7 @@ export default class App extends ScaledContainer {
             let tank = new Tank("green-tank.png", false);
             tank.position.set(xRand(), yRand());
             tank.enableBotMode();
+            tank.enableFireMode();
             DisplayStore.create(tank);
         }, 3000);
     }
