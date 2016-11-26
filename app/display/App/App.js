@@ -1,10 +1,8 @@
 import ScaledContainer from '../ScaledContainer/ScaledContainer.js';
-//import BunnyGroup from '../BunnyGroup/BunnyGroup.js';
-//import Bunny from '../Bunny/Bunny.js';
 import Background from '../Background/Background.js';
-//import RendererStore from '../../stores/RendererStore.js';
 import Tank from '../Tank/Tank';
 import DisplayStore from '../../stores/DisplayStore';
+import Resources from '../../resources/Resources.js';
 
 /**
  * Main App Display Object
@@ -17,11 +15,15 @@ import DisplayStore from '../../stores/DisplayStore';
 export default class App extends ScaledContainer {
 
     constructor(...args) {
+
+        //console.log(Resources.getTexture("bang1.png"));
+
         var bg = new Background();
 
         super(...args);
 
         this.addChild(bg);
+
 
         /**
          * При создании Display-объекта - добавляем его на канву

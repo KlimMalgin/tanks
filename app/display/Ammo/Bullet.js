@@ -113,7 +113,6 @@ export default class Bullet extends Sprite {
      */
     _checkForDestroy() {
         if (this.x < 0 || this.x > config.stageWidth || this.y < 0 || this.y > config.stageHeight) {
-            //console.log('destroy: %o', this);
             DisplayStore.destroy(this);
         }
     }

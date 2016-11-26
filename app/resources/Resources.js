@@ -8,7 +8,8 @@ class Resources {
     constructor() {
         // TODO: Пока работает только с одним файлом спрайта
         this.resources = [
-            "public/tanks.sprite.json"
+            "public/tanks.sprite.json",
+            "public/bang.sprite.json"
         ];
     }
 
@@ -28,7 +29,17 @@ class Resources {
     }
 
     getTexture(name) {
-        return resources["public/tanks.sprite.json"].textures[name];
+        let ln = this.resources.length;
+
+        for (let i = 0; i < ln; i++) {
+            if (resources[this.resources[i]].textures[name]) {
+                return resources[this.resources[i]].textures[name];
+            }
+        }
+
+        console.error("Текстура %o не найдена!", name);
+
+        return null;
     }
 }
 

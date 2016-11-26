@@ -37824,6 +37824,10 @@
 
 	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
 
+	var _Resources = __webpack_require__(187);
+
+	var _Resources2 = _interopRequireDefault(_Resources);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -37831,11 +37835,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	//import BunnyGroup from '../BunnyGroup/BunnyGroup.js';
-	//import Bunny from '../Bunny/Bunny.js';
-
-	//import RendererStore from '../../stores/RendererStore.js';
-
 
 	/**
 	 * Main App Display Object
@@ -37852,6 +37851,8 @@
 	        var _ref;
 
 	        _classCallCheck(this, App);
+
+	        //console.log(Resources.getTexture("bang1.png"));
 
 	        var bg = new _Background2.default();
 
@@ -38091,7 +38092,7 @@
 /* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -38112,11 +38113,11 @@
 	        _classCallCheck(this, Resources);
 
 	        // TODO: Пока работает только с одним файлом спрайта
-	        this.resources = ["public/tanks.sprite.json"];
+	        this.resources = ["public/tanks.sprite.json", "public/bang.sprite.json"];
 	    }
 
 	    _createClass(Resources, [{
-	        key: 'load',
+	        key: "load",
 	        value: function load(callback) {
 	            var _this = this;
 
@@ -38130,14 +38131,24 @@
 	            });
 	        }
 	    }, {
-	        key: '_onLoadResources',
+	        key: "_onLoadResources",
 	        value: function _onLoadResources() {
 	            console.log('resources is loaded!', arguments);
 	        }
 	    }, {
-	        key: 'getTexture',
+	        key: "getTexture",
 	        value: function getTexture(name) {
-	            return resources["public/tanks.sprite.json"].textures[name];
+	            var ln = this.resources.length;
+
+	            for (var i = 0; i < ln; i++) {
+	                if (resources[this.resources[i]].textures[name]) {
+	                    return resources[this.resources[i]].textures[name];
+	                }
+	            }
+
+	            console.error("Текстура %o не найдена!", name);
+
+	            return null;
 	        }
 	    }]);
 
@@ -38913,7 +38924,6 @@
 	        key: '_checkForDestroy',
 	        value: function _checkForDestroy() {
 	            if (this.x < 0 || this.x > _package.config.stageWidth || this.y < 0 || this.y > _package.config.stageHeight) {
-	                //console.log('destroy: %o', this);
 	                _DisplayStore2.default.destroy(this);
 	            }
 	        }
