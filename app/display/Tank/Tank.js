@@ -126,6 +126,9 @@ export default class Tank extends AnimatedSprite {
      * Действия которые должны выполниться с объектов при перерисовке сцены
      */
     onDraw() {
+        if (this.vx != 0 || this.vy != 0) {
+            this._checkCollision();
+        }
         this._checkAndMove();
     }
 
@@ -140,7 +143,7 @@ export default class Tank extends AnimatedSprite {
      * onComplete колбек, который вызывается по окончании анимации текущего спрайта
      */
     _afterAnimation() {
-        console.warn('animation complete ', this);
+        //console.warn('animation complete ', this);
         this.onComplete = null;
         DisplayStore.destroy(this);
     }
@@ -216,6 +219,21 @@ export default class Tank extends AnimatedSprite {
 
             case 'right':
                 return { x: this.x + Math.round(this.height / 2), y: this.y };
+        }
+    }
+
+    _checkCollision() {
+        let collisionList = CollisionManager.checkAll(this, 'tank', [this])
+
+        if (collisionList.length) {
+            //console.log('Коллизия Танк-Танк ', collisionList);
+            collisionList.forEach((collisionObject) => {
+                //console.log('Коллизия %o %o %o %o', collisionObject.collision, this.rotatePosition, collisionObject.collision.xDirection, collisionObject.collision.yDirection);
+                if (this.rotatePosition == collisionObject.collision.xDirection ||
+                    this.rotatePosition == collisionObject.collision.yDirection) {
+                        this.stop();
+                    }
+            });
         }
     }
 

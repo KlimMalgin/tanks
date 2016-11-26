@@ -2,7 +2,6 @@ import ScaledContainer from '../ScaledContainer/ScaledContainer.js';
 import Background from '../Background/Background.js';
 import Tank from '../Tank/Tank';
 import DisplayStore from '../../stores/DisplayStore';
-import Resources from '../../resources/Resources.js';
 
 /**
  * Main App Display Object
@@ -47,9 +46,9 @@ export default class App extends ScaledContainer {
             tank2 = new Tank("green-tank.png"),
             tank3 = new Tank("green-tank.png");
 
-        tank.position.set(10, 100);
+        tank.position.set(150, 100);
         tank2.position.set(310, 250);
-        tank3.position.set(800, 180);
+        tank3.position.set(700, 180);
 
         DisplayStore.create(tank);
         DisplayStore.create(tank2);

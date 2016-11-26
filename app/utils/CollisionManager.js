@@ -45,11 +45,12 @@ class CollisionManager {
         let checkingObjects = this.objects[typeForCheck],
             result = [];
         if (checkingObjects) {
-            checkingObjects.forEach(function(value) {
-                if (!this._isExclude(value, exclude) && this._test(object, value)) {
-                    result.push(value);
+            checkingObjects.forEach((value) => {
+                let collision = this._test(object, value);
+                if (!this._isExclude(value, exclude) && collision) {
+                    result.push(this._createCollisionObject(collision, value));
                 }
-            }, this);
+            });
         }
 
         return result;
@@ -75,7 +76,8 @@ class CollisionManager {
         var hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
 
         //hit will determine whether there's a collision
-        hit = false;
+        //hit = false;
+        hit = null;
 
         //Find the center points of each sprite
         r1.centerX = r1.x + r1.width / 2;
@@ -104,20 +106,39 @@ class CollisionManager {
             if (Math.abs(vy) < combinedHalfHeights) {
 
                 //There's definitely a collision happening
-                hit = true;
+                //hit = true;
+                hit = {
+                    vx,
+                    vy,
+                    xDirection: vx <= 0 ? 'right' : 'left',
+                    yDirection: vy <= 0 ? 'down' : 'up'
+                };
             } else {
 
                 //There's no collision on the y axis
-                hit = false;
+                //hit = false;
+                hit = null;
             }
         } else {
 
             //There's no collision on the x axis
-            hit = false;
+            //hit = false;
+            hit = null;
         }
 
         //`hit` will be either `true` or `false`
         return hit;
+    }
+
+    /**
+     * Создаст описание коллизии. Описание будет состоять из данных коллизии (collision)
+     * и субъекта с которым произошла коллизия (collisionSubject)
+     */
+    _createCollisionObject(collision, subject) {
+        return {
+            collision,
+            subject
+        };
     }
 }
 

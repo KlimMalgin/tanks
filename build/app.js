@@ -37824,10 +37824,6 @@
 
 	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
 
-	var _Resources = __webpack_require__(187);
-
-	var _Resources2 = _interopRequireDefault(_Resources);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -37891,9 +37887,9 @@
 	                tank2 = new _Tank2.default("green-tank.png"),
 	                tank3 = new _Tank2.default("green-tank.png");
 
-	            tank.position.set(10, 100);
+	            tank.position.set(150, 100);
 	            tank2.position.set(310, 250);
-	            tank3.position.set(800, 180);
+	            tank3.position.set(700, 180);
 
 	            _DisplayStore2.default.create(tank);
 	            _DisplayStore2.default.create(tank2);
@@ -38336,6 +38332,9 @@
 	    }, {
 	        key: 'onDraw',
 	        value: function onDraw() {
+	            if (this.vx != 0 || this.vy != 0) {
+	                this._checkCollision();
+	            }
 	            this._checkAndMove();
 	        }
 
@@ -38356,7 +38355,7 @@
 	    }, {
 	        key: '_afterAnimation',
 	        value: function _afterAnimation() {
-	            console.warn('animation complete ', this);
+	            //console.warn('animation complete ', this);
 	            this.onComplete = null;
 	            _DisplayStore2.default.destroy(this);
 	        }
@@ -38447,6 +38446,23 @@
 
 	                case 'right':
 	                    return { x: this.x + Math.round(this.height / 2), y: this.y };
+	            }
+	        }
+	    }, {
+	        key: '_checkCollision',
+	        value: function _checkCollision() {
+	            var _this3 = this;
+
+	            var collisionList = _utils.CollisionManager.checkAll(this, 'tank', [this]);
+
+	            if (collisionList.length) {
+	                //console.log('Коллизия Танк-Танк ', collisionList);
+	                collisionList.forEach(function (collisionObject) {
+	                    //console.log('Коллизия %o %o %o %o', collisionObject.collision, this.rotatePosition, collisionObject.collision.xDirection, collisionObject.collision.yDirection);
+	                    if (_this3.rotatePosition == collisionObject.collision.xDirection || _this3.rotatePosition == collisionObject.collision.yDirection) {
+	                        _this3.stop();
+	                    }
+	                });
 	            }
 	        }
 	    }]);
@@ -38980,10 +38996,9 @@
 	            var collisionList = _utils.CollisionManager.checkAll(this, 'tank', [this.parentUnit]);
 
 	            if (collisionList.length) {
-	                console.log('>>> Есть коллизия: ', collisionList);
-	                collisionList.forEach(function (item) {
-	                    //DisplayStore.destroy(item);
-	                    item.animatedDestroy();
+	                console.log('Коллизия Снаряд-Танк ', collisionList);
+	                collisionList.forEach(function (collisionObject) {
+	                    collisionObject.subject.animatedDestroy();
 	                });
 	                _DisplayStore2.default.destroy(this);
 	                return false;
@@ -39143,14 +39158,17 @@
 	    }, {
 	        key: "checkAll",
 	        value: function checkAll(object, typeForCheck, exclude) {
+	            var _this = this;
+
 	            var checkingObjects = this.objects[typeForCheck],
 	                result = [];
 	            if (checkingObjects) {
 	                checkingObjects.forEach(function (value) {
-	                    if (!this._isExclude(value, exclude) && this._test(object, value)) {
-	                        result.push(value);
+	                    var collision = _this._test(object, value);
+	                    if (!_this._isExclude(value, exclude) && collision) {
+	                        result.push(_this._createCollisionObject(collision, value));
 	                    }
-	                }, this);
+	                });
 	            }
 
 	            return result;
@@ -39182,7 +39200,8 @@
 	            var hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
 
 	            //hit will determine whether there's a collision
-	            hit = false;
+	            //hit = false;
+	            hit = null;
 
 	            //Find the center points of each sprite
 	            r1.centerX = r1.x + r1.width / 2;
@@ -39211,20 +39230,42 @@
 	                if (Math.abs(vy) < combinedHalfHeights) {
 
 	                    //There's definitely a collision happening
-	                    hit = true;
+	                    //hit = true;
+	                    hit = {
+	                        vx: vx,
+	                        vy: vy,
+	                        xDirection: vx <= 0 ? 'right' : 'left',
+	                        yDirection: vy <= 0 ? 'down' : 'up'
+	                    };
 	                } else {
 
 	                    //There's no collision on the y axis
-	                    hit = false;
+	                    //hit = false;
+	                    hit = null;
 	                }
 	            } else {
 
 	                //There's no collision on the x axis
-	                hit = false;
+	                //hit = false;
+	                hit = null;
 	            }
 
 	            //`hit` will be either `true` or `false`
 	            return hit;
+	        }
+
+	        /**
+	         * Создаст описание коллизии. Описание будет состоять из данных коллизии (collision)
+	         * и субъекта с которым произошла коллизия (collisionSubject)
+	         */
+
+	    }, {
+	        key: "_createCollisionObject",
+	        value: function _createCollisionObject(collision, subject) {
+	            return {
+	                collision: collision,
+	                subject: subject
+	            };
 	        }
 	    }]);
 
