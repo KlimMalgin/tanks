@@ -37876,7 +37876,9 @@
 	            objectInstance.destroy();
 	        });
 
-	        _this.addTanks();
+	        //this.addTanks();
+	        _this.createPlayer();
+	        _this.tanksGenerator();
 	        return _this;
 	    }
 
@@ -37894,6 +37896,30 @@
 	            _DisplayStore2.default.create(tank);
 	            _DisplayStore2.default.create(tank2);
 	            _DisplayStore2.default.create(tank3);
+	        }
+	    }, {
+	        key: 'createPlayer',
+	        value: function createPlayer() {
+	            var tank = new _Tank2.default("blue-tank.png", true);
+	            tank.position.set(150, 100);
+	            _DisplayStore2.default.create(tank);
+	        }
+	    }, {
+	        key: 'tanksGenerator',
+	        value: function tanksGenerator() {
+	            var xRand = function xRand() {
+	                return Math.floor(Math.random() * 800 + 1);
+	            },
+	                yRand = function yRand() {
+	                return Math.floor(Math.random() * 600 + 1);
+	            };
+
+	            setInterval(function () {
+	                var tank = new _Tank2.default("green-tank.png", false);
+	                tank.position.set(xRand(), yRand());
+	                tank.enableBotMode();
+	                _DisplayStore2.default.create(tank);
+	            }, 3000);
 	        }
 	    }]);
 
@@ -38345,6 +38371,7 @@
 	    }, {
 	        key: 'animatedDestroy',
 	        value: function animatedDestroy() {
+	            this.stop();
 	            this.play();
 	        }
 
@@ -38448,6 +38475,11 @@
 	                    return { x: this.x + Math.round(this.height / 2), y: this.y };
 	            }
 	        }
+
+	        /**
+	         * Проверяем коллизии текущего танка с другими танками и препятствиями
+	         */
+
 	    }, {
 	        key: '_checkCollision',
 	        value: function _checkCollision() {
@@ -38464,6 +38496,32 @@
 	                    }
 	                });
 	            }
+	        }
+	    }, {
+	        key: 'enableBotMode',
+	        value: function enableBotMode() {
+	            var _this4 = this;
+
+	            // Случайное направление движения
+	            var xyRand = function xyRand() {
+	                return Math.floor(Math.random() * 4 + 1);
+	            },
+
+
+	            // Каждые 5 сек меняем направление движения
+	            changeDirectionMs = 1500;
+
+	            var intrId = setInterval(function () {
+	                _this4.stop();
+	                if (xyRand() == 1) _this4.go('up');else if (xyRand() == 2) _this4.go('right');else if (xyRand() == 3) _this4.go('down');else if (xyRand() == 4) _this4.go('left');
+	            }, changeDirectionMs);
+
+	            // TODO: Нужно сделать once-подписку в сторах!!
+	            _DisplayStore2.default.addDestroyListener(function (objectInstance) {
+	                if (objectInstance.guid == _this4.guid) {
+	                    clearInterval(intrId);
+	                }
+	            });
 	        }
 	    }]);
 

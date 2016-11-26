@@ -38,7 +38,9 @@ export default class App extends ScaledContainer {
             objectInstance.destroy();
         });
 
-        this.addTanks();
+        //this.addTanks();
+        this.createPlayer();
+        this.tanksGenerator();
     }
 
     addTanks() {
@@ -53,6 +55,24 @@ export default class App extends ScaledContainer {
         DisplayStore.create(tank);
         DisplayStore.create(tank2);
         DisplayStore.create(tank3);
+    }
+
+    createPlayer() {
+        let tank = new Tank("blue-tank.png", true);
+        tank.position.set(150, 100);
+        DisplayStore.create(tank);
+    }
+
+    tanksGenerator() {
+        let xRand = () => Math.floor((Math.random() * 800) + 1),
+            yRand = () => Math.floor((Math.random() * 600) + 1);
+
+        setInterval(() => {
+            let tank = new Tank("green-tank.png", false);
+            tank.position.set(xRand(), yRand());
+            tank.enableBotMode();
+            DisplayStore.create(tank);
+        }, 3000);
     }
 
 }

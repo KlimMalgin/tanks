@@ -136,6 +136,7 @@ export default class Tank extends AnimatedSprite {
      * Запустит анимацию уничтожения, по окончанию которой объект будет уничтожен
      */
     animatedDestroy() {
+        this.stop();
         this.play();
     }
 
@@ -222,6 +223,9 @@ export default class Tank extends AnimatedSprite {
         }
     }
 
+    /**
+     * Проверяем коллизии текущего танка с другими танками и препятствиями
+     */
     _checkCollision() {
         let collisionList = CollisionManager.checkAll(this, 'tank', [this])
 
@@ -236,5 +240,30 @@ export default class Tank extends AnimatedSprite {
             });
         }
     }
+
+    enableBotMode() {
+            // Случайное направление движения
+        let xyRand = () => Math.floor((Math.random() * 4) + 1),
+
+            // Каждые 5 сек меняем направление движения
+            changeDirectionMs = 1500
+
+        let intrId = setInterval(() => {
+            this.stop();
+            if (xyRand() == 1) this.go('up');
+            else if (xyRand() == 2) this.go('right');
+            else if (xyRand() == 3) this.go('down');
+            else if (xyRand() == 4) this.go('left');
+        }, changeDirectionMs)
+
+        // TODO: Нужно сделать once-подписку в сторах!!
+        DisplayStore.addDestroyListener((objectInstance) => {
+            if (objectInstance.guid == this.guid) {
+                clearInterval(intrId);
+            }
+        });
+
+    }
+
 
 }
