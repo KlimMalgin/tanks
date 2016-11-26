@@ -1,6 +1,6 @@
 import { Sprite } from 'pixi.js';
 import Resources from '../../resources/Resources.js';
-import { Keyboard } from '../../utils';
+import { Keyboard, guid, CollisionManager } from '../../utils';
 import AnimationStore from '../../stores/AnimationStore';
 import { config } from '../../../package.json';
 import Weapon from '../../Weapon';
@@ -14,6 +14,11 @@ export default class Tank extends Sprite {
      */
     constructor(name, managed) {
         super(Resources.getTexture(name));
+
+        this.type = 'tank';
+
+        this.guid = guid();
+        console.log('tank guid: ', this.guid, this);
 
         this.anchor.x = 0.5;
         this.anchor.y = 0.5;
@@ -40,6 +45,8 @@ export default class Tank extends Sprite {
          * Ускорение при движении по вертикали
          */
         this.vy = 0;
+
+        CollisionManager.add(this);
 
         managed && this.listenKeyboard();
         AnimationStore.addChangeListener(this.onDraw.bind(this));

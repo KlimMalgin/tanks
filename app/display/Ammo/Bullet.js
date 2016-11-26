@@ -6,6 +6,7 @@ import Resources from '../../resources/Resources.js';
 import { config } from '../../../package.json';
 import AnimationStore from '../../stores/AnimationStore';
 import DisplayStore from '../../stores/DisplayStore';
+import { guid, CollisionManager } from '../../utils';
 
 export default class Bullet extends Sprite {
 
@@ -17,6 +18,11 @@ export default class Bullet extends Sprite {
      */
     constructor(direction, speed, startPosition) {
         super(Resources.getTexture(config.ammo.bullet));
+
+        this.type = 'bullet';
+
+        this.guid = guid();
+        console.log('bullet guid: ', this.guid, this);
 
         this.anchor.x = 0.5;
         this.anchor.y = 0.5;
@@ -50,6 +56,8 @@ export default class Bullet extends Sprite {
          * дальнейшего добавления/удаления её в сторе
          */
         this.onDrawWrapper = this.onDraw.bind(this);
+
+        CollisionManager.add(this);
 
         AnimationStore.addChangeListener(this.onDrawWrapper);
     }
