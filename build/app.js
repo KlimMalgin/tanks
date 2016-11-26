@@ -38222,14 +38222,19 @@
 	        return _this;
 	    }
 
-	    /**
-	     * Перемещает танк в указанном направлении с заданным ускорением
-	     * @param {String} direction Направление перемещения {'up','down','left','right'}
-	     * @param {Number} velocity Ускорение. По умолчанию == 2
-	     */
-
-
 	    _createClass(Tank, [{
+	        key: 'destructor',
+	        value: function destructor() {
+	            _utils.CollisionManager.remove(this);
+	        }
+
+	        /**
+	         * Перемещает танк в указанном направлении с заданным ускорением
+	         * @param {String} direction Направление перемещения {'up','down','left','right'}
+	         * @param {Number} velocity Ускорение. По умолчанию == 2
+	         */
+
+	    }, {
 	        key: 'go',
 	        value: function go(direction) {
 	            var velocity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
@@ -38314,7 +38319,7 @@
 	            _utils.Keyboard.on('rightRelease', onRelease);
 
 	            _utils.Keyboard.on('space', function () {
-	                var bullet = _Weapon2.default.fire('Bullet', _this2.rotatePosition, 8, _this2._weaponStartPosition(_this2.rotatePosition));
+	                var bullet = _Weapon2.default.fire('Bullet', _this2.rotatePosition, 8, _this2._weaponStartPosition(_this2.rotatePosition), _this2);
 	                if (bullet) {
 	                    _DisplayStore2.default.create(bullet);
 	                } else {
@@ -38774,7 +38779,7 @@
 	     * @param {Number} speed Скорость патрона
 	     * @param {Object} startPosition Содержит координаты стартовой позиции пули
 	     */
-	    function Bullet(direction, speed, startPosition) {
+	    function Bullet(direction, speed, startPosition, parentUnit) {
 	        _classCallCheck(this, Bullet);
 
 	        var _this = _possibleConstructorReturn(this, (Bullet.__proto__ || Object.getPrototypeOf(Bullet)).call(this, _Resources2.default.getTexture(_package.config.ammo.bullet)));
@@ -38783,6 +38788,8 @@
 
 	        _this.guid = (0, _utils.guid)();
 	        console.log('bullet guid: ', _this.guid, _this);
+
+	        _this.parentUnit = parentUnit;
 
 	        _this.anchor.x = 0.5;
 	        _this.anchor.y = 0.5;
@@ -38817,7 +38824,8 @@
 	         */
 	        _this.onDrawWrapper = _this.onDraw.bind(_this);
 
-	        _utils.CollisionManager.add(_this);
+	        // Снаряды нужно в менеджер коллизий?
+	        // CollisionManager.add(this);
 
 	        _AnimationStore2.default.addChangeListener(_this.onDrawWrapper);
 	        return _this;
@@ -38838,6 +38846,7 @@
 	        value: function onDraw() {
 	            this.x += this.vx;
 	            this.y += this.vy;
+	            this._checkCollision();
 	            this._checkForDestroy();
 	        }
 
@@ -38883,6 +38892,19 @@
 	            if (this.x < 0 || this.x > _package.config.stageWidth || this.y < 0 || this.y > _package.config.stageHeight) {
 	                //console.log('destroy: %o', this);
 	                _DisplayStore2.default.destroy(this);
+	            }
+	        }
+	    }, {
+	        key: '_checkCollision',
+	        value: function _checkCollision() {
+	            /**
+	             * Проверить столкновение текущего патрона со всеми танками на поле
+	             */
+	            var collisionList = _utils.CollisionManager.checkAll(this, 'tank', [this.parentUnit]);
+
+	            if (collisionList.length) {
+	                console.log('>>> Есть коллизия: ', collisionList);
+	                debugger;
 	            }
 	        }
 	    }]);
@@ -39027,12 +39049,50 @@
 	        }
 
 	        /**
+	         * Проверит наличие коллизии объекта object со всеми объектами типа typeForCheck
+	         * @param {Object} object Объект, который проверяет свое столкновения с объектами типа typeForCheck
+	         * @param {String} typeForCheck Тип объектов с которыми ожижается коллизия объекта object
+	         * @param {Array} exclude Массив объектов, которые исключаются из проверки коллизий
+	         * @return {Array} Список коллизий
+	         */
+
+	    }, {
+	        key: "checkAll",
+	        value: function checkAll(object, typeForCheck, exclude) {
+	            var checkingObjects = this.objects[typeForCheck],
+	                result = [];
+	            if (checkingObjects) {
+	                checkingObjects.forEach(function (value) {
+	                    if (!this._isExclude(value, exclude) && this._test(object, value)) {
+	                        result.push(value);
+	                    }
+	                }, this);
+	            }
+
+	            return result;
+	        }
+
+	        /**
+	         * Проверит, исключается ли заданный объект из проверки коллизий
+	         */
+
+	    }, {
+	        key: "_isExclude",
+	        value: function _isExclude(object, exclude) {
+	            var result = false;
+	            exclude.forEach(function (value) {
+	                result = !result && object.guid == value.guid;
+	            });
+	            return result;
+	        }
+
+	        /**
 	         * Тестирует наличие коллизии
 	         */
 
 	    }, {
-	        key: "test",
-	        value: function test(r1, r2) {
+	        key: "_test",
+	        value: function _test(r1, r2) {
 
 	            //Define the variables we'll need to calculate
 	            var hit, combinedHalfWidths, combinedHalfHeights, vx, vy;

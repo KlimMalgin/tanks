@@ -52,6 +52,10 @@ export default class Tank extends Sprite {
         AnimationStore.addChangeListener(this.onDraw.bind(this));
     }
 
+    destructor() {
+        CollisionManager.remove(this);
+    }
+
     /**
      * Перемещает танк в указанном направлении с заданным ускорением
      * @param {String} direction Направление перемещения {'up','down','left','right'}
@@ -121,7 +125,7 @@ export default class Tank extends Sprite {
         Keyboard.on('rightRelease', onRelease);
 
         Keyboard.on('space', () => {
-            var bullet = Weapon.fire('Bullet', this.rotatePosition, 8, this._weaponStartPosition(this.rotatePosition));
+            var bullet = Weapon.fire('Bullet', this.rotatePosition, 8, this._weaponStartPosition(this.rotatePosition), this);
             if (bullet) {
                 DisplayStore.create(bullet);
             } else {

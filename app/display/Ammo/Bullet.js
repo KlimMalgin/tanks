@@ -16,13 +16,15 @@ export default class Bullet extends Sprite {
      * @param {Number} speed Скорость патрона
      * @param {Object} startPosition Содержит координаты стартовой позиции пули
      */
-    constructor(direction, speed, startPosition) {
+    constructor(direction, speed, startPosition, parentUnit) {
         super(Resources.getTexture(config.ammo.bullet));
 
         this.type = 'bullet';
 
         this.guid = guid();
         console.log('bullet guid: ', this.guid, this);
+
+        this.parentUnit = parentUnit;
 
         this.anchor.x = 0.5;
         this.anchor.y = 0.5;
@@ -57,7 +59,8 @@ export default class Bullet extends Sprite {
          */
         this.onDrawWrapper = this.onDraw.bind(this);
 
-        CollisionManager.add(this);
+        // Снаряды нужно в менеджер коллизий?
+        // CollisionManager.add(this);
 
         AnimationStore.addChangeListener(this.onDrawWrapper);
     }
@@ -72,6 +75,7 @@ export default class Bullet extends Sprite {
     onDraw() {
         this.x += this.vx;
         this.y += this.vy;
+        this._checkCollision();
         this._checkForDestroy();
     }
 
@@ -111,6 +115,18 @@ export default class Bullet extends Sprite {
         if (this.x < 0 || this.x > config.stageWidth || this.y < 0 || this.y > config.stageHeight) {
             //console.log('destroy: %o', this);
             DisplayStore.destroy(this);
+        }
+    }
+
+    _checkCollision() {
+        /**
+         * Проверить столкновение текущего патрона со всеми танками на поле
+         */
+        let collisionList = CollisionManager.checkAll(this, 'tank', [this.parentUnit]);
+
+        if (collisionList.length) {
+            console.log('>>> Есть коллизия: ', collisionList);
+            debugger;
         }
     }
 }

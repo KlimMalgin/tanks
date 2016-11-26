@@ -35,9 +35,41 @@ class CollisionManager {
     }
 
     /**
+     * Проверит наличие коллизии объекта object со всеми объектами типа typeForCheck
+     * @param {Object} object Объект, который проверяет свое столкновения с объектами типа typeForCheck
+     * @param {String} typeForCheck Тип объектов с которыми ожижается коллизия объекта object
+     * @param {Array} exclude Массив объектов, которые исключаются из проверки коллизий
+     * @return {Array} Список коллизий
+     */
+    checkAll(object, typeForCheck, exclude) {
+        let checkingObjects = this.objects[typeForCheck],
+            result = [];
+        if (checkingObjects) {
+            checkingObjects.forEach(function(value) {
+                if (!this._isExclude(value, exclude) && this._test(object, value)) {
+                    result.push(value);
+                }
+            }, this);
+        }
+
+        return result;
+    }
+
+    /**
+     * Проверит, исключается ли заданный объект из проверки коллизий
+     */
+    _isExclude(object, exclude) {
+        let result = false;
+        exclude.forEach(function (value) {
+            result = !result && object.guid == value.guid;
+        });
+        return result;
+    }
+
+    /**
      * Тестирует наличие коллизии
      */
-    test(r1, r2) {
+    _test(r1, r2) {
 
         //Define the variables we'll need to calculate
         var hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
