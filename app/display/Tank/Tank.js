@@ -136,6 +136,7 @@ export default class Tank extends AnimatedSprite {
      * Запустит анимацию уничтожения, по окончанию которой объект будет уничтожен
      */
     animatedDestroy() {
+        // TODO: Не останавливает движение?
         this.stop();
         this.play();
     }
