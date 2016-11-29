@@ -2,7 +2,7 @@ import { extras } from 'pixi.js';
 import Resources from '../../resources/Resources.js';
 import { Keyboard, guid, CollisionManager } from '../../utils';
 import AnimationStore from '../../stores/AnimationStore';
-import { config } from '../../../package.json';
+import { config } from '../../config';
 import Weapon from '../../Weapon';
 import DisplayStore from '../../stores/DisplayStore';
 

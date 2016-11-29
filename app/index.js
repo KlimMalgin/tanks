@@ -7,7 +7,7 @@
  */
 
 //import './index.html';
-import {config} from '../package.json';
+import {config} from './config';
 import Renderer from './Renderer/Renderer';
 import App from './display/App/App';
 import Resources from './resources/Resources';

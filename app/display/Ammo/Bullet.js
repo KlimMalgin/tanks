@@ -3,7 +3,7 @@
  */
 import { Sprite } from 'pixi.js';
 import Resources from '../../resources/Resources.js';
-import { config } from '../../../package.json';
+import { config } from '../../config';
 import AnimationStore from '../../stores/AnimationStore';
 import DisplayStore from '../../stores/DisplayStore';
 import { guid, CollisionManager } from '../../utils';

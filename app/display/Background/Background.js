@@ -1,6 +1,6 @@
 import { Container, Sprite } from 'pixi.js';
 import Resources from '../../resources/Resources';
-import { config } from '../../../package.json';
+import { config } from '../../config';
 
 /**
  * Loads the adds the diagnostic image

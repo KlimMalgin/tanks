@@ -1,0 +1,12 @@
+{
+    name: "My test level",
+    width: 5,
+    height: 5,
+    map: [
+        [],
+        [],
+        [],
+        [],
+        []
+    ]
+}

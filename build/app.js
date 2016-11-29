@@ -46,7 +46,7 @@
 
 	'use strict';
 
-	var _package = __webpack_require__(1);
+	var _config = __webpack_require__(200);
 
 	var _Renderer = __webpack_require__(2);
 
@@ -75,7 +75,7 @@
 	 */
 
 	//import './index.html';
-	var renderer = new _Renderer2.default(_package.config.stageWidth, _package.config.stageHeight);
+	var renderer = new _Renderer2.default(_config.config.stageWidth, _config.config.stageHeight);
 
 	document.body.appendChild(renderer.view);
 
@@ -83,7 +83,7 @@
 
 	console.log('Start resource loading...');
 	_Resources2.default.load(function () {
-	  var app = new _App2.default(_package.config.stageWidth, _package.config.stageHeight);
+	  var app = new _App2.default(_config.config.stageWidth, _config.config.stageHeight);
 	  renderer.addRenderable(app);
 	  renderer.start();
 
@@ -38068,7 +38068,7 @@
 
 	var _Resources2 = _interopRequireDefault(_Resources);
 
-	var _package = __webpack_require__(1);
+	var _config = __webpack_require__(200);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -38103,8 +38103,8 @@
 	        tileW = bg.width = bg.width / 2;
 	        tileH = bg.height = bg.height / 2;
 
-	        tileCountX = _package.config.stageWidth / tileW;
-	        tileCountY = _package.config.stageHeight / tileH;
+	        tileCountX = _config.config.stageWidth / tileW;
+	        tileCountY = _config.config.stageHeight / tileH;
 
 	        for (var x = 0; x < tileCountX; x++) {
 	            for (var y = 0; y < tileCountY; y++) {
@@ -38214,7 +38214,7 @@
 
 	var _AnimationStore2 = _interopRequireDefault(_AnimationStore);
 
-	var _package = __webpack_require__(1);
+	var _config = __webpack_require__(200);
 
 	var _Weapon = __webpack_require__(193);
 
@@ -38455,15 +38455,15 @@
 	                hd2 = this.height / 2;
 
 	            // Разрешен только выезд на поле из-за его пределов, если танк вдруг там оказался
-	            if (wd2 > x && x > this.x || _package.config.stageWidth - wd2 < x && x < this.x) {
+	            if (wd2 > x && x > this.x || _config.config.stageWidth - wd2 < x && x < this.x) {
 	                this.x = x;
 	            }
 	            // Аналогично
-	            else if (hd2 > y && y > this.y || _package.config.stageHeight - hd2 < y && y < this.y) {
+	            else if (hd2 > y && y > this.y || _config.config.stageHeight - hd2 < y && y < this.y) {
 	                    this.y = y;
 	                }
 	                // Когда танк находится в пределах поля - можно перемещаться в любых направлениях
-	                else if (wd2 <= x && _package.config.stageWidth - wd2 >= x && hd2 <= y && _package.config.stageHeight - hd2 >= y) {
+	                else if (wd2 <= x && _config.config.stageWidth - wd2 >= x && hd2 <= y && _config.config.stageHeight - hd2 >= y) {
 	                        this.y = y;
 	                        this.x = x;
 	                    }
@@ -39121,7 +39121,7 @@
 
 	var _Resources2 = _interopRequireDefault(_Resources);
 
-	var _package = __webpack_require__(1);
+	var _config = __webpack_require__(200);
 
 	var _AnimationStore = __webpack_require__(183);
 
@@ -39156,7 +39156,7 @@
 	    function Bullet(direction, speed, startPosition, parentUnit) {
 	        _classCallCheck(this, Bullet);
 
-	        var _this = _possibleConstructorReturn(this, (Bullet.__proto__ || Object.getPrototypeOf(Bullet)).call(this, _Resources2.default.getTexture(_package.config.ammo.bullet)));
+	        var _this = _possibleConstructorReturn(this, (Bullet.__proto__ || Object.getPrototypeOf(Bullet)).call(this, _Resources2.default.getTexture(_config.config.ammo.bullet)));
 
 	        _this.type = 'bullet';
 
@@ -39262,7 +39262,7 @@
 	    }, {
 	        key: '_checkForDestroy',
 	        value: function _checkForDestroy() {
-	            if (this.x < 0 || this.x > _package.config.stageWidth || this.y < 0 || this.y > _package.config.stageHeight) {
+	            if (this.x < 0 || this.x > _config.config.stageWidth || this.y < 0 || this.y > _config.config.stageHeight) {
 	                _DisplayStore2.default.destroy(this);
 	            }
 	        }
@@ -39520,6 +39520,32 @@
 	}(AnimatedSprite);
 
 	exports.default = Wall;
+
+/***/ },
+/* 200 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.config = undefined;
+
+	var _package = __webpack_require__(1);
+
+	/*
+	{
+	    "buildDir": "./build",
+	    "stageWidth": 800,
+	    "stageHeight": 600,
+	    "ammo": {
+	        "bullet": "fire.png"
+	    }
+	}
+	*/
+
+	exports.config = _package.config;
 
 /***/ }
 /******/ ]);
