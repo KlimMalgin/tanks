@@ -1,12 +1,118 @@
 {
-    name: "My test level",
-    width: 5,
-    height: 5,
-    map: [
-        [],
-        [],
-        [],
-        [],
-        []
+    "name": "My test level",
+    "width": 5,
+    "height": 5,
+    "tileSize": 45,
+    "map": [
+        [
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
+                "building": "wall"
+            },
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
+                "building": ""
+            }
+        ],
+        [
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
+                "building": "wall"
+            },
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
+                "building": ""
+            }
+        ],
+        [
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
+                "building": "wall"
+            },
+            {
+                "surface": "ground",
+                "building": "wall"
+            },
+            {
+                "surface": "ground",
+                "building": ""
+            }
+        ],
+        [
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
+                "building": "wall"
+            },
+            {
+                "surface": "ground",
+                "building": ""
+            }
+        ],
+        [
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
+                "building": ""
+            }
+        ]
     ]
 }

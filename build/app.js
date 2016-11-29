@@ -93,53 +93,7 @@
 	});
 
 /***/ },
-/* 1 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"name": "tanks",
-		"version": "0.0.1",
-		"description": "pixi.js tanks",
-		"scripts": {
-			"start": "node server.js"
-		},
-		"config": {
-			"buildDir": "./build",
-			"stageWidth": 800,
-			"stageHeight": 600,
-			"ammo": {
-				"bullet": "fire.png"
-			}
-		},
-		"repository": {
-			"type": "git",
-			"url": "git+https://github.com/KlimMalgin/tanks.git"
-		},
-		"author": "KlimMalgin",
-		"license": "ISC",
-		"bugs": {
-			"url": "https://github.com/KlimMalgin/tanks/issues"
-		},
-		"homepage": "https://github.com/KlimMalgin/tanks#readme",
-		"dependencies": {
-			"brfs": "^1.4.3",
-			"express": "^4.14.0",
-			"json-loader": "^0.5.4",
-			"pixi.js": "^4.2.2",
-			"transform-loader": "^0.2.3"
-		},
-		"devDependencies": {
-			"babel-cli": "^6.18.0",
-			"babel-core": "^6.18.2",
-			"babel-loader": "^6.2.8",
-			"babel-preset-latest": "^6.16.0",
-			"css-loader": "^0.26.0",
-			"style-loader": "^0.13.1",
-			"webpack": "^1.13.3"
-		}
-	};
-
-/***/ },
+/* 1 */,
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -39532,20 +39486,148 @@
 	});
 	exports.config = undefined;
 
-	var _package = __webpack_require__(1);
+	var _level = __webpack_require__(201);
 
-	/*
-	{
+	var _level2 = _interopRequireDefault(_level);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	console.log('LEVEL: %o ', _level2.default);
+	//import { config } from '../package.json';
+
+	var config = {
 	    "buildDir": "./build",
-	    "stageWidth": 800,
-	    "stageHeight": 600,
+	    "stageWidth": 400,
+	    "stageHeight": 300,
 	    "ammo": {
 	        "bullet": "fire.png"
 	    }
-	}
-	*/
+	};
 
-	exports.config = _package.config;
+	exports.config = config;
+
+/***/ },
+/* 201 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"name": "My test level",
+		"width": 5,
+		"height": 5,
+		"tileSize": 45,
+		"map": [
+			[
+				{
+					"surface": "ground",
+					"building": ""
+				},
+				{
+					"surface": "ground",
+					"building": ""
+				},
+				{
+					"surface": "ground",
+					"building": "wall"
+				},
+				{
+					"surface": "ground",
+					"building": ""
+				},
+				{
+					"surface": "ground",
+					"building": ""
+				}
+			],
+			[
+				{
+					"surface": "ground",
+					"building": ""
+				},
+				{
+					"surface": "ground",
+					"building": ""
+				},
+				{
+					"surface": "ground",
+					"building": "wall"
+				},
+				{
+					"surface": "ground",
+					"building": ""
+				},
+				{
+					"surface": "ground",
+					"building": ""
+				}
+			],
+			[
+				{
+					"surface": "ground",
+					"building": ""
+				},
+				{
+					"surface": "ground",
+					"building": ""
+				},
+				{
+					"surface": "ground",
+					"building": "wall"
+				},
+				{
+					"surface": "ground",
+					"building": "wall"
+				},
+				{
+					"surface": "ground",
+					"building": ""
+				}
+			],
+			[
+				{
+					"surface": "ground",
+					"building": ""
+				},
+				{
+					"surface": "ground",
+					"building": ""
+				},
+				{
+					"surface": "ground",
+					"building": ""
+				},
+				{
+					"surface": "ground",
+					"building": "wall"
+				},
+				{
+					"surface": "ground",
+					"building": ""
+				}
+			],
+			[
+				{
+					"surface": "ground",
+					"building": ""
+				},
+				{
+					"surface": "ground",
+					"building": ""
+				},
+				{
+					"surface": "ground",
+					"building": ""
+				},
+				{
+					"surface": "ground",
+					"building": ""
+				},
+				{
+					"surface": "ground",
+					"building": ""
+				}
+			]
+		]
+	};
 
 /***/ }
 /******/ ]);
