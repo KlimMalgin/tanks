@@ -6,10 +6,10 @@ let resources = loader.resources;
 class Resources {
 
     constructor() {
-        // TODO: Пока работает только с одним файлом спрайта
         this.resources = [
             "public/tanks.sprite.json",
-            "public/bang.sprite.json"
+            "public/bang.sprite.json",
+            "public/wall.sprite.json"
         ];
     }
 

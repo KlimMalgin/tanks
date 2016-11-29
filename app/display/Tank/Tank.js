@@ -24,8 +24,6 @@ export default class Tank extends AnimatedSprite {
 
         super(frames);
 
-        //console.log('>> ', extras);
-
         this.type = 'tank';
 
         this.guid = guid();
@@ -232,7 +230,7 @@ export default class Tank extends AnimatedSprite {
      * Проверяем коллизии текущего танка с другими танками и препятствиями
      */
     _checkCollision() {
-        let collisionList = CollisionManager.checkAll(this, 'tank', [this])
+        let collisionList = CollisionManager.checkAll(this, [ 'tank', 'wall' ], [this]);
 
         if (collisionList.length) {
             //console.log('Коллизия Танк-Танк ', collisionList);
@@ -246,12 +244,15 @@ export default class Tank extends AnimatedSprite {
         }
     }
 
+    /**
+     * Включает режим бота - перемещение в случайную сторону через промежуток времени
+     */
     enableBotMode() {
             // Случайное направление движения
         let xyRand = () => Math.floor((Math.random() * 4) + 1),
 
             // Каждые 5 сек меняем направление движения
-            changeDirectionMs = 1500
+            changeDirectionMs = 1500;
 
         let intrId = setInterval(() => {
             this.stop();
@@ -259,7 +260,7 @@ export default class Tank extends AnimatedSprite {
             else if (xyRand() == 2) this.go('right');
             else if (xyRand() == 3) this.go('down');
             else if (xyRand() == 4) this.go('left');
-        }, changeDirectionMs)
+        }, changeDirectionMs);
 
         // TODO: Нужно сделать once-подписку в сторах!!
         DisplayStore.addDestroyListener((objectInstance) => {
@@ -269,6 +270,9 @@ export default class Tank extends AnimatedSprite {
         });
     }
 
+    /**
+     * Включает режим стрельбы каждые 1.5 сек
+     */
     enableFireMode() {
         let fireMs = 1500,
             intrId = setInterval(() => {

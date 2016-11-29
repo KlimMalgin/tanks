@@ -37,21 +37,24 @@ class CollisionManager {
     /**
      * Проверит наличие коллизии объекта object со всеми объектами типа typeForCheck
      * @param {Object} object Объект, который проверяет свое столкновения с объектами типа typeForCheck
-     * @param {String} typeForCheck Тип объектов с которыми ожижается коллизия объекта object
+     * @param {Array} Массив typeForCheck типов объектов с которыми ожижается коллизия объекта object
      * @param {Array} exclude Массив объектов, которые исключаются из проверки коллизий
      * @return {Array} Список коллизий
      */
     checkAll(object, typeForCheck, exclude) {
-        let checkingObjects = this.objects[typeForCheck],
-            result = [];
-        if (checkingObjects) {
-            checkingObjects.forEach((value) => {
-                let collision = this._test(object, value);
-                if (!this._isExclude(value, exclude) && collision) {
-                    result.push(this._createCollisionObject(collision, value));
-                }
-            });
-        }
+        let result = [];
+
+        typeForCheck.forEach((item) => {
+            let checkingObjects = this.objects[item];
+            if (checkingObjects) {
+                checkingObjects.forEach((value) => {
+                    let collision = this._test(object, value);
+                    if (!this._isExclude(value, exclude) && collision) {
+                        result.push(this._createCollisionObject(collision, value));
+                    }
+                });
+            }
+        });
 
         return result;
     }

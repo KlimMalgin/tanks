@@ -37820,7 +37820,9 @@
 
 	var _Tank2 = _interopRequireDefault(_Tank);
 
-	var _DisplayStore = __webpack_require__(196);
+	var _landscape = __webpack_require__(198);
+
+	var _DisplayStore = __webpack_require__(197);
 
 	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
 
@@ -37879,25 +37881,23 @@
 	        //this.addTanks();
 	        _this.createPlayer();
 	        _this.tanksGenerator();
+	        _this.addWall();
 	        return _this;
 	    }
 
+	    /*addTanks() {
+	        let tank = new Tank("blue-tank.png", true),
+	            tank2 = new Tank("green-tank.png"),
+	            tank3 = new Tank("green-tank.png");
+	         tank.position.set(150, 100);
+	        tank2.position.set(310, 250);
+	        tank3.position.set(700, 180);
+	         DisplayStore.create(tank);
+	        DisplayStore.create(tank2);
+	        DisplayStore.create(tank3);
+	    }*/
+
 	    _createClass(App, [{
-	        key: 'addTanks',
-	        value: function addTanks() {
-	            var tank = new _Tank2.default("blue-tank.png", true),
-	                tank2 = new _Tank2.default("green-tank.png"),
-	                tank3 = new _Tank2.default("green-tank.png");
-
-	            tank.position.set(150, 100);
-	            tank2.position.set(310, 250);
-	            tank3.position.set(700, 180);
-
-	            _DisplayStore2.default.create(tank);
-	            _DisplayStore2.default.create(tank2);
-	            _DisplayStore2.default.create(tank3);
-	        }
-	    }, {
 	        key: 'createPlayer',
 	        value: function createPlayer() {
 	            var tank = new _Tank2.default("blue-tank.png", true);
@@ -37921,6 +37921,17 @@
 	                tank.enableFireMode();
 	                _DisplayStore2.default.create(tank);
 	            }, 3000);
+	        }
+	    }, {
+	        key: 'addWall',
+	        value: function addWall() {
+	            var wall1 = new _landscape.Wall('wall1.png'),
+	                wall2 = new _landscape.Wall('wall2.png');
+
+	            wall1.position.set(250, 350);
+	            wall2.position.set(250, 392);
+	            _DisplayStore2.default.create(wall1);
+	            _DisplayStore2.default.create(wall2);
 	        }
 	    }]);
 
@@ -38135,8 +38146,7 @@
 	    function Resources() {
 	        _classCallCheck(this, Resources);
 
-	        // TODO: Пока работает только с одним файлом спрайта
-	        this.resources = ["public/tanks.sprite.json", "public/bang.sprite.json"];
+	        this.resources = ["public/tanks.sprite.json", "public/bang.sprite.json", "public/wall.sprite.json"];
 	    }
 
 	    _createClass(Resources, [{
@@ -38206,11 +38216,11 @@
 
 	var _package = __webpack_require__(1);
 
-	var _Weapon = __webpack_require__(192);
+	var _Weapon = __webpack_require__(193);
 
 	var _Weapon2 = _interopRequireDefault(_Weapon);
 
-	var _DisplayStore = __webpack_require__(196);
+	var _DisplayStore = __webpack_require__(197);
 
 	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
 
@@ -38240,8 +38250,6 @@
 	        frames.push(_Resources2.default.getTexture('bang1.png'));
 	        frames.push(_Resources2.default.getTexture('bang2.png'));
 	        frames.push(_Resources2.default.getTexture('bang3.png'));
-
-	        //console.log('>> ', extras);
 
 	        var _this = _possibleConstructorReturn(this, (Tank.__proto__ || Object.getPrototypeOf(Tank)).call(this, frames));
 
@@ -38372,6 +38380,7 @@
 	    }, {
 	        key: 'animatedDestroy',
 	        value: function animatedDestroy() {
+	            // TODO: Не останавливает движение?
 	            this.stop();
 	            this.play();
 	        }
@@ -38491,7 +38500,7 @@
 	        value: function _checkCollision() {
 	            var _this3 = this;
 
-	            var collisionList = _utils.CollisionManager.checkAll(this, 'tank', [this]);
+	            var collisionList = _utils.CollisionManager.checkAll(this, ['tank', 'wall'], [this]);
 
 	            if (collisionList.length) {
 	                //console.log('Коллизия Танк-Танк ', collisionList);
@@ -38503,6 +38512,11 @@
 	                });
 	            }
 	        }
+
+	        /**
+	         * Включает режим бота - перемещение в случайную сторону через промежуток времени
+	         */
+
 	    }, {
 	        key: 'enableBotMode',
 	        value: function enableBotMode() {
@@ -38529,6 +38543,11 @@
 	                }
 	            });
 	        }
+
+	        /**
+	         * Включает режим стрельбы каждые 1.5 сек
+	         */
+
 	    }, {
 	        key: 'enableFireMode',
 	        value: function enableFireMode() {
@@ -38572,7 +38591,7 @@
 
 	var _guid2 = _interopRequireDefault(_guid);
 
-	var _CollisionManager = __webpack_require__(197);
+	var _CollisionManager = __webpack_require__(192);
 
 	var _CollisionManager2 = _interopRequireDefault(_CollisionManager);
 
@@ -38810,6 +38829,186 @@
 
 /***/ },
 /* 192 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	/**
+	 * Класс для работы с коллизиями
+	 */
+	var CollisionManager = function () {
+	    function CollisionManager() {
+	        _classCallCheck(this, CollisionManager);
+
+	        /**
+	         * Содержит ссылки на объекты расположенные на игровом поле.
+	         * Объекты распределены по типам для анализа коллизий между ними.
+	         */
+	        this.objects = {};
+	    }
+
+	    _createClass(CollisionManager, [{
+	        key: "add",
+	        value: function add(object) {
+	            if (!this.objects[object.type]) {
+	                this.objects[object.type] = new Map();
+	            }
+	            if (!this.objects[object.type].has(object.guid)) {
+	                this.objects[object.type].set(object.guid, object);
+	            } else {
+	                console.error("Элемент с таким guid уже существует! Попытка добавить элемент %o с guid %o в CollisionManager. Объект %o", object.type, object.guid, object);
+	            }
+	        }
+	    }, {
+	        key: "remove",
+	        value: function remove(object) {
+	            if (this.objects[object.type].has(object.guid)) {
+	                this.objects[object.type].delete(object.guid);
+	            } else {
+	                console.error("Элемента с таким guid не существует! Попытка удалить элемент %o с guid %o в CollisionManager. Объект %o", object.type, object.guid, object);
+	            }
+	        }
+
+	        /**
+	         * Проверит наличие коллизии объекта object со всеми объектами типа typeForCheck
+	         * @param {Object} object Объект, который проверяет свое столкновения с объектами типа typeForCheck
+	         * @param {Array} Массив typeForCheck типов объектов с которыми ожижается коллизия объекта object
+	         * @param {Array} exclude Массив объектов, которые исключаются из проверки коллизий
+	         * @return {Array} Список коллизий
+	         */
+
+	    }, {
+	        key: "checkAll",
+	        value: function checkAll(object, typeForCheck, exclude) {
+	            var _this = this;
+
+	            var result = [];
+
+	            typeForCheck.forEach(function (item) {
+	                var checkingObjects = _this.objects[item];
+	                if (checkingObjects) {
+	                    checkingObjects.forEach(function (value) {
+	                        var collision = _this._test(object, value);
+	                        if (!_this._isExclude(value, exclude) && collision) {
+	                            result.push(_this._createCollisionObject(collision, value));
+	                        }
+	                    });
+	                }
+	            });
+
+	            return result;
+	        }
+
+	        /**
+	         * Проверит, исключается ли заданный объект из проверки коллизий
+	         */
+
+	    }, {
+	        key: "_isExclude",
+	        value: function _isExclude(object, exclude) {
+	            var result = false;
+	            exclude.forEach(function (value) {
+	                result = !result && object.guid == value.guid;
+	            });
+	            return result;
+	        }
+
+	        /**
+	         * Тестирует наличие коллизии
+	         */
+
+	    }, {
+	        key: "_test",
+	        value: function _test(r1, r2) {
+
+	            //Define the variables we'll need to calculate
+	            var hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
+
+	            //hit will determine whether there's a collision
+	            //hit = false;
+	            hit = null;
+
+	            //Find the center points of each sprite
+	            r1.centerX = r1.x + r1.width / 2;
+	            r1.centerY = r1.y + r1.height / 2;
+	            r2.centerX = r2.x + r2.width / 2;
+	            r2.centerY = r2.y + r2.height / 2;
+
+	            //Find the half-widths and half-heights of each sprite
+	            r1.halfWidth = r1.width / 2;
+	            r1.halfHeight = r1.height / 2;
+	            r2.halfWidth = r2.width / 2;
+	            r2.halfHeight = r2.height / 2;
+
+	            //Calculate the distance vector between the sprites
+	            vx = r1.centerX - r2.centerX;
+	            vy = r1.centerY - r2.centerY;
+
+	            //Figure out the combined half-widths and half-heights
+	            combinedHalfWidths = r1.halfWidth + r2.halfWidth;
+	            combinedHalfHeights = r1.halfHeight + r2.halfHeight;
+
+	            //Check for a collision on the x axis
+	            if (Math.abs(vx) < combinedHalfWidths) {
+
+	                //A collision might be occuring. Check for a collision on the y axis
+	                if (Math.abs(vy) < combinedHalfHeights) {
+
+	                    //There's definitely a collision happening
+	                    //hit = true;
+	                    hit = {
+	                        vx: vx,
+	                        vy: vy,
+	                        xDirection: vx <= 0 ? 'right' : 'left',
+	                        yDirection: vy <= 0 ? 'down' : 'up'
+	                    };
+	                } else {
+
+	                    //There's no collision on the y axis
+	                    //hit = false;
+	                    hit = null;
+	                }
+	            } else {
+
+	                //There's no collision on the x axis
+	                //hit = false;
+	                hit = null;
+	            }
+
+	            //`hit` will be either `true` or `false`
+	            return hit;
+	        }
+
+	        /**
+	         * Создаст описание коллизии. Описание будет состоять из данных коллизии (collision)
+	         * и субъекта с которым произошла коллизия (collisionSubject)
+	         */
+
+	    }, {
+	        key: "_createCollisionObject",
+	        value: function _createCollisionObject(collision, subject) {
+	            return {
+	                collision: collision,
+	                subject: subject
+	            };
+	        }
+	    }]);
+
+	    return CollisionManager;
+	}();
+
+	exports.default = new CollisionManager();
+
+/***/ },
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38818,7 +39017,7 @@
 	  value: true
 	});
 
-	var _Weapon = __webpack_require__(193);
+	var _Weapon = __webpack_require__(194);
 
 	var _Weapon2 = _interopRequireDefault(_Weapon);
 
@@ -38827,7 +39026,7 @@
 	exports.default = _Weapon2.default;
 
 /***/ },
-/* 193 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38842,7 +39041,7 @@
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
 
-	var _Ammo = __webpack_require__(194);
+	var _Ammo = __webpack_require__(195);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -38886,7 +39085,7 @@
 	exports.default = Weapon;
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38896,7 +39095,7 @@
 	});
 	exports.Bullet = undefined;
 
-	var _Bullet = __webpack_require__(195);
+	var _Bullet = __webpack_require__(196);
 
 	var _Bullet2 = _interopRequireDefault(_Bullet);
 
@@ -38905,7 +39104,7 @@
 	exports.Bullet = _Bullet2.default;
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38928,7 +39127,7 @@
 
 	var _AnimationStore2 = _interopRequireDefault(_AnimationStore);
 
-	var _DisplayStore = __webpack_require__(196);
+	var _DisplayStore = __webpack_require__(197);
 
 	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
 
@@ -39074,7 +39273,7 @@
 	             * Проверить столкновение текущего патрона со всеми танками на поле
 	             * @return {Boolean} Продолжать после выполнения этой функции проверять необходимость уничтожения (true) патрона или нет (false)
 	             */
-	            var collisionList = _utils.CollisionManager.checkAll(this, 'tank', [this.parentUnit]);
+	            var collisionList = _utils.CollisionManager.checkAll(this, ['tank', 'wall'], [this.parentUnit]);
 
 	            if (collisionList.length) {
 	                console.log('Коллизия Снаряд-Танк ', collisionList);
@@ -39095,7 +39294,7 @@
 	exports.default = Bullet;
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39179,10 +39378,29 @@
 	exports.default = new DisplayStore();
 
 /***/ },
-/* 197 */
-/***/ function(module, exports) {
+/* 198 */
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.Wall = undefined;
+
+	var _Wall = __webpack_require__(199);
+
+	var _Wall2 = _interopRequireDefault(_Wall);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.Wall = _Wall2.default;
+
+/***/ },
+/* 199 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -39190,170 +39408,118 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+	var _pixi = __webpack_require__(3);
+
+	var _Resources = __webpack_require__(187);
+
+	var _Resources2 = _interopRequireDefault(_Resources);
+
+	var _utils = __webpack_require__(189);
+
+	var _AnimationStore = __webpack_require__(183);
+
+	var _AnimationStore2 = _interopRequireDefault(_AnimationStore);
+
+	var _DisplayStore = __webpack_require__(197);
+
+	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	/**
-	 * Класс для работы с коллизиями
-	 */
-	var CollisionManager = function () {
-	    function CollisionManager() {
-	        _classCallCheck(this, CollisionManager);
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AnimatedSprite = _pixi.extras.AnimatedSprite;
+
+	var Wall = function (_AnimatedSprite) {
+	    _inherits(Wall, _AnimatedSprite);
+
+	    function Wall(name) {
+	        _classCallCheck(this, Wall);
+
+	        //super(Resources.getTexture(name));
+
+	        var frames = [];
+
+	        frames.push(_Resources2.default.getTexture(name));
+	        frames.push(_Resources2.default.getTexture('bang1.png'));
+	        frames.push(_Resources2.default.getTexture('bang2.png'));
+	        frames.push(_Resources2.default.getTexture('bang3.png'));
+
+	        var _this = _possibleConstructorReturn(this, (Wall.__proto__ || Object.getPrototypeOf(Wall)).call(this, frames));
+
+	        _this.type = 'wall';
+
+	        _this.guid = (0, _utils.guid)();
+
+	        _this.anchor.x = 0.5;
+	        _this.anchor.y = 0.5;
+
+	        _this.loop = false;
+	        _this.animationSpeed = 0.21;
+
+	        _this.width = _this.width / 2;
+	        _this.height = _this.height / 2;
 
 	        /**
-	         * Содержит ссылки на объекты расположенные на игровом поле.
-	         * Объекты распределены по типам для анализа коллизий между ними.
+	         * Создаем постоянную onDraw-функцию с привязанным контекстом для
+	         * дальнейшего добавления/удаления её в сторе
 	         */
-	        this.objects = {};
+	        _this.onDrawWrapper = _this.onDraw.bind(_this);
+
+	        _utils.CollisionManager.add(_this);
+
+	        _AnimationStore2.default.addChangeListener(_this.onDrawWrapper);
+
+	        _this.onComplete = _this._afterAnimation;
+	        return _this;
 	    }
 
-	    _createClass(CollisionManager, [{
-	        key: "add",
-	        value: function add(object) {
-	            if (!this.objects[object.type]) {
-	                this.objects[object.type] = new Map();
-	            }
-	            if (!this.objects[object.type].has(object.guid)) {
-	                this.objects[object.type].set(object.guid, object);
-	            } else {
-	                console.error("Элемент с таким guid уже существует! Попытка добавить элемент %o с guid %o в CollisionManager. Объект %o", object.type, object.guid, object);
-	            }
-	        }
-	    }, {
-	        key: "remove",
-	        value: function remove(object) {
-	            if (this.objects[object.type].has(object.guid)) {
-	                this.objects[object.type].delete(object.guid);
-	            } else {
-	                console.error("Элемента с таким guid не существует! Попытка удалить элемент %o с guid %o в CollisionManager. Объект %o", object.type, object.guid, object);
-	            }
+	    _createClass(Wall, [{
+	        key: 'destructor',
+	        value: function destructor() {
+	            _AnimationStore2.default.removeChangeListener(this.onDrawWrapper);
+	            _utils.CollisionManager.remove(this);
 	        }
 
 	        /**
-	         * Проверит наличие коллизии объекта object со всеми объектами типа typeForCheck
-	         * @param {Object} object Объект, который проверяет свое столкновения с объектами типа typeForCheck
-	         * @param {String} typeForCheck Тип объектов с которыми ожижается коллизия объекта object
-	         * @param {Array} exclude Массив объектов, которые исключаются из проверки коллизий
-	         * @return {Array} Список коллизий
+	         * Действия которые должны выполниться с объектов при перерисовке сцены
 	         */
 
 	    }, {
-	        key: "checkAll",
-	        value: function checkAll(object, typeForCheck, exclude) {
-	            var _this = this;
+	        key: 'onDraw',
+	        value: function onDraw() {}
 
-	            var checkingObjects = this.objects[typeForCheck],
-	                result = [];
-	            if (checkingObjects) {
-	                checkingObjects.forEach(function (value) {
-	                    var collision = _this._test(object, value);
-	                    if (!_this._isExclude(value, exclude) && collision) {
-	                        result.push(_this._createCollisionObject(collision, value));
-	                    }
-	                });
-	            }
+	        /**
+	         * Запустит анимацию уничтожения, по окончанию которой объект будет уничтожен
+	         */
 
-	            return result;
+	    }, {
+	        key: 'animatedDestroy',
+	        value: function animatedDestroy() {
+	            this.play();
 	        }
 
 	        /**
-	         * Проверит, исключается ли заданный объект из проверки коллизий
+	         * onComplete колбек, который вызывается по окончании анимации текущего спрайта
 	         */
 
 	    }, {
-	        key: "_isExclude",
-	        value: function _isExclude(object, exclude) {
-	            var result = false;
-	            exclude.forEach(function (value) {
-	                result = !result && object.guid == value.guid;
-	            });
-	            return result;
-	        }
-
-	        /**
-	         * Тестирует наличие коллизии
-	         */
-
-	    }, {
-	        key: "_test",
-	        value: function _test(r1, r2) {
-
-	            //Define the variables we'll need to calculate
-	            var hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
-
-	            //hit will determine whether there's a collision
-	            //hit = false;
-	            hit = null;
-
-	            //Find the center points of each sprite
-	            r1.centerX = r1.x + r1.width / 2;
-	            r1.centerY = r1.y + r1.height / 2;
-	            r2.centerX = r2.x + r2.width / 2;
-	            r2.centerY = r2.y + r2.height / 2;
-
-	            //Find the half-widths and half-heights of each sprite
-	            r1.halfWidth = r1.width / 2;
-	            r1.halfHeight = r1.height / 2;
-	            r2.halfWidth = r2.width / 2;
-	            r2.halfHeight = r2.height / 2;
-
-	            //Calculate the distance vector between the sprites
-	            vx = r1.centerX - r2.centerX;
-	            vy = r1.centerY - r2.centerY;
-
-	            //Figure out the combined half-widths and half-heights
-	            combinedHalfWidths = r1.halfWidth + r2.halfWidth;
-	            combinedHalfHeights = r1.halfHeight + r2.halfHeight;
-
-	            //Check for a collision on the x axis
-	            if (Math.abs(vx) < combinedHalfWidths) {
-
-	                //A collision might be occuring. Check for a collision on the y axis
-	                if (Math.abs(vy) < combinedHalfHeights) {
-
-	                    //There's definitely a collision happening
-	                    //hit = true;
-	                    hit = {
-	                        vx: vx,
-	                        vy: vy,
-	                        xDirection: vx <= 0 ? 'right' : 'left',
-	                        yDirection: vy <= 0 ? 'down' : 'up'
-	                    };
-	                } else {
-
-	                    //There's no collision on the y axis
-	                    //hit = false;
-	                    hit = null;
-	                }
-	            } else {
-
-	                //There's no collision on the x axis
-	                //hit = false;
-	                hit = null;
-	            }
-
-	            //`hit` will be either `true` or `false`
-	            return hit;
-	        }
-
-	        /**
-	         * Создаст описание коллизии. Описание будет состоять из данных коллизии (collision)
-	         * и субъекта с которым произошла коллизия (collisionSubject)
-	         */
-
-	    }, {
-	        key: "_createCollisionObject",
-	        value: function _createCollisionObject(collision, subject) {
-	            return {
-	                collision: collision,
-	                subject: subject
-	            };
+	        key: '_afterAnimation',
+	        value: function _afterAnimation() {
+	            //console.warn('animation complete ', this);
+	            this.onComplete = null;
+	            _DisplayStore2.default.destroy(this);
 	        }
 	    }]);
 
-	    return CollisionManager;
-	}();
+	    return Wall;
+	}(AnimatedSprite);
 
-	exports.default = new CollisionManager();
+	exports.default = Wall;
 
 /***/ }
 /******/ ]);

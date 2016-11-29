@@ -1,6 +1,7 @@
 import ScaledContainer from '../ScaledContainer/ScaledContainer.js';
 import Background from '../Background/Background.js';
 import Tank from '../Tank/Tank';
+import { Wall } from '../landscape';
 import DisplayStore from '../../stores/DisplayStore';
 
 /**
@@ -41,9 +42,10 @@ export default class App extends ScaledContainer {
         //this.addTanks();
         this.createPlayer();
         this.tanksGenerator();
+        this.addWall();
     }
 
-    addTanks() {
+    /*addTanks() {
         let tank = new Tank("blue-tank.png", true),
             tank2 = new Tank("green-tank.png"),
             tank3 = new Tank("green-tank.png");
@@ -55,7 +57,7 @@ export default class App extends ScaledContainer {
         DisplayStore.create(tank);
         DisplayStore.create(tank2);
         DisplayStore.create(tank3);
-    }
+    }*/
 
     createPlayer() {
         let tank = new Tank("blue-tank.png", true);
@@ -74,6 +76,16 @@ export default class App extends ScaledContainer {
             tank.enableFireMode();
             DisplayStore.create(tank);
         }, 3000);
+    }
+
+    addWall() {
+        let wall1 = new Wall('wall1.png'),
+            wall2 = new Wall('wall2.png');
+
+        wall1.position.set(250, 350);
+        wall2.position.set(250, 392);
+        DisplayStore.create(wall1);
+        DisplayStore.create(wall2);
     }
 
 }
