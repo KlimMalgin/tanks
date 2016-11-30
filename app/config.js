@@ -1,9 +1,9 @@
 
 //import { config } from '../package.json';
 
-import level from '../public/levels/level.json';
+//import level from '../public/levels/level.json';
 
-console.log('LEVEL: %o ', level);
+//console.log('LEVEL: %o ', level);
 
 let config = {
         "buildDir": "./build",

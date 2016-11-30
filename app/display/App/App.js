@@ -4,6 +4,8 @@ import Tank from '../Tank/Tank';
 import { Wall } from '../landscape';
 import DisplayStore from '../../stores/DisplayStore';
 
+import { testLevel, levelFactory } from '../../level';
+
 /**
  * Main App Display Object
  *
@@ -16,7 +18,19 @@ export default class App extends ScaledContainer {
 
     constructor(...args) {
 
-        //console.log(Resources.getTexture("bang1.png"));
+        /*
+        console.log('testLevel %o \nlevelFactory %o', testLevel, levelFactory);
+        let level = levelFactory(testLevel),
+            ground = level.ground(),        // return container with ground fill
+            buildings = level.buildings(),  // ... with buildings fill
+            respawn = level.respawn();      // ... respawn's
+
+        this.addChild(ground);
+        this.addChild(buildings);
+        this.addChild(respawn);
+
+        */
+
 
         var bg = new Background();
 

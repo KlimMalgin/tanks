@@ -22,7 +22,10 @@ document.body.appendChild(renderer.view);
 //AnimationStore.addChangeListener(() => TWEEN.update());
 
 console.log('Start resource loading...');
+console.time('Resources');
 Resources.load(() => {
+    console.timeEnd('Resources');
+
     const app = new App(config.stageWidth, config.stageHeight);
     renderer.addRenderable(app);
     renderer.start();
