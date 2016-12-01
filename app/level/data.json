@@ -6,111 +6,111 @@
     "map": [
         [
             {
-                "surface": "ground",
+                "surface": "tile.png",
                 "building": ""
             },
             {
-                "surface": "ground",
+                "surface": "tile.png",
                 "building": ""
             },
             {
-                "surface": "ground",
-                "building": "wall"
+                "surface": "tile.png",
+                "building": "wall1.png"
             },
             {
-                "surface": "ground",
+                "surface": "tile.png",
                 "building": ""
             },
             {
-                "surface": "ground",
-                "building": ""
-            }
-        ],
-        [
-            {
-                "surface": "ground",
-                "building": ""
-            },
-            {
-                "surface": "ground",
-                "building": ""
-            },
-            {
-                "surface": "ground",
-                "building": "wall"
-            },
-            {
-                "surface": "ground",
-                "building": ""
-            },
-            {
-                "surface": "ground",
+                "surface": "tile.png",
                 "building": ""
             }
         ],
         [
             {
-                "surface": "ground",
+                "surface": "tile.png",
                 "building": ""
             },
             {
-                "surface": "ground",
+                "surface": "tile.png",
                 "building": ""
             },
             {
-                "surface": "ground",
-                "building": "wall"
+                "surface": "tile.png",
+                "building": "wall1.png"
             },
             {
-                "surface": "ground",
-                "building": "wall"
-            },
-            {
-                "surface": "ground",
-                "building": ""
-            }
-        ],
-        [
-            {
-                "surface": "ground",
+                "surface": "tile.png",
                 "building": ""
             },
             {
-                "surface": "ground",
-                "building": ""
-            },
-            {
-                "surface": "ground",
-                "building": ""
-            },
-            {
-                "surface": "ground",
-                "building": "wall"
-            },
-            {
-                "surface": "ground",
+                "surface": "tile.png",
                 "building": ""
             }
         ],
         [
             {
-                "surface": "ground",
+                "surface": "tile.png",
                 "building": ""
             },
             {
-                "surface": "ground",
+                "surface": "tile.png",
                 "building": ""
             },
             {
-                "surface": "ground",
+                "surface": "tile.png",
+                "building": "wall1.png"
+            },
+            {
+                "surface": "tile.png",
+                "building": "wall1.png"
+            },
+            {
+                "surface": "tile.png",
+                "building": ""
+            }
+        ],
+        [
+            {
+                "surface": "tile.png",
                 "building": ""
             },
             {
-                "surface": "ground",
+                "surface": "tile.png",
                 "building": ""
             },
             {
-                "surface": "ground",
+                "surface": "tile.png",
+                "building": ""
+            },
+            {
+                "surface": "tile.png",
+                "building": "wall1.png"
+            },
+            {
+                "surface": "tile.png",
+                "building": ""
+            }
+        ],
+        [
+            {
+                "surface": "tile.png",
+                "building": ""
+            },
+            {
+                "surface": "tile.png",
+                "building": ""
+            },
+            {
+                "surface": "tile.png",
+                "building": ""
+            },
+            {
+                "surface": "tile.png",
+                "building": ""
+            },
+            {
+                "surface": "tile.png",
                 "building": ""
             }
         ]

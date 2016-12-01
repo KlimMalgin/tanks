@@ -1,5 +1,5 @@
-import ScaledContainer from '../ScaledContainer/ScaledContainer.js';
-import Background from '../Background/Background.js';
+import { ScaledContainer } from '../../display';
+//import Background from '../Background/Background.js';
 import Tank from '../Tank/Tank';
 import { Wall } from '../landscape';
 import DisplayStore from '../../stores/DisplayStore';
@@ -18,26 +18,26 @@ export default class App extends ScaledContainer {
 
     constructor(...args) {
 
-        /*
+
         console.log('testLevel %o \nlevelFactory %o', testLevel, levelFactory);
         let level = levelFactory(testLevel),
             ground = level.ground(),        // return container with ground fill
             buildings = level.buildings(),  // ... with buildings fill
             respawn = level.respawn();      // ... respawn's
 
-        this.addChild(ground);
-        this.addChild(buildings);
-        this.addChild(respawn);
 
-        */
+        //this.addChild(buildings);
+        //this.addChild(respawn);
 
 
-        var bg = new Background();
+
+        //var bg = new Background();
 
         super(...args);
 
-        this.addChild(bg);
+        //this.addChild(bg);
 
+        this.addChild(ground);
 
         /**
          * При создании Display-объекта - добавляем его на канву
