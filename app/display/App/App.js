@@ -17,46 +17,38 @@ import { testLevel, levelFactory } from '../../level';
 export default class App extends ScaledContainer {
 
     constructor(...args) {
-
-
-        console.log('testLevel %o \nlevelFactory %o', testLevel, levelFactory);
-        let level = levelFactory(testLevel),
-            ground = level.ground(),        // return container with ground fill
-            buildings = level.buildings(),  // ... with buildings fill
-            respawn = level.respawn();      // ... respawn's
-
-
-        //this.addChild(buildings);
-        //this.addChild(respawn);
-
-
-
-        //var bg = new Background();
-
         super(...args);
-
-        //this.addChild(bg);
-
-        this.addChild(ground);
 
         /**
          * При создании Display-объекта - добавляем его на канву
          */
-        DisplayStore.addCreateListener( objectInstance => this.addChild(objectInstance) );
+        DisplayStore.addCreateListener((objectInstance, cnt) => {
+            cnt.addChild(objectInstance);
+        });
 
         /**
          * При уничтожении Display-объекта - удаляем его с канвы
          */
-        DisplayStore.addDestroyListener((objectInstance) => {
-            this.removeChild(objectInstance);
+        DisplayStore.addDestroyListener((objectInstance, cnt) => {
+            cnt.removeChild(objectInstance);
             objectInstance.destructor();
             objectInstance.destroy();
         });
 
+
+        let level = levelFactory(testLevel),
+            ground = level.ground(),
+            buildings = level.buildings(),
+            respawn = level.respawn();
+
+        this.addChild(ground);
+        this.addChild(buildings);
+
+
         //this.addTanks();
         this.createPlayer();
-        this.tanksGenerator();
-        this.addWall();
+        //this.tanksGenerator();
+        //this.addWall();
     }
 
     /*addTanks() {
@@ -76,7 +68,7 @@ export default class App extends ScaledContainer {
     createPlayer() {
         let tank = new Tank("blue-tank.png", true);
         tank.position.set(150, 100);
-        DisplayStore.create(tank);
+        DisplayStore.create(tank, this);
     }
 
     tanksGenerator() {

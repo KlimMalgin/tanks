@@ -1,17 +1,17 @@
 import { Sprite } from 'pixi.js';
 import { ScaledContainer, Wall } from '../display';
 import Resources from '../resources/Resources';
-
+import DisplayStore from '../stores/DisplayStore';
 
 export default class LevelBuilder {
     constructor(levelData) {
 
-        console.log('Hi, i am LevelBuilder!', ScaledContainer);
-        this._createBackground(levelData);
+        //console.log('Hi, i am LevelBuilder!', ScaledContainer);
+        this._createLevelElements(levelData);
         //this._createBuildings(levelData);
     }
 
-    _createBackground(levelData) {
+    _createLevelElements(levelData) {
         let surfaceTile = null,
             buildingTile = null,
             containerWidth = levelData.width * levelData.tileSize,
@@ -27,18 +27,19 @@ export default class LevelBuilder {
                     surfaceTile.width = levelData.tileSize;
                     surfaceTile.height = levelData.tileSize;
                     surfaceTile.position.set(i * levelData.tileSize, j * levelData.tileSize);
-
-                    //buildingTile = new Wall(Resources.getTexture(levelData.map[i][j].building));
-
+                    // Фон не реализует никаких действий, поэтому можно добавить его напрямую в контейнер
                     this.backgroundLayer.addChild(surfaceTile);
-                    //this.buildingsLayer.addChild(buildingTile);
+                }
+
+                if (levelData.map[i][j].building) {
+                    buildingTile = new Wall(levelData.map[i][j].building);
+                    buildingTile.width = levelData.tileSize;
+                    buildingTile.height = levelData.tileSize;
+                    buildingTile.position.set(i * levelData.tileSize, j * levelData.tileSize);
+                    DisplayStore.create(buildingTile, this.buildingsLayer);
                 }
             }
         }
-    }
-
-    _createBuildings(levelData) {
-
     }
 
     ground() {
@@ -46,7 +47,7 @@ export default class LevelBuilder {
     }
 
     buildings() {
-        return {};
+        return this.buildingsLayer;
     }
 
     respawn() {

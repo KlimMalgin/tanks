@@ -124,7 +124,7 @@ export default class Bullet extends Sprite {
         let collisionList = CollisionManager.checkAll(this, [ 'tank', 'wall' ], [this.parentUnit]);
 
         if (collisionList.length) {
-            console.log('Коллизия Снаряд-Танк ', collisionList);
+            console.log('Коллизия Снаряд-Танк/Стена ', collisionList);
             collisionList.forEach((collisionObject) => {
                 collisionObject.subject.animatedDestroy();
             });

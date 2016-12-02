@@ -56,7 +56,7 @@
 
 	var _App2 = _interopRequireDefault(_App);
 
-	var _Resources = __webpack_require__(188);
+	var _Resources = __webpack_require__(189);
 
 	var _Resources2 = _interopRequireDefault(_Resources);
 
@@ -37793,17 +37793,17 @@
 
 	var _display = __webpack_require__(185);
 
-	var _Tank = __webpack_require__(189);
+	var _Tank = __webpack_require__(195);
 
 	var _Tank2 = _interopRequireDefault(_Tank);
 
-	var _landscape = __webpack_require__(199);
+	var _landscape = __webpack_require__(187);
 
-	var _DisplayStore = __webpack_require__(198);
+	var _DisplayStore = __webpack_require__(194);
 
 	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
 
-	var _level = __webpack_require__(201);
+	var _level = __webpack_require__(200);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -37831,51 +37831,40 @@
 
 	        _classCallCheck(this, App);
 
-	        console.log('testLevel %o \nlevelFactory %o', _level.testLevel, _level.levelFactory);
-	        var level = (0, _level.levelFactory)(_level.testLevel),
-	            ground = level.ground(),
-	            // return container with ground fill
-	        buildings = level.buildings(),
-	            // ... with buildings fill
-	        respawn = level.respawn(); // ... respawn's
-
-
-	        //this.addChild(buildings);
-	        //this.addChild(respawn);
-
-
-	        //var bg = new Background();
-
 	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	            args[_key] = arguments[_key];
 	        }
 
-	        //this.addChild(bg);
-
-	        var _this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args)));
-
-	        _this.addChild(ground);
-
 	        /**
 	         * При создании Display-объекта - добавляем его на канву
 	         */
-	        _DisplayStore2.default.addCreateListener(function (objectInstance) {
-	            return _this.addChild(objectInstance);
+	        var _this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args)));
+
+	        _DisplayStore2.default.addCreateListener(function (objectInstance, cnt) {
+	            cnt.addChild(objectInstance);
 	        });
 
 	        /**
 	         * При уничтожении Display-объекта - удаляем его с канвы
 	         */
-	        _DisplayStore2.default.addDestroyListener(function (objectInstance) {
-	            _this.removeChild(objectInstance);
+	        _DisplayStore2.default.addDestroyListener(function (objectInstance, cnt) {
+	            cnt.removeChild(objectInstance);
 	            objectInstance.destructor();
 	            objectInstance.destroy();
 	        });
 
+	        var level = (0, _level.levelFactory)(_level.testLevel),
+	            ground = level.ground(),
+	            buildings = level.buildings(),
+	            respawn = level.respawn();
+
+	        _this.addChild(ground);
+	        _this.addChild(buildings);
+
 	        //this.addTanks();
 	        _this.createPlayer();
-	        _this.tanksGenerator();
-	        _this.addWall();
+	        //this.tanksGenerator();
+	        //this.addWall();
 	        return _this;
 	    }
 
@@ -37896,7 +37885,7 @@
 	        value: function createPlayer() {
 	            var tank = new _Tank2.default("blue-tank.png", true);
 	            tank.position.set(150, 100);
-	            _DisplayStore2.default.create(tank);
+	            _DisplayStore2.default.create(tank, this);
 	        }
 	    }, {
 	        key: 'tanksGenerator',
@@ -37949,7 +37938,7 @@
 
 	var _ScaledContainer2 = _interopRequireDefault(_ScaledContainer);
 
-	var _landscape = __webpack_require__(199);
+	var _landscape = __webpack_require__(187);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -38069,8 +38058,151 @@
 	exports.default = ScaledContainer;
 
 /***/ },
-/* 187 */,
+/* 187 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.Wall = undefined;
+
+	var _Wall = __webpack_require__(188);
+
+	var _Wall2 = _interopRequireDefault(_Wall);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.Wall = _Wall2.default;
+
+/***/ },
 /* 188 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _pixi = __webpack_require__(3);
+
+	var _Resources = __webpack_require__(189);
+
+	var _Resources2 = _interopRequireDefault(_Resources);
+
+	var _utils = __webpack_require__(190);
+
+	var _AnimationStore = __webpack_require__(183);
+
+	var _AnimationStore2 = _interopRequireDefault(_AnimationStore);
+
+	var _DisplayStore = __webpack_require__(194);
+
+	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AnimatedSprite = _pixi.extras.AnimatedSprite;
+
+	var Wall = function (_AnimatedSprite) {
+	    _inherits(Wall, _AnimatedSprite);
+
+	    function Wall(name) {
+	        _classCallCheck(this, Wall);
+
+	        //super(Resources.getTexture(name));
+
+	        var frames = [];
+
+	        frames.push(_Resources2.default.getTexture(name));
+	        frames.push(_Resources2.default.getTexture('bang1.png'));
+	        frames.push(_Resources2.default.getTexture('bang2.png'));
+	        frames.push(_Resources2.default.getTexture('bang3.png'));
+
+	        var _this = _possibleConstructorReturn(this, (Wall.__proto__ || Object.getPrototypeOf(Wall)).call(this, frames));
+
+	        _this.type = 'wall';
+
+	        _this.guid = (0, _utils.guid)();
+
+	        _this.anchor.x = 0.5;
+	        _this.anchor.y = 0.5;
+
+	        _this.loop = false;
+	        _this.animationSpeed = 0.21;
+
+	        _this.width = _this.width / 2;
+	        _this.height = _this.height / 2;
+
+	        /**
+	         * Создаем постоянную onDraw-функцию с привязанным контекстом для
+	         * дальнейшего добавления/удаления её в сторе
+	         */
+	        _this.onDrawWrapper = _this.onDraw.bind(_this);
+
+	        _utils.CollisionManager.add(_this);
+
+	        _AnimationStore2.default.addChangeListener(_this.onDrawWrapper);
+
+	        _this.onComplete = _this._afterAnimation;
+	        return _this;
+	    }
+
+	    _createClass(Wall, [{
+	        key: 'destructor',
+	        value: function destructor() {
+	            _AnimationStore2.default.removeChangeListener(this.onDrawWrapper);
+	            _utils.CollisionManager.remove(this);
+	        }
+
+	        /**
+	         * Действия которые должны выполниться с объектов при перерисовке сцены
+	         */
+
+	    }, {
+	        key: 'onDraw',
+	        value: function onDraw() {}
+
+	        /**
+	         * Запустит анимацию уничтожения, по окончанию которой объект будет уничтожен
+	         */
+
+	    }, {
+	        key: 'animatedDestroy',
+	        value: function animatedDestroy() {
+	            this.play();
+	        }
+
+	        /**
+	         * onComplete колбек, который вызывается по окончании анимации текущего спрайта
+	         */
+
+	    }, {
+	        key: '_afterAnimation',
+	        value: function _afterAnimation() {
+	            //console.warn('animation complete ', this);
+	            this.onComplete = null;
+	            _DisplayStore2.default.destroy(this);
+	        }
+	    }]);
+
+	    return Wall;
+	}(AnimatedSprite);
+
+	exports.default = Wall;
+
+/***/ },
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -38136,388 +38268,6 @@
 	}();
 
 	exports.default = new Resources();
-
-/***/ },
-/* 189 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _pixi = __webpack_require__(3);
-
-	var _Resources = __webpack_require__(188);
-
-	var _Resources2 = _interopRequireDefault(_Resources);
-
-	var _utils = __webpack_require__(190);
-
-	var _AnimationStore = __webpack_require__(183);
-
-	var _AnimationStore2 = _interopRequireDefault(_AnimationStore);
-
-	var _config = __webpack_require__(1);
-
-	var _Weapon = __webpack_require__(194);
-
-	var _Weapon2 = _interopRequireDefault(_Weapon);
-
-	var _DisplayStore = __webpack_require__(198);
-
-	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var AnimatedSprite = _pixi.extras.AnimatedSprite;
-
-	var Tank = function (_AnimatedSprite) {
-	    _inherits(Tank, _AnimatedSprite);
-
-	    /**
-	     * @param {String} name Текстовое наименование спрайта
-	     * @param {Boolean} managed Управляемый танк или нет {true|false}
-	     */
-	    function Tank(name, managed) {
-	        _classCallCheck(this, Tank);
-
-	        var frames = [];
-
-	        frames.push(_Resources2.default.getTexture(name));
-	        frames.push(_Resources2.default.getTexture('bang1.png'));
-	        frames.push(_Resources2.default.getTexture('bang2.png'));
-	        frames.push(_Resources2.default.getTexture('bang3.png'));
-
-	        var _this = _possibleConstructorReturn(this, (Tank.__proto__ || Object.getPrototypeOf(Tank)).call(this, frames));
-
-	        _this.type = 'tank';
-
-	        _this.guid = (0, _utils.guid)();
-	        console.log('tank guid: ', _this.guid, _this);
-
-	        _this.anchor.x = 0.5;
-	        _this.anchor.y = 0.5;
-
-	        _this.loop = false;
-	        _this.animationSpeed = 0.21;
-
-	        _this.width = _this.width / 2;
-	        _this.height = _this.height / 2;
-
-	        /**
-	         * Текущий угол поворота танка
-	         */
-	        _this.rotation = 0;
-
-	        /**
-	         * Текущее направление
-	         */
-	        _this.rotatePosition = 'up';
-
-	        /**
-	         * Ускорение при движении по горизонтали
-	         */
-	        _this.vx = 0;
-
-	        /**
-	         * Ускорение при движении по вертикали
-	         */
-	        _this.vy = 0;
-
-	        /**
-	         * Создаем постоянную onDraw-функцию с привязанным контекстом для
-	         * дальнейшего добавления/удаления её в сторе
-	         */
-	        _this.onDrawWrapper = _this.onDraw.bind(_this);
-
-	        _utils.CollisionManager.add(_this);
-
-	        managed && _this._listenKeyboard();
-	        _AnimationStore2.default.addChangeListener(_this.onDrawWrapper);
-
-	        _this.onComplete = _this._afterAnimation;
-	        return _this;
-	    }
-
-	    _createClass(Tank, [{
-	        key: 'destructor',
-	        value: function destructor() {
-	            _AnimationStore2.default.removeChangeListener(this.onDrawWrapper);
-	            _utils.CollisionManager.remove(this);
-	        }
-
-	        /**
-	         * Перемещает танк в указанном направлении с заданным ускорением
-	         * @param {String} direction Направление перемещения {'up','down','left','right'}
-	         * @param {Number} velocity Ускорение. По умолчанию == 2
-	         */
-
-	    }, {
-	        key: 'go',
-	        value: function go(direction) {
-	            var velocity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
-
-	            var rotateAngle = Math.PI / 2;
-	            this.stop();
-	            switch (direction) {
-	                case 'up':
-	                    this.rotation = rotateAngle * 0;
-	                    this.rotatePosition = direction;
-	                    this.vy -= velocity;
-	                    break;
-
-	                case 'down':
-	                    this.rotation = rotateAngle * -2;
-	                    this.rotatePosition = direction;
-	                    this.vy += velocity;
-	                    break;
-
-	                case 'left':
-	                    this.rotation = rotateAngle * -1;
-	                    this.rotatePosition = direction;
-	                    this.vx -= velocity;
-	                    break;
-
-	                case 'right':
-	                    this.rotation = rotateAngle * 1;
-	                    this.rotatePosition = direction;
-	                    this.vx += velocity;
-	                    break;
-	            }
-	        }
-
-	        /**
-	         * Прекращает движение танка
-	         */
-
-	    }, {
-	        key: 'stop',
-	        value: function stop() {
-	            this.vx = 0;
-	            this.vy = 0;
-	        }
-
-	        /**
-	         * Действия которые должны выполниться с объектов при перерисовке сцены
-	         */
-
-	    }, {
-	        key: 'onDraw',
-	        value: function onDraw() {
-	            if (this.vx != 0 || this.vy != 0) {
-	                this._checkCollision();
-	            }
-	            this._checkAndMove();
-	        }
-
-	        /**
-	         * Запустит анимацию уничтожения, по окончанию которой объект будет уничтожен
-	         */
-
-	    }, {
-	        key: 'animatedDestroy',
-	        value: function animatedDestroy() {
-	            // TODO: Не останавливает движение?
-	            this.stop();
-	            this.play();
-	        }
-
-	        /**
-	         * onComplete колбек, который вызывается по окончании анимации текущего спрайта
-	         */
-
-	    }, {
-	        key: '_afterAnimation',
-	        value: function _afterAnimation() {
-	            //console.warn('animation complete ', this);
-	            this.onComplete = null;
-	            _DisplayStore2.default.destroy(this);
-	        }
-	    }, {
-	        key: '_listenKeyboard',
-	        value: function _listenKeyboard() {
-	            var _this2 = this;
-
-	            var onRelease = function onRelease(params) {
-	                _this2.stop();
-	                !!params.isDown && _this2.go(params.isDown);
-	            };
-
-	            _utils.Keyboard.on('down', function () {
-	                _this2.go('down');
-	            });
-	            _utils.Keyboard.on('downRelease', onRelease);
-
-	            _utils.Keyboard.on('up', function () {
-	                _this2.go('up');
-	            });
-	            _utils.Keyboard.on('upRelease', onRelease);
-
-	            _utils.Keyboard.on('left', function () {
-	                _this2.go('left');
-	            });
-	            _utils.Keyboard.on('leftRelease', onRelease);
-
-	            _utils.Keyboard.on('right', function () {
-	                _this2.go('right');
-	            });
-	            _utils.Keyboard.on('rightRelease', onRelease);
-
-	            _utils.Keyboard.on('space', function () {
-	                _this2._fire();
-	            });
-	        }
-	    }, {
-	        key: '_fire',
-	        value: function _fire() {
-	            // TODO: Рефакторинг! Сделать Weapon.create, который будет вызывать DisplayStore
-	            var bullet = _Weapon2.default.fire('Bullet', this.rotatePosition, 8, this._weaponStartPosition(this.rotatePosition), this);
-	            if (bullet) {
-	                _DisplayStore2.default.create(bullet);
-	            } else {
-	                console.log('Снаряд не создан');
-	            }
-	        }
-
-	        /**
-	         * Проверяет расположение танка и передвигает его, если это возможно
-	         */
-
-	    }, {
-	        key: '_checkAndMove',
-	        value: function _checkAndMove() {
-	            var x = this.x + this.vx,
-	                y = this.y + this.vy,
-	                wd2 = this.width / 2,
-	                hd2 = this.height / 2;
-
-	            // Разрешен только выезд на поле из-за его пределов, если танк вдруг там оказался
-	            if (wd2 > x && x > this.x || _config.config.stageWidth - wd2 < x && x < this.x) {
-	                this.x = x;
-	            }
-	            // Аналогично
-	            else if (hd2 > y && y > this.y || _config.config.stageHeight - hd2 < y && y < this.y) {
-	                    this.y = y;
-	                }
-	                // Когда танк находится в пределах поля - можно перемещаться в любых направлениях
-	                else if (wd2 <= x && _config.config.stageWidth - wd2 >= x && hd2 <= y && _config.config.stageHeight - hd2 >= y) {
-	                        this.y = y;
-	                        this.x = x;
-	                    }
-	        }
-
-	        /**
-	         * Вычисляем стартовую позицию для пущеного снаряда
-	         */
-
-	    }, {
-	        key: '_weaponStartPosition',
-	        value: function _weaponStartPosition(direction) {
-	            switch (direction) {
-	                case 'up':
-	                    return { x: this.x, y: this.y - Math.round(this.height / 2) };
-
-	                case 'down':
-	                    return { x: this.x, y: this.y + Math.round(this.height / 2) };
-
-	                case 'left':
-	                    return { x: this.x - Math.round(this.height / 2), y: this.y };
-
-	                case 'right':
-	                    return { x: this.x + Math.round(this.height / 2), y: this.y };
-	            }
-	        }
-
-	        /**
-	         * Проверяем коллизии текущего танка с другими танками и препятствиями
-	         */
-
-	    }, {
-	        key: '_checkCollision',
-	        value: function _checkCollision() {
-	            var _this3 = this;
-
-	            var collisionList = _utils.CollisionManager.checkAll(this, ['tank', 'wall'], [this]);
-
-	            if (collisionList.length) {
-	                //console.log('Коллизия Танк-Танк ', collisionList);
-	                collisionList.forEach(function (collisionObject) {
-	                    //console.log('Коллизия %o %o %o %o', collisionObject.collision, this.rotatePosition, collisionObject.collision.xDirection, collisionObject.collision.yDirection);
-	                    if (_this3.rotatePosition == collisionObject.collision.xDirection || _this3.rotatePosition == collisionObject.collision.yDirection) {
-	                        _this3.stop();
-	                    }
-	                });
-	            }
-	        }
-
-	        /**
-	         * Включает режим бота - перемещение в случайную сторону через промежуток времени
-	         */
-
-	    }, {
-	        key: 'enableBotMode',
-	        value: function enableBotMode() {
-	            var _this4 = this;
-
-	            // Случайное направление движения
-	            var xyRand = function xyRand() {
-	                return Math.floor(Math.random() * 4 + 1);
-	            },
-
-
-	            // Каждые 5 сек меняем направление движения
-	            changeDirectionMs = 1500;
-
-	            var intrId = setInterval(function () {
-	                _this4.stop();
-	                if (xyRand() == 1) _this4.go('up');else if (xyRand() == 2) _this4.go('right');else if (xyRand() == 3) _this4.go('down');else if (xyRand() == 4) _this4.go('left');
-	            }, changeDirectionMs);
-
-	            // TODO: Нужно сделать once-подписку в сторах!!
-	            _DisplayStore2.default.addDestroyListener(function (objectInstance) {
-	                if (objectInstance.guid == _this4.guid) {
-	                    clearInterval(intrId);
-	                }
-	            });
-	        }
-
-	        /**
-	         * Включает режим стрельбы каждые 1.5 сек
-	         */
-
-	    }, {
-	        key: 'enableFireMode',
-	        value: function enableFireMode() {
-	            var _this5 = this;
-
-	            var fireMs = 1500,
-	                intrId = setInterval(function () {
-	                _this5._fire();
-	            }, fireMs);
-
-	            // TODO: Нужно сделать once-подписку в сторах!!
-	            _DisplayStore2.default.addDestroyListener(function (objectInstance) {
-	                if (objectInstance.guid == _this5.guid) {
-	                    clearInterval(intrId);
-	                }
-	            });
-	        }
-	    }]);
-
-	    return Tank;
-	}(AnimatedSprite);
-
-	exports.default = Tank;
 
 /***/ },
 /* 190 */
@@ -38961,10 +38711,478 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _events = __webpack_require__(181);
+
+	var _events2 = _interopRequireDefault(_events);
+
+	var _AppConstants = __webpack_require__(182);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	 * В DisplayStore регистрируются обработчики, которые добавляют
+	 * и удаляют DisplayObjects с канвы
+	 */
+	var DisplayStore = function (_EventEmitter) {
+	    _inherits(DisplayStore, _EventEmitter);
+
+	    function DisplayStore() {
+	        var _ref;
+
+	        _classCallCheck(this, DisplayStore);
+
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	            args[_key] = arguments[_key];
+	        }
+
+	        return _possibleConstructorReturn(this, (_ref = DisplayStore.__proto__ || Object.getPrototypeOf(DisplayStore)).call.apply(_ref, [this].concat(args)));
+	    }
+
+	    /**
+	     * Генерирует событие создания объекта
+	     * @param {Object} objectInstance Экземпляр создаваемого объекта
+	     * @param {Object} container Контейнер в который будет добавлен objectInstance
+	     */
+
+
+	    _createClass(DisplayStore, [{
+	        key: 'create',
+	        value: function create(objectInstance, container) {
+	            this.emit(_AppConstants.CREATE_OBJECT, objectInstance, container);
+	        }
+
+	        /**
+	         * Генерирует событие уничтожения объекта
+	         * @param {Object} objectInstance Экземпляр объекта, который нужно удалить с карты и уничтожить
+	         * @param {Object} container Контейнер в который будет добавлен objectInstance
+	         */
+
+	    }, {
+	        key: 'destroy',
+	        value: function destroy(objectInstance, container) {
+	            this.emit(_AppConstants.DESTROY_OBJECT, objectInstance, container);
+	        }
+	    }, {
+	        key: 'addCreateListener',
+	        value: function addCreateListener(callback) {
+	            this.on(_AppConstants.CREATE_OBJECT, callback);
+	        }
+	    }, {
+	        key: 'addDestroyListener',
+	        value: function addDestroyListener(callback) {
+	            this.on(_AppConstants.DESTROY_OBJECT, callback);
+	        }
+	    }]);
+
+	    return DisplayStore;
+	}(_events2.default);
+
+	exports.default = new DisplayStore();
+
+/***/ },
+/* 195 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _pixi = __webpack_require__(3);
+
+	var _Resources = __webpack_require__(189);
+
+	var _Resources2 = _interopRequireDefault(_Resources);
+
+	var _utils = __webpack_require__(190);
+
+	var _AnimationStore = __webpack_require__(183);
+
+	var _AnimationStore2 = _interopRequireDefault(_AnimationStore);
+
+	var _config = __webpack_require__(1);
+
+	var _Weapon = __webpack_require__(196);
+
+	var _Weapon2 = _interopRequireDefault(_Weapon);
+
+	var _DisplayStore = __webpack_require__(194);
+
+	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AnimatedSprite = _pixi.extras.AnimatedSprite;
+
+	var Tank = function (_AnimatedSprite) {
+	    _inherits(Tank, _AnimatedSprite);
+
+	    /**
+	     * @param {String} name Текстовое наименование спрайта
+	     * @param {Boolean} managed Управляемый танк или нет {true|false}
+	     */
+	    function Tank(name, managed) {
+	        _classCallCheck(this, Tank);
+
+	        var frames = [];
+
+	        frames.push(_Resources2.default.getTexture(name));
+	        frames.push(_Resources2.default.getTexture('bang1.png'));
+	        frames.push(_Resources2.default.getTexture('bang2.png'));
+	        frames.push(_Resources2.default.getTexture('bang3.png'));
+
+	        var _this = _possibleConstructorReturn(this, (Tank.__proto__ || Object.getPrototypeOf(Tank)).call(this, frames));
+
+	        _this.type = 'tank';
+
+	        _this.guid = (0, _utils.guid)();
+	        console.log('tank guid: ', _this.guid, _this);
+
+	        _this.anchor.x = 0.5;
+	        _this.anchor.y = 0.5;
+
+	        _this.loop = false;
+	        _this.animationSpeed = 0.21;
+
+	        _this.width = _this.width / 2;
+	        _this.height = _this.height / 2;
+
+	        /**
+	         * Текущий угол поворота танка
+	         */
+	        _this.rotation = 0;
+
+	        /**
+	         * Текущее направление
+	         */
+	        _this.rotatePosition = 'up';
+
+	        /**
+	         * Ускорение при движении по горизонтали
+	         */
+	        _this.vx = 0;
+
+	        /**
+	         * Ускорение при движении по вертикали
+	         */
+	        _this.vy = 0;
+
+	        /**
+	         * Создаем постоянную onDraw-функцию с привязанным контекстом для
+	         * дальнейшего добавления/удаления её в сторе
+	         */
+	        _this.onDrawWrapper = _this.onDraw.bind(_this);
+
+	        _utils.CollisionManager.add(_this);
+
+	        managed && _this._listenKeyboard();
+	        _AnimationStore2.default.addChangeListener(_this.onDrawWrapper);
+
+	        _this.onComplete = _this._afterAnimation;
+	        return _this;
+	    }
+
+	    _createClass(Tank, [{
+	        key: 'destructor',
+	        value: function destructor() {
+	            _AnimationStore2.default.removeChangeListener(this.onDrawWrapper);
+	            _utils.CollisionManager.remove(this);
+	        }
+
+	        /**
+	         * Перемещает танк в указанном направлении с заданным ускорением
+	         * @param {String} direction Направление перемещения {'up','down','left','right'}
+	         * @param {Number} velocity Ускорение. По умолчанию == 2
+	         */
+
+	    }, {
+	        key: 'go',
+	        value: function go(direction) {
+	            var velocity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+
+	            var rotateAngle = Math.PI / 2;
+	            this.stop();
+	            switch (direction) {
+	                case 'up':
+	                    this.rotation = rotateAngle * 0;
+	                    this.rotatePosition = direction;
+	                    this.vy -= velocity;
+	                    break;
+
+	                case 'down':
+	                    this.rotation = rotateAngle * -2;
+	                    this.rotatePosition = direction;
+	                    this.vy += velocity;
+	                    break;
+
+	                case 'left':
+	                    this.rotation = rotateAngle * -1;
+	                    this.rotatePosition = direction;
+	                    this.vx -= velocity;
+	                    break;
+
+	                case 'right':
+	                    this.rotation = rotateAngle * 1;
+	                    this.rotatePosition = direction;
+	                    this.vx += velocity;
+	                    break;
+	            }
+	        }
+
+	        /**
+	         * Прекращает движение танка
+	         */
+
+	    }, {
+	        key: 'stop',
+	        value: function stop() {
+	            this.vx = 0;
+	            this.vy = 0;
+	        }
+
+	        /**
+	         * Действия которые должны выполниться с объектов при перерисовке сцены
+	         */
+
+	    }, {
+	        key: 'onDraw',
+	        value: function onDraw() {
+	            if (this.vx != 0 || this.vy != 0) {
+	                this._checkCollision();
+	            }
+	            this._checkAndMove();
+	        }
+
+	        /**
+	         * Запустит анимацию уничтожения, по окончанию которой объект будет уничтожен
+	         */
+
+	    }, {
+	        key: 'animatedDestroy',
+	        value: function animatedDestroy() {
+	            // TODO: Не останавливает движение?
+	            this.stop();
+	            this.play();
+	        }
+
+	        /**
+	         * onComplete колбек, который вызывается по окончании анимации текущего спрайта
+	         */
+
+	    }, {
+	        key: '_afterAnimation',
+	        value: function _afterAnimation() {
+	            //console.warn('animation complete ', this);
+	            this.onComplete = null;
+	            _DisplayStore2.default.destroy(this);
+	        }
+	    }, {
+	        key: '_listenKeyboard',
+	        value: function _listenKeyboard() {
+	            var _this2 = this;
+
+	            var onRelease = function onRelease(params) {
+	                _this2.stop();
+	                !!params.isDown && _this2.go(params.isDown);
+	            };
+
+	            _utils.Keyboard.on('down', function () {
+	                _this2.go('down');
+	            });
+	            _utils.Keyboard.on('downRelease', onRelease);
+
+	            _utils.Keyboard.on('up', function () {
+	                _this2.go('up');
+	            });
+	            _utils.Keyboard.on('upRelease', onRelease);
+
+	            _utils.Keyboard.on('left', function () {
+	                _this2.go('left');
+	            });
+	            _utils.Keyboard.on('leftRelease', onRelease);
+
+	            _utils.Keyboard.on('right', function () {
+	                _this2.go('right');
+	            });
+	            _utils.Keyboard.on('rightRelease', onRelease);
+
+	            _utils.Keyboard.on('space', function () {
+	                _this2._fire();
+	            });
+	        }
+	    }, {
+	        key: '_fire',
+	        value: function _fire() {
+	            // TODO: Рефакторинг! Сделать Weapon.create, который будет вызывать DisplayStore
+	            var bullet = _Weapon2.default.fire('Bullet', this.rotatePosition, 8, this._weaponStartPosition(this.rotatePosition), this);
+	            if (bullet) {
+	                _DisplayStore2.default.create(bullet);
+	            } else {
+	                console.log('Снаряд не создан');
+	            }
+	        }
+
+	        /**
+	         * Проверяет расположение танка и передвигает его, если это возможно
+	         */
+
+	    }, {
+	        key: '_checkAndMove',
+	        value: function _checkAndMove() {
+	            var x = this.x + this.vx,
+	                y = this.y + this.vy,
+	                wd2 = this.width / 2,
+	                hd2 = this.height / 2;
+
+	            // Разрешен только выезд на поле из-за его пределов, если танк вдруг там оказался
+	            if (wd2 > x && x > this.x || _config.config.stageWidth - wd2 < x && x < this.x) {
+	                this.x = x;
+	            }
+	            // Аналогично
+	            else if (hd2 > y && y > this.y || _config.config.stageHeight - hd2 < y && y < this.y) {
+	                    this.y = y;
+	                }
+	                // Когда танк находится в пределах поля - можно перемещаться в любых направлениях
+	                else if (wd2 <= x && _config.config.stageWidth - wd2 >= x && hd2 <= y && _config.config.stageHeight - hd2 >= y) {
+	                        this.y = y;
+	                        this.x = x;
+	                    }
+	        }
+
+	        /**
+	         * Вычисляем стартовую позицию для пущеного снаряда
+	         */
+
+	    }, {
+	        key: '_weaponStartPosition',
+	        value: function _weaponStartPosition(direction) {
+	            switch (direction) {
+	                case 'up':
+	                    return { x: this.x, y: this.y - Math.round(this.height / 2) };
+
+	                case 'down':
+	                    return { x: this.x, y: this.y + Math.round(this.height / 2) };
+
+	                case 'left':
+	                    return { x: this.x - Math.round(this.height / 2), y: this.y };
+
+	                case 'right':
+	                    return { x: this.x + Math.round(this.height / 2), y: this.y };
+	            }
+	        }
+
+	        /**
+	         * Проверяем коллизии текущего танка с другими танками и препятствиями
+	         */
+
+	    }, {
+	        key: '_checkCollision',
+	        value: function _checkCollision() {
+	            var _this3 = this;
+
+	            var collisionList = _utils.CollisionManager.checkAll(this, ['tank', 'wall'], [this]);
+
+	            if (collisionList.length) {
+	                //console.log('Коллизия Танк-Танк ', collisionList);
+	                collisionList.forEach(function (collisionObject) {
+	                    //console.log('Коллизия %o %o %o %o', collisionObject.collision, this.rotatePosition, collisionObject.collision.xDirection, collisionObject.collision.yDirection);
+	                    if (_this3.rotatePosition == collisionObject.collision.xDirection || _this3.rotatePosition == collisionObject.collision.yDirection) {
+	                        _this3.stop();
+	                    }
+	                });
+	            }
+	        }
+
+	        /**
+	         * Включает режим бота - перемещение в случайную сторону через промежуток времени
+	         */
+
+	    }, {
+	        key: 'enableBotMode',
+	        value: function enableBotMode() {
+	            var _this4 = this;
+
+	            // Случайное направление движения
+	            var xyRand = function xyRand() {
+	                return Math.floor(Math.random() * 4 + 1);
+	            },
+
+
+	            // Каждые 5 сек меняем направление движения
+	            changeDirectionMs = 1500;
+
+	            var intrId = setInterval(function () {
+	                _this4.stop();
+	                if (xyRand() == 1) _this4.go('up');else if (xyRand() == 2) _this4.go('right');else if (xyRand() == 3) _this4.go('down');else if (xyRand() == 4) _this4.go('left');
+	            }, changeDirectionMs);
+
+	            // TODO: Нужно сделать once-подписку в сторах!!
+	            _DisplayStore2.default.addDestroyListener(function (objectInstance) {
+	                if (objectInstance.guid == _this4.guid) {
+	                    clearInterval(intrId);
+	                }
+	            });
+	        }
+
+	        /**
+	         * Включает режим стрельбы каждые 1.5 сек
+	         */
+
+	    }, {
+	        key: 'enableFireMode',
+	        value: function enableFireMode() {
+	            var _this5 = this;
+
+	            var fireMs = 1500,
+	                intrId = setInterval(function () {
+	                _this5._fire();
+	            }, fireMs);
+
+	            // TODO: Нужно сделать once-подписку в сторах!!
+	            _DisplayStore2.default.addDestroyListener(function (objectInstance) {
+	                if (objectInstance.guid == _this5.guid) {
+	                    clearInterval(intrId);
+	                }
+	            });
+	        }
+	    }]);
+
+	    return Tank;
+	}(AnimatedSprite);
+
+	exports.default = Tank;
+
+/***/ },
+/* 196 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
-	var _Weapon = __webpack_require__(195);
+	var _Weapon = __webpack_require__(197);
 
 	var _Weapon2 = _interopRequireDefault(_Weapon);
 
@@ -38973,7 +39191,7 @@
 	exports.default = _Weapon2.default;
 
 /***/ },
-/* 195 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38988,7 +39206,7 @@
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
 
-	var _Ammo = __webpack_require__(196);
+	var _Ammo = __webpack_require__(198);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -39032,7 +39250,7 @@
 	exports.default = Weapon;
 
 /***/ },
-/* 196 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39042,7 +39260,7 @@
 	});
 	exports.Bullet = undefined;
 
-	var _Bullet = __webpack_require__(197);
+	var _Bullet = __webpack_require__(199);
 
 	var _Bullet2 = _interopRequireDefault(_Bullet);
 
@@ -39051,7 +39269,7 @@
 	exports.Bullet = _Bullet2.default;
 
 /***/ },
-/* 197 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39064,7 +39282,7 @@
 
 	var _pixi = __webpack_require__(3);
 
-	var _Resources = __webpack_require__(188);
+	var _Resources = __webpack_require__(189);
 
 	var _Resources2 = _interopRequireDefault(_Resources);
 
@@ -39074,7 +39292,7 @@
 
 	var _AnimationStore2 = _interopRequireDefault(_AnimationStore);
 
-	var _DisplayStore = __webpack_require__(198);
+	var _DisplayStore = __webpack_require__(194);
 
 	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
 
@@ -39223,7 +39441,7 @@
 	            var collisionList = _utils.CollisionManager.checkAll(this, ['tank', 'wall'], [this.parentUnit]);
 
 	            if (collisionList.length) {
-	                console.log('Коллизия Снаряд-Танк ', collisionList);
+	                console.log('Коллизия Снаряд-Танк/Стена ', collisionList);
 	                collisionList.forEach(function (collisionObject) {
 	                    collisionObject.subject.animatedDestroy();
 	                });
@@ -39241,235 +39459,7 @@
 	exports.default = Bullet;
 
 /***/ },
-/* 198 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _events = __webpack_require__(181);
-
-	var _events2 = _interopRequireDefault(_events);
-
-	var _AppConstants = __webpack_require__(182);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	/**
-	 * В DisplayStore регистрируются обработчики, которые добавляют
-	 * и удаляют DisplayObjects с канвы
-	 */
-	var DisplayStore = function (_EventEmitter) {
-	    _inherits(DisplayStore, _EventEmitter);
-
-	    function DisplayStore() {
-	        var _ref;
-
-	        _classCallCheck(this, DisplayStore);
-
-	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	            args[_key] = arguments[_key];
-	        }
-
-	        return _possibleConstructorReturn(this, (_ref = DisplayStore.__proto__ || Object.getPrototypeOf(DisplayStore)).call.apply(_ref, [this].concat(args)));
-	    }
-
-	    /**
-	     * Генерирует событие создания объекта
-	     * @param {Object} objectInstance Экземпляр создаваемого объекта
-	     */
-
-
-	    _createClass(DisplayStore, [{
-	        key: 'create',
-	        value: function create(objectInstance) {
-	            this.emit(_AppConstants.CREATE_OBJECT, objectInstance);
-	        }
-
-	        /**
-	         * Генерирует событие уничтожения объекта
-	         * @param {Object} objectInstance Экземпляр объекта, который нужно удалить с карты и уничтожить
-	         */
-
-	    }, {
-	        key: 'destroy',
-	        value: function destroy(objectInstance) {
-	            this.emit(_AppConstants.DESTROY_OBJECT, objectInstance);
-	        }
-	    }, {
-	        key: 'addCreateListener',
-	        value: function addCreateListener(callback) {
-	            this.on(_AppConstants.CREATE_OBJECT, callback);
-	        }
-	    }, {
-	        key: 'addDestroyListener',
-	        value: function addDestroyListener(callback) {
-	            this.on(_AppConstants.DESTROY_OBJECT, callback);
-	        }
-	    }]);
-
-	    return DisplayStore;
-	}(_events2.default);
-
-	exports.default = new DisplayStore();
-
-/***/ },
-/* 199 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.Wall = undefined;
-
-	var _Wall = __webpack_require__(200);
-
-	var _Wall2 = _interopRequireDefault(_Wall);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.Wall = _Wall2.default;
-
-/***/ },
 /* 200 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _pixi = __webpack_require__(3);
-
-	var _Resources = __webpack_require__(188);
-
-	var _Resources2 = _interopRequireDefault(_Resources);
-
-	var _utils = __webpack_require__(190);
-
-	var _AnimationStore = __webpack_require__(183);
-
-	var _AnimationStore2 = _interopRequireDefault(_AnimationStore);
-
-	var _DisplayStore = __webpack_require__(198);
-
-	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var AnimatedSprite = _pixi.extras.AnimatedSprite;
-
-	var Wall = function (_AnimatedSprite) {
-	    _inherits(Wall, _AnimatedSprite);
-
-	    function Wall(name) {
-	        _classCallCheck(this, Wall);
-
-	        //super(Resources.getTexture(name));
-
-	        var frames = [];
-
-	        frames.push(_Resources2.default.getTexture(name));
-	        frames.push(_Resources2.default.getTexture('bang1.png'));
-	        frames.push(_Resources2.default.getTexture('bang2.png'));
-	        frames.push(_Resources2.default.getTexture('bang3.png'));
-
-	        var _this = _possibleConstructorReturn(this, (Wall.__proto__ || Object.getPrototypeOf(Wall)).call(this, frames));
-
-	        _this.type = 'wall';
-
-	        _this.guid = (0, _utils.guid)();
-
-	        _this.anchor.x = 0.5;
-	        _this.anchor.y = 0.5;
-
-	        _this.loop = false;
-	        _this.animationSpeed = 0.21;
-
-	        _this.width = _this.width / 2;
-	        _this.height = _this.height / 2;
-
-	        /**
-	         * Создаем постоянную onDraw-функцию с привязанным контекстом для
-	         * дальнейшего добавления/удаления её в сторе
-	         */
-	        _this.onDrawWrapper = _this.onDraw.bind(_this);
-
-	        _utils.CollisionManager.add(_this);
-
-	        _AnimationStore2.default.addChangeListener(_this.onDrawWrapper);
-
-	        _this.onComplete = _this._afterAnimation;
-	        return _this;
-	    }
-
-	    _createClass(Wall, [{
-	        key: 'destructor',
-	        value: function destructor() {
-	            _AnimationStore2.default.removeChangeListener(this.onDrawWrapper);
-	            _utils.CollisionManager.remove(this);
-	        }
-
-	        /**
-	         * Действия которые должны выполниться с объектов при перерисовке сцены
-	         */
-
-	    }, {
-	        key: 'onDraw',
-	        value: function onDraw() {}
-
-	        /**
-	         * Запустит анимацию уничтожения, по окончанию которой объект будет уничтожен
-	         */
-
-	    }, {
-	        key: 'animatedDestroy',
-	        value: function animatedDestroy() {
-	            this.play();
-	        }
-
-	        /**
-	         * onComplete колбек, который вызывается по окончании анимации текущего спрайта
-	         */
-
-	    }, {
-	        key: '_afterAnimation',
-	        value: function _afterAnimation() {
-	            //console.warn('animation complete ', this);
-	            this.onComplete = null;
-	            _DisplayStore2.default.destroy(this);
-	        }
-	    }]);
-
-	    return Wall;
-	}(AnimatedSprite);
-
-	exports.default = Wall;
-
-/***/ },
-/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39480,11 +39470,11 @@
 	exports.testLevel = undefined;
 	exports.levelFactory = levelFactory;
 
-	var _data = __webpack_require__(202);
+	var _data = __webpack_require__(201);
 
 	var _data2 = _interopRequireDefault(_data);
 
-	var _Builder = __webpack_require__(203);
+	var _Builder = __webpack_require__(202);
 
 	var _Builder2 = _interopRequireDefault(_Builder);
 
@@ -39496,7 +39486,7 @@
 	}
 
 /***/ },
-/* 202 */
+/* 201 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -39516,7 +39506,7 @@
 				},
 				{
 					"surface": "tile.png",
-					"building": "wall1.png"
+					"building": "wall2.png"
 				},
 				{
 					"surface": "tile.png",
@@ -39619,7 +39609,7 @@
 	};
 
 /***/ },
-/* 203 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39634,9 +39624,13 @@
 
 	var _display = __webpack_require__(185);
 
-	var _Resources = __webpack_require__(188);
+	var _Resources = __webpack_require__(189);
 
 	var _Resources2 = _interopRequireDefault(_Resources);
+
+	var _DisplayStore = __webpack_require__(194);
+
+	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -39646,14 +39640,14 @@
 	    function LevelBuilder(levelData) {
 	        _classCallCheck(this, LevelBuilder);
 
-	        console.log('Hi, i am LevelBuilder!', _display.ScaledContainer);
-	        this._createBackground(levelData);
+	        //console.log('Hi, i am LevelBuilder!', ScaledContainer);
+	        this._createLevelElements(levelData);
 	        //this._createBuildings(levelData);
 	    }
 
 	    _createClass(LevelBuilder, [{
-	        key: '_createBackground',
-	        value: function _createBackground(levelData) {
+	        key: '_createLevelElements',
+	        value: function _createLevelElements(levelData) {
 	            var surfaceTile = null,
 	                buildingTile = null,
 	                containerWidth = levelData.width * levelData.tileSize,
@@ -39669,18 +39663,20 @@
 	                        surfaceTile.width = levelData.tileSize;
 	                        surfaceTile.height = levelData.tileSize;
 	                        surfaceTile.position.set(i * levelData.tileSize, j * levelData.tileSize);
-
-	                        //buildingTile = new Wall(Resources.getTexture(levelData.map[i][j].building));
-
+	                        // Фон не реализует никаких действий, поэтому можно добавить его напрямую в контейнер
 	                        this.backgroundLayer.addChild(surfaceTile);
-	                        //this.buildingsLayer.addChild(buildingTile);
+	                    }
+
+	                    if (levelData.map[i][j].building) {
+	                        buildingTile = new _display.Wall(levelData.map[i][j].building);
+	                        buildingTile.width = levelData.tileSize;
+	                        buildingTile.height = levelData.tileSize;
+	                        buildingTile.position.set(i * levelData.tileSize, j * levelData.tileSize);
+	                        _DisplayStore2.default.create(buildingTile, this.buildingsLayer);
 	                    }
 	                }
 	            }
 	        }
-	    }, {
-	        key: '_createBuildings',
-	        value: function _createBuildings(levelData) {}
 	    }, {
 	        key: 'ground',
 	        value: function ground() {
@@ -39689,7 +39685,7 @@
 	    }, {
 	        key: 'buildings',
 	        value: function buildings() {
-	            return {};
+	            return this.buildingsLayer;
 	        }
 	    }, {
 	        key: 'respawn',

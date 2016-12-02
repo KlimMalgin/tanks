@@ -13,17 +13,19 @@ class DisplayStore extends EventEmitter {
     /**
      * Генерирует событие создания объекта
      * @param {Object} objectInstance Экземпляр создаваемого объекта
+     * @param {Object} container Контейнер в который будет добавлен objectInstance
      */
-    create(objectInstance) {
-        this.emit(CREATE_OBJECT, objectInstance);
+    create(objectInstance, container) {
+        this.emit(CREATE_OBJECT, objectInstance, container);
     }
 
     /**
      * Генерирует событие уничтожения объекта
      * @param {Object} objectInstance Экземпляр объекта, который нужно удалить с карты и уничтожить
+     * @param {Object} container Контейнер в который будет добавлен objectInstance
      */
-    destroy(objectInstance) {
-        this.emit(DESTROY_OBJECT, objectInstance);
+    destroy(objectInstance, container) {
+        this.emit(DESTROY_OBJECT, objectInstance, container);
     }
 
     addCreateListener(callback) {
