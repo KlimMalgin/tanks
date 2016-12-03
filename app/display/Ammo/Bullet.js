@@ -22,15 +22,15 @@ export default class Bullet extends Sprite {
         this.type = 'bullet';
 
         this.guid = guid();
-        console.log('bullet guid: ', this.guid, this);
+        //console.log('bullet guid: ', this.guid, this);
 
         this.parentUnit = parentUnit;
 
         this.anchor.x = 0.5;
         this.anchor.y = 0.5;
 
-        this.width = this.width / 2;
-        this.height = this.height / 2;
+        //this.width = this.width / 2;
+        //this.height = this.height / 2;
 
         /**
          * Ускорение при движении по горизонтали

@@ -74,10 +74,14 @@
 	 *
 	 */
 
-	//import './index.html';
 	var renderer = new _Renderer2.default(_config.config.stageWidth, _config.config.stageHeight);
+	var app = document.getElementById('app');
 
-	document.body.appendChild(renderer.view);
+	app.setAttribute("style", "width:" + _config.config.stageWidth + "px;height:" + _config.config.stageHeight + "px;");
+	app.style.width = _config.config.stageWidth + 'px';
+	app.style.height = _config.config.stageHeight + 'px';
+
+	app.appendChild(renderer.view);
 
 	//AnimationStore.addChangeListener(() => TWEEN.update());
 
@@ -89,32 +93,25 @@
 	  var app = new _App2.default(_config.config.stageWidth, _config.config.stageHeight);
 	  renderer.addRenderable(app);
 	  renderer.start();
-
-	  console.log('bg: w: %o, h: %o', app.width, app.height);
-
-	  console.log('Game start!');
 	});
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.config = undefined;
 
-	//import { config } from '../package.json';
-
-	//import level from '../public/levels/level.json';
-
-	//console.log('LEVEL: %o ', level);
+	var _level = __webpack_require__(200);
 
 	var config = {
 	    "buildDir": "./build",
-	    "stageWidth": 400,
-	    "stageHeight": 300,
+	    "stageWidth": _level.levelParams.stageWidth,
+	    "stageHeight": _level.levelParams.stageHeight,
 	    "ammo": {
 	        "bullet": "fire.png"
 	    }
@@ -145,8 +142,6 @@
 	var _AnimationStore2 = _interopRequireDefault(_AnimationStore);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -179,18 +174,18 @@
 
 	    //this.resolution = window.devicePixelRatio;
 
-	    var _this = _possibleConstructorReturn(this, (_ref = Renderer.__proto__ || Object.getPrototypeOf(Renderer)).call.apply(_ref, [this].concat(args)));
+	    //window.addEventListener('resize', this.resizeHandler.bind(this));
 
-	    window.addEventListener('resize', _this.resizeHandler.bind(_this));
+	    var _this = _possibleConstructorReturn(this, (_ref = Renderer.__proto__ || Object.getPrototypeOf(Renderer)).call.apply(_ref, [this].concat(args)));
 
 	    _RendererStore2.default.set('resolution', _this.resolution);
 	    _RendererStore2.default.set('stageWidth', args[0]);
 	    _RendererStore2.default.set('stageHeight', args[1]);
 	    _RendererStore2.default.set('stageCenter', new _pixi.Point(args[0] / 2, args[1] / 2));
 
-	    _this.setStore();
+	    _this.setStore.apply(_this, args);
 
-	    _this.resizeHandler();
+	    //this.resizeHandler();
 	    return _this;
 	  }
 
@@ -202,8 +197,11 @@
 	  _createClass(Renderer, [{
 	    key: 'setStore',
 	    value: function setStore() {
-	      _RendererStore2.default.set('width', this.getWindowSize()[0]);
-	      _RendererStore2.default.set('height', this.getWindowSize()[1]);
+	      //RendererStore.set('width', this.getWindowSize()[0]);
+	      //RendererStore.set('height', this.getWindowSize()[1]);
+	      // ==
+	      _RendererStore2.default.set('width', arguments.length <= 0 ? undefined : arguments[0]);
+	      _RendererStore2.default.set('height', arguments.length <= 1 ? undefined : arguments[1]);
 	    }
 
 	    /**
@@ -214,7 +212,8 @@
 	  }, {
 	    key: 'resizeHandler',
 	    value: function resizeHandler() {
-	      this.resize.apply(this, _toConsumableArray(this.getWindowSize()));
+	      //Ресайз канвы не нужен
+	      //this.resize(...this.getWindowSize());
 	      this.setStore();
 	      _RendererStore2.default.emitChange();
 	    }
@@ -37342,6 +37341,7 @@
 	  }, {
 	    key: 'emitChange',
 	    value: function emitChange() {
+	      console.log('RendererStore: ', this.data);
 	      this.emit(_AppConstants.RESIZE, this.data);
 	    }
 	  }, {
@@ -37841,14 +37841,14 @@
 	        var _this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args)));
 
 	        _DisplayStore2.default.addCreateListener(function (objectInstance, cnt) {
-	            cnt.addChild(objectInstance);
+	            (cnt || _this).addChild(objectInstance);
 	        });
 
 	        /**
 	         * При уничтожении Display-объекта - удаляем его с канвы
 	         */
 	        _DisplayStore2.default.addDestroyListener(function (objectInstance, cnt) {
-	            cnt.removeChild(objectInstance);
+	            (cnt || _this).removeChild(objectInstance);
 	            objectInstance.destructor();
 	            objectInstance.destroy();
 	        });
@@ -38141,8 +38141,8 @@
 	        _this.loop = false;
 	        _this.animationSpeed = 0.21;
 
-	        _this.width = _this.width / 2;
-	        _this.height = _this.height / 2;
+	        //this.width = this.width / 2;
+	        //this.height = this.height / 2;
 
 	        /**
 	         * Создаем постоянную onDraw-функцию с привязанным контекстом для
@@ -38155,6 +38155,8 @@
 	        _AnimationStore2.default.addChangeListener(_this.onDrawWrapper);
 
 	        _this.onComplete = _this._afterAnimation;
+
+	        console.log('Wall: ', _this);
 	        return _this;
 	    }
 
@@ -38864,8 +38866,8 @@
 	        _this.loop = false;
 	        _this.animationSpeed = 0.21;
 
-	        _this.width = _this.width / 2;
-	        _this.height = _this.height / 2;
+	        //this.width = this.width / 2;
+	        //this.height = this.height / 2;
 
 	        /**
 	         * Текущий угол поворота танка
@@ -39051,8 +39053,9 @@
 	        value: function _checkAndMove() {
 	            var x = this.x + this.vx,
 	                y = this.y + this.vy,
-	                wd2 = this.width / 2,
-	                hd2 = this.height / 2;
+	                wd2 = this.width /*/ 2*/
+	            ,
+	                hd2 = this.height /*/ 2*/;
 
 	            // Разрешен только выезд на поле из-за его пределов, если танк вдруг там оказался
 	            if (wd2 > x && x > this.x || _config.config.stageWidth - wd2 < x && x < this.x) {
@@ -39326,15 +39329,15 @@
 	        _this.type = 'bullet';
 
 	        _this.guid = (0, _utils.guid)();
-	        console.log('bullet guid: ', _this.guid, _this);
+	        //console.log('bullet guid: ', this.guid, this);
 
 	        _this.parentUnit = parentUnit;
 
 	        _this.anchor.x = 0.5;
 	        _this.anchor.y = 0.5;
 
-	        _this.width = _this.width / 2;
-	        _this.height = _this.height / 2;
+	        //this.width = this.width / 2;
+	        //this.height = this.height / 2;
 
 	        /**
 	         * Ускорение при движении по горизонтали
@@ -39467,7 +39470,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.testLevel = undefined;
+	exports.levelParams = exports.testLevel = undefined;
 	exports.levelFactory = levelFactory;
 
 	var _data = __webpack_require__(201);
@@ -39480,7 +39483,13 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var levelParams = {
+	    stageWidth: _data2.default.width * _data2.default.tileSize,
+	    stageHeight: _data2.default.height * _data2.default.tileSize
+	};
+
 	exports.testLevel = _data2.default;
+	exports.levelParams = levelParams;
 	function levelFactory(levelData) {
 	    return new _Builder2.default(levelData);
 	}
@@ -39493,7 +39502,7 @@
 		"name": "My test level",
 		"width": 5,
 		"height": 5,
-		"tileSize": 45,
+		"tileSize": 130,
 		"map": [
 			[
 				{
@@ -39656,22 +39665,18 @@
 	            this.backgroundLayer = new _display.ScaledContainer(containerWidth, containerHeight);
 	            this.buildingsLayer = new _display.ScaledContainer(containerWidth, containerHeight);
 
-	            for (var i = 0; i < levelData.width; i++) {
-	                for (var j = 0; j < levelData.height; j++) {
-	                    if (levelData.map[i][j].surface) {
-	                        surfaceTile = new _pixi.Sprite(_Resources2.default.getTexture(levelData.map[i][j].surface));
-	                        surfaceTile.width = levelData.tileSize;
-	                        surfaceTile.height = levelData.tileSize;
-	                        surfaceTile.position.set(i * levelData.tileSize, j * levelData.tileSize);
+	            for (var y = 0; y < levelData.width; y++) {
+	                for (var x = 0; x < levelData.height; x++) {
+	                    if (levelData.map[x][y].surface) {
+	                        surfaceTile = new _pixi.Sprite(_Resources2.default.getTexture(levelData.map[x][y].surface));
+	                        surfaceTile.position.set(x * levelData.tileSize, y * levelData.tileSize);
 	                        // Фон не реализует никаких действий, поэтому можно добавить его напрямую в контейнер
 	                        this.backgroundLayer.addChild(surfaceTile);
 	                    }
 
-	                    if (levelData.map[i][j].building) {
-	                        buildingTile = new _display.Wall(levelData.map[i][j].building);
-	                        buildingTile.width = levelData.tileSize;
-	                        buildingTile.height = levelData.tileSize;
-	                        buildingTile.position.set(i * levelData.tileSize, j * levelData.tileSize);
+	                    if (levelData.map[x][y].building) {
+	                        buildingTile = new _display.Wall(levelData.map[x][y].building);
+	                        buildingTile.position.set(x * levelData.tileSize, y * levelData.tileSize);
 	                        _DisplayStore2.default.create(buildingTile, this.buildingsLayer);
 	                    }
 	                }

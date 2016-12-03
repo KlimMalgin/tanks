@@ -35,8 +35,8 @@ export default class Tank extends AnimatedSprite {
         this.loop = false;
         this.animationSpeed = 0.21;
 
-        this.width = this.width / 2;
-        this.height = this.height / 2;
+        //this.width = this.width / 2;
+        //this.height = this.height / 2;
 
         /**
          * Текущий угол поворота танка
@@ -187,8 +187,8 @@ export default class Tank extends AnimatedSprite {
     _checkAndMove() {
         let x = this.x + this.vx,
             y = this.y + this.vy,
-            wd2 = this.width / 2,
-            hd2 = this.height / 2;
+            wd2 = this.width /*/ 2*/,
+            hd2 = this.height /*/ 2*/;
 
 
         // Разрешен только выезд на поле из-за его пределов, если танк вдруг там оказался

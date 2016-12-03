@@ -1,18 +1,14 @@
 
-//import { config } from '../package.json';
-
-//import level from '../public/levels/level.json';
-
-//console.log('LEVEL: %o ', level);
+import { levelParams } from './level';
 
 let config = {
-        "buildDir": "./build",
-        "stageWidth": 400,
-        "stageHeight": 300,
-        "ammo": {
-            "bullet": "fire.png"
-        }
-    };
+    "buildDir": "./build",
+    "stageWidth": levelParams.stageWidth,
+    "stageHeight": levelParams.stageHeight,
+    "ammo": {
+        "bullet": "fire.png"
+    }
+};
 
 
 export { config };

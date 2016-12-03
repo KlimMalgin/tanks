@@ -2,7 +2,33 @@
 <meta charset="utf-8">
 <title>Fast Tanks</title>
 <link rel="icon" type="image/png" href="/public/tank.png" />
-<style>* {padding: 0; margin: 0}</style>
+<style>
+* {padding: 0; margin: 0}
+
+#app {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 450px;
+    height: 450px;
+    margin: auto;
+}
+
+.page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    top: 0;
+    left: 0;
+}
+
+</style>
 <body>
+<div class="page">
+    <div id="app"></div>
+</div>
 <script src="build/app.js"></script>
 </body>

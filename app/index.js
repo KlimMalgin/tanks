@@ -6,7 +6,6 @@
  *
  */
 
-//import './index.html';
 import {config} from './config';
 import Renderer from './Renderer/Renderer';
 import App from './display/App/App';
@@ -16,8 +15,13 @@ import Resources from './resources/Resources';
 
 
 const renderer = new Renderer(config.stageWidth, config.stageHeight);
+const app = document.getElementById('app');
 
-document.body.appendChild(renderer.view);
+app.setAttribute("style","width:"+config.stageWidth+"px;height:"+config.stageHeight+"px;");
+app.style.width=config.stageWidth+'px';
+app.style.height=config.stageHeight+'px';
+
+app.appendChild(renderer.view);
 
 //AnimationStore.addChangeListener(() => TWEEN.update());
 
@@ -29,9 +33,5 @@ Resources.load(() => {
     const app = new App(config.stageWidth, config.stageHeight);
     renderer.addRenderable(app);
     renderer.start();
-
-    console.log('bg: w: %o, h: %o', app.width, app.height);
-
-    console.log('Game start!');
 
 });

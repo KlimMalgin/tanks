@@ -30,8 +30,8 @@ export default class Wall extends AnimatedSprite {
         this.loop = false;
         this.animationSpeed = 0.21;
 
-        this.width = this.width / 2;
-        this.height = this.height / 2;
+        //this.width = this.width / 2;
+        //this.height = this.height / 2;
 
         /**
          * Создаем постоянную onDraw-функцию с привязанным контекстом для
@@ -44,6 +44,8 @@ export default class Wall extends AnimatedSprite {
         AnimationStore.addChangeListener(this.onDrawWrapper);
 
         this.onComplete = this._afterAnimation;
+
+        console.log('Wall: ', this);
     }
 
     destructor() {

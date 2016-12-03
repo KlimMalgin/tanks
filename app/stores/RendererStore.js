@@ -36,6 +36,7 @@ class RendererStore extends EventEmitter {
   }
 
   emitChange() {
+    console.log('RendererStore: ', this.data);
     this.emit(RESIZE, this.data);
   }
 

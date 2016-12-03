@@ -23,14 +23,14 @@ export default class App extends ScaledContainer {
          * При создании Display-объекта - добавляем его на канву
          */
         DisplayStore.addCreateListener((objectInstance, cnt) => {
-            cnt.addChild(objectInstance);
+            (cnt || this).addChild(objectInstance);
         });
 
         /**
          * При уничтожении Display-объекта - удаляем его с канвы
          */
         DisplayStore.addDestroyListener((objectInstance, cnt) => {
-            cnt.removeChild(objectInstance);
+            (cnt || this).removeChild(objectInstance);
             objectInstance.destructor();
             objectInstance.destroy();
         });

@@ -20,24 +20,27 @@ export default class Renderer extends WebGLRenderer {
 
     //this.resolution = window.devicePixelRatio;
 
-    window.addEventListener('resize', this.resizeHandler.bind(this));
+    //window.addEventListener('resize', this.resizeHandler.bind(this));
 
     RendererStore.set('resolution', this.resolution);
     RendererStore.set('stageWidth', args[0]);
     RendererStore.set('stageHeight', args[1]);
     RendererStore.set('stageCenter', new Point(args[0] / 2, args[1] / 2));
 
-    this.setStore();
+    this.setStore(...args);
 
-    this.resizeHandler();
+    //this.resizeHandler();
   }
 
   /**
    * Set the stores width and height on resize
    */
-  setStore() {
-    RendererStore.set('width', this.getWindowSize()[0]);
-    RendererStore.set('height', this.getWindowSize()[1]);
+  setStore(...args) {
+    //RendererStore.set('width', this.getWindowSize()[0]);
+    //RendererStore.set('height', this.getWindowSize()[1]);
+    // ==
+    RendererStore.set('width', args[0]);
+    RendererStore.set('height', args[1]);
   }
 
   /**
@@ -45,7 +48,8 @@ export default class Renderer extends WebGLRenderer {
    * @return {null}
    */
   resizeHandler() {
-    this.resize(...this.getWindowSize());
+    //Ресайз канвы не нужен
+    //this.resize(...this.getWindowSize());
     this.setStore();
     RendererStore.emitChange();
   }
