@@ -1,8 +1,8 @@
 {
     "name": "My test level",
-    "width": 5,
-    "height": 5,
-    "tileSize": 130,
+    "width": 9,
+    "height": 7,
+    "tileSize": 84,
     "map": [
         [
             {

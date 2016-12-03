@@ -44,8 +44,6 @@ export default class Wall extends AnimatedSprite {
         AnimationStore.addChangeListener(this.onDrawWrapper);
 
         this.onComplete = this._afterAnimation;
-
-        console.log('Wall: ', this);
     }
 
     destructor() {

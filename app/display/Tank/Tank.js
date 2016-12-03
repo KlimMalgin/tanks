@@ -187,8 +187,8 @@ export default class Tank extends AnimatedSprite {
     _checkAndMove() {
         let x = this.x + this.vx,
             y = this.y + this.vy,
-            wd2 = this.width /*/ 2*/,
-            hd2 = this.height /*/ 2*/;
+            wd2 = this.width / 2,
+            hd2 = this.height / 2;
 
 
         // Разрешен только выезд на поле из-за его пределов, если танк вдруг там оказался

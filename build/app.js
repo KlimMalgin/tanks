@@ -38155,8 +38155,6 @@
 	        _AnimationStore2.default.addChangeListener(_this.onDrawWrapper);
 
 	        _this.onComplete = _this._afterAnimation;
-
-	        console.log('Wall: ', _this);
 	        return _this;
 	    }
 
@@ -39053,9 +39051,8 @@
 	        value: function _checkAndMove() {
 	            var x = this.x + this.vx,
 	                y = this.y + this.vy,
-	                wd2 = this.width /*/ 2*/
-	            ,
-	                hd2 = this.height /*/ 2*/;
+	                wd2 = this.width / 2,
+	                hd2 = this.height / 2;
 
 	            // Разрешен только выезд на поле из-за его пределов, если танк вдруг там оказался
 	            if (wd2 > x && x > this.x || _config.config.stageWidth - wd2 < x && x < this.x) {
@@ -39500,9 +39497,9 @@
 
 	module.exports = {
 		"name": "My test level",
-		"width": 5,
-		"height": 5,
-		"tileSize": 130,
+		"width": 9,
+		"height": 7,
+		"tileSize": 84,
 		"map": [
 			[
 				{
@@ -39665,18 +39662,25 @@
 	            this.backgroundLayer = new _display.ScaledContainer(containerWidth, containerHeight);
 	            this.buildingsLayer = new _display.ScaledContainer(containerWidth, containerHeight);
 
+	            console.log('tileSize: ', levelData.tileSize);
+
 	            for (var y = 0; y < levelData.width; y++) {
 	                for (var x = 0; x < levelData.height; x++) {
-	                    if (levelData.map[x][y].surface) {
-	                        surfaceTile = new _pixi.Sprite(_Resources2.default.getTexture(levelData.map[x][y].surface));
-	                        surfaceTile.position.set(x * levelData.tileSize, y * levelData.tileSize);
+	                    var coord = {
+	                        x: x * levelData.tileSize,
+	                        y: y * levelData.tileSize
+	                    },
+	                        map = levelData.map;
+	                    if (map[x] && map[x][y] && map[x][y].surface) {
+	                        surfaceTile = new _pixi.Sprite(_Resources2.default.getTexture(map[x][y].surface));
+	                        surfaceTile.position.set(coord.x, coord.y);
 	                        // Фон не реализует никаких действий, поэтому можно добавить его напрямую в контейнер
 	                        this.backgroundLayer.addChild(surfaceTile);
 	                    }
 
-	                    if (levelData.map[x][y].building) {
-	                        buildingTile = new _display.Wall(levelData.map[x][y].building);
-	                        buildingTile.position.set(x * levelData.tileSize, y * levelData.tileSize);
+	                    if (map[x] && map[x][y] && map[x][y].building) {
+	                        buildingTile = new _display.Wall(map[x][y].building);
+	                        buildingTile.position.set(coord.x + buildingTile.width / 2, coord.y + buildingTile.height / 2);
 	                        _DisplayStore2.default.create(buildingTile, this.buildingsLayer);
 	                    }
 	                }

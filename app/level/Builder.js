@@ -20,18 +20,28 @@ export default class LevelBuilder {
         this.backgroundLayer = new ScaledContainer(containerWidth, containerHeight);
         this.buildingsLayer = new ScaledContainer(containerWidth, containerHeight);
 
+        console.log('tileSize: ', levelData.tileSize);
+
         for (var y = 0; y<levelData.width; y++) {
             for (var x = 0; x<levelData.height; x++) {
-                if (levelData.map[x][y].surface) {
-                    surfaceTile = new Sprite(Resources.getTexture(levelData.map[x][y].surface));
-                    surfaceTile.position.set(x * levelData.tileSize, y * levelData.tileSize);
+                let coord = {
+                        x: x * levelData.tileSize,
+                        y: y * levelData.tileSize
+                    },
+                    map = levelData.map;
+                if (map[x] && map[x][y] && map[x][y].surface) {
+                    surfaceTile = new Sprite(Resources.getTexture(map[x][y].surface));
+                    surfaceTile.position.set(coord.x, coord.y);
                     // Фон не реализует никаких действий, поэтому можно добавить его напрямую в контейнер
                     this.backgroundLayer.addChild(surfaceTile);
                 }
 
-                if (levelData.map[x][y].building) {
-                    buildingTile = new Wall(levelData.map[x][y].building);
-                    buildingTile.position.set(x * levelData.tileSize, y * levelData.tileSize);
+                if (map[x] && map[x][y] && map[x][y].building) {
+                    buildingTile = new Wall(map[x][y].building);
+                    buildingTile.position.set(
+                        coord.x + (buildingTile.width / 2),
+                        coord.y + (buildingTile.height / 2)
+                    );
                     DisplayStore.create(buildingTile, this.buildingsLayer);
                 }
             }
