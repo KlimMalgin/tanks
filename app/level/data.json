@@ -3,114 +3,121 @@
     "width": 9,
     "height": 7,
     "tileSize": 84,
+    "spriteHash": {
+        "ground": "tile.png",
+        "greenTank": "green-tank.png",
+        "blueTank": "green-tank.png",
+        "wall": "wall1.png",
+        "respawn": "wall2.png"
+    },
     "map": [
         [
             {
-                "surface": "tile.png",
+                "surface": "ground",
                 "building": ""
             },
             {
-                "surface": "tile.png",
+                "surface": "ground",
                 "building": ""
             },
             {
-                "surface": "tile.png",
-                "building": "wall2.png"
+                "surface": "ground",
+                "building": "wall"
             },
             {
-                "surface": "tile.png",
+                "surface": "ground",
                 "building": ""
             },
             {
-                "surface": "tile.png",
+                "surface": "ground",
+                "building": "respawn"
+            }
+        ],
+        [
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
+                "building": "wall"
+            },
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
                 "building": ""
             }
         ],
         [
             {
-                "surface": "tile.png",
+                "surface": "ground",
                 "building": ""
             },
             {
-                "surface": "tile.png",
+                "surface": "ground",
                 "building": ""
             },
             {
-                "surface": "tile.png",
-                "building": "wall1.png"
+                "surface": "ground",
+                "building": "wall"
             },
             {
-                "surface": "tile.png",
-                "building": ""
+                "surface": "ground",
+                "building": "wall"
             },
             {
-                "surface": "tile.png",
-                "building": ""
-            }
-        ],
-        [
-            {
-                "surface": "tile.png",
-                "building": ""
-            },
-            {
-                "surface": "tile.png",
-                "building": ""
-            },
-            {
-                "surface": "tile.png",
-                "building": "wall1.png"
-            },
-            {
-                "surface": "tile.png",
-                "building": "wall1.png"
-            },
-            {
-                "surface": "tile.png",
+                "surface": "ground",
                 "building": ""
             }
         ],
         [
             {
-                "surface": "tile.png",
+                "surface": "ground",
                 "building": ""
             },
             {
-                "surface": "tile.png",
+                "surface": "ground",
                 "building": ""
             },
             {
-                "surface": "tile.png",
+                "surface": "ground",
                 "building": ""
             },
             {
-                "surface": "tile.png",
-                "building": "wall1.png"
+                "surface": "ground",
+                "building": "wall"
             },
             {
-                "surface": "tile.png",
+                "surface": "ground",
                 "building": ""
             }
         ],
         [
             {
-                "surface": "tile.png",
+                "surface": "ground",
                 "building": ""
             },
             {
-                "surface": "tile.png",
+                "surface": "ground",
                 "building": ""
             },
             {
-                "surface": "tile.png",
+                "surface": "ground",
                 "building": ""
             },
             {
-                "surface": "tile.png",
+                "surface": "ground",
                 "building": ""
             },
             {
-                "surface": "tile.png",
+                "surface": "ground",
                 "building": ""
             }
         ]
