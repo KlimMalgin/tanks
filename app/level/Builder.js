@@ -47,11 +47,14 @@ export default class LevelBuilder {
                 }
 
                 if (map[x] && map[x][y] && map[x][y].respawn) {
-                    respawnTile = new Respawn(textureFile(map[x][y].respawn));
-                    respawnTile.position.set(
-                        coord.x + (respawnTile.width / 2),
-                        coord.y + (respawnTile.height / 2)
-                    );
+                    let rX, rY;
+                    respawnTile = new Respawn(textureFile(map[x][y].respawn), coord);
+                    rX = coord.x + (respawnTile.width / 2),
+                    rY = coord.y + (respawnTile.height / 2);
+                    respawnTile.position.set(rX, rY);
+
+                    // todo: хак для сохранения позиции респауна на поле. Внутри респауна почему-то всегда нулевой position-объект
+                    //respawnTile.startPosition = { x: rX, y: rY };
                     DisplayStore.create(respawnTile);
                 }
             }

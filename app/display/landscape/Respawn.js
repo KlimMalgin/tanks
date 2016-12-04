@@ -6,7 +6,7 @@ import RespawnStore from '../../stores/RespawnStore';
 import DisplayStore from '../../stores/DisplayStore';
 
 export default class Respawn extends Sprite {
-    constructor(name) {
+    constructor(name, coord) {
         super(Resources.getTexture(name));
 
         this.type = 'respawn';
@@ -18,6 +18,12 @@ export default class Respawn extends Sprite {
 
         this.loop = false;
         this.animationSpeed = 0.21;
+
+        // todo: хак для сохранения позиции респауна на поле. Внутри респауна почему-то всегда нулевой position-объект
+        this.startPosition = {
+            x: coord.x + (this.width / 2),
+            y: coord.y + (this.height / 2)
+        };
 
         /**
          * Создаем постоянную onDraw-функцию с привязанным контекстом для
@@ -54,9 +60,9 @@ export default class Respawn extends Sprite {
      * Пересоздать юнита связанного с текущей respawn-точкой
      */
     _respawnMyUnit(unitProps) {
-        console.log('Пересоздаем юнит типа %o на респауне № %o в координатах %o %o // bounds: %o', unitProps && unitProps.type, this.guid, this.x, this.y, this.getBounds());
+        console.log('Пересоздаем юнит типа %o на респауне № %o в координатах %o %o // bounds: %o', unitProps && unitProps.type, this.guid, this.startPosition.x, this.startPosition.y, this.getBounds());
         let tank = new Tank("blue-tank.png", true);
-        tank.position.set(this.x, this.y);
+        tank.position.set(this.startPosition.x, this.startPosition.y);
         tank.respawnGUID = this.guid;
         DisplayStore.create(tank);
     }

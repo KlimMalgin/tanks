@@ -358,8 +358,14 @@
 	                    }
 
 	                    if (map[x] && map[x][y] && map[x][y].respawn) {
-	                        respawnTile = new _display.Respawn(textureFile(map[x][y].respawn));
-	                        respawnTile.position.set(coord.x + respawnTile.width / 2, coord.y + respawnTile.height / 2);
+	                        var rX = void 0,
+	                            rY = void 0;
+	                        respawnTile = new _display.Respawn(textureFile(map[x][y].respawn), coord);
+	                        rX = coord.x + respawnTile.width / 2, rY = coord.y + respawnTile.height / 2;
+	                        respawnTile.position.set(rX, rY);
+
+	                        // todo: хак для сохранения позиции респауна на поле. Внутри респауна почему-то всегда нулевой position-объект
+	                        //respawnTile.startPosition = { x: rX, y: rY };
 	                        _DisplayStore2.default.create(respawnTile);
 	                    }
 	                }
@@ -39809,7 +39815,7 @@
 	var Respawn = function (_Sprite) {
 	    _inherits(Respawn, _Sprite);
 
-	    function Respawn(name) {
+	    function Respawn(name, coord) {
 	        _classCallCheck(this, Respawn);
 
 	        var _this = _possibleConstructorReturn(this, (Respawn.__proto__ || Object.getPrototypeOf(Respawn)).call(this, _Resources2.default.getTexture(name)));
@@ -39823,6 +39829,12 @@
 
 	        _this.loop = false;
 	        _this.animationSpeed = 0.21;
+
+	        // todo: хак для сохранения позиции респауна на поле. Внутри респауна почему-то всегда нулевой position-объект
+	        _this.startPosition = {
+	            x: coord.x + _this.width / 2,
+	            y: coord.y + _this.height / 2
+	        };
 
 	        /**
 	         * Создаем постоянную onDraw-функцию с привязанным контекстом для
@@ -39868,9 +39880,9 @@
 	    }, {
 	        key: '_respawnMyUnit',
 	        value: function _respawnMyUnit(unitProps) {
-	            console.log('Пересоздаем юнит типа %o на респауне № %o в координатах %o %o // bounds: %o', unitProps && unitProps.type, this.guid, this.x, this.y, this.getBounds());
+	            console.log('Пересоздаем юнит типа %o на респауне № %o в координатах %o %o // bounds: %o', unitProps && unitProps.type, this.guid, this.startPosition.x, this.startPosition.y, this.getBounds());
 	            var tank = new _index.Tank("blue-tank.png", true);
-	            tank.position.set(this.x, this.y);
+	            tank.position.set(this.startPosition.x, this.startPosition.y);
 	            tank.respawnGUID = this.guid;
 	            _DisplayStore2.default.create(tank);
 	        }
