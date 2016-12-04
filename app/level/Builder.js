@@ -52,7 +52,7 @@ export default class LevelBuilder {
                         coord.x + (respawnTile.width / 2),
                         coord.y + (respawnTile.height / 2)
                     );
-                    DisplayStore.create(respawnTile, this.respawnsLayer);
+                    DisplayStore.create(respawnTile);
                 }
             }
         }

@@ -172,9 +172,11 @@ export default class Tank extends AnimatedSprite {
     }
 
     _fire() {
+        let weapSpartPos = this._weaponStartPosition(this.rotatePosition);
         // TODO: Рефакторинг! Сделать Weapon.create, который будет вызывать DisplayStore
-        var bullet = Weapon.fire('Bullet', this.rotatePosition, 8, this._weaponStartPosition(this.rotatePosition), this);
+        var bullet = Weapon.fire('Bullet', this.rotatePosition, 8, weapSpartPos, this);
         if (bullet) {
+            console.log('Fire: %o', weapSpartPos);
             DisplayStore.create(bullet);
         } else {
             console.log('Снаряд не создан');
@@ -190,19 +192,23 @@ export default class Tank extends AnimatedSprite {
             wd2 = this.width / 2,
             hd2 = this.height / 2;
 
-
         // Разрешен только выезд на поле из-за его пределов, если танк вдруг там оказался
-        if ((wd2 > x && x > this.x) || ((config.stageWidth - wd2) < x && x < this.x)) {
+        if ((wd2 >= x && x > this.x) || ((config.stageWidth - wd2) <= x && x < this.x)) {
+            //console.log('X: Разрешен только выезд на поле из-за его пределов, если танк вдруг там оказался x: %o, y: %o, wd2: %o, hd2: %o, stageWidth: %o, stageHeight: %o', x, y, wd2, hd2, config.stageWidth, config.stageHeight);
             this.x = x;
         }
         // Аналогично
-        else if ((hd2 > y && y > this.y) || ((config.stageHeight - hd2) < y && y < this.y)) {
+        else if ((hd2 >= y && y > this.y) || ((config.stageHeight - hd2) <= y && y < this.y)) {
+            //console.log('Y: Разрешен только выезд на поле из-за его пределов, если танк вдруг там оказался x: %o, y: %o, wd2: %o, hd2: %o, stageWidth: %o, stageHeight: %o', x, y, wd2, hd2, config.stageWidth, config.stageHeight);
             this.y = y;
         }
         // Когда танк находится в пределах поля - можно перемещаться в любых направлениях
-        else if (wd2 <= x && (config.stageWidth - wd2) >= x && hd2 <= y && (config.stageHeight - hd2) >= y) {
-            this.y = y;
+        else if (x != this.x && wd2 <= x && (config.stageWidth - wd2) >= x) {
+            //console.log('X: Когда танк находится в пределах поля - можно перемещаться в любых направлениях x: %o, y: %o, wd2: %o, hd2: %o, stageWidth: %o, stageHeight: %o', x, y, wd2, hd2, config.stageWidth, config.stageHeight);
             this.x = x;
+        } else if (y != this.y && hd2 <= y && (config.stageHeight - hd2) >= y) {
+            //console.log('Y: Когда танк находится в пределах поля - можно перемещаться в любых направлениях x: %o, y: %o, wd2: %o, hd2: %o, stageWidth: %o, stageHeight: %o', x, y, wd2, hd2, config.stageWidth, config.stageHeight);
+            this.y = y;
         }
 
     }
@@ -235,7 +241,7 @@ export default class Tank extends AnimatedSprite {
         if (collisionList.length) {
             //console.log('Коллизия Танк-Танк ', collisionList);
             collisionList.forEach((collisionObject) => {
-                //console.log('Коллизия %o %o %o %o', collisionObject.collision, this.rotatePosition, collisionObject.collision.xDirection, collisionObject.collision.yDirection);
+                console.log('Коллизия %o %o %o %o', collisionObject.collision, this.rotatePosition, collisionObject.collision.xDirection, collisionObject.collision.yDirection);
                 if (this.rotatePosition == collisionObject.collision.xDirection ||
                     this.rotatePosition == collisionObject.collision.yDirection) {
                         this.stop();

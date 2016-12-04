@@ -30,7 +30,8 @@
             },
             {
                 "surface": "ground",
-                "building": "respawn"
+                "building": "",
+                "respawn": "respawn"
             }
         ],
         [

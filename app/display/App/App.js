@@ -41,7 +41,7 @@ export default class App extends ScaledContainer {
             buildings = level.buildings(),
             respawn = level.respawn();
 
-        this.addChild(ground);
+        //this.addChild(ground);
         this.addChild(buildings);
         this.addChild(respawn);
 
@@ -82,7 +82,7 @@ export default class App extends ScaledContainer {
             tank.enableBotMode();
             tank.enableFireMode();
             DisplayStore.create(tank);
-        }, 3000);
+        }, 4000);
     }
 
     addWall() {

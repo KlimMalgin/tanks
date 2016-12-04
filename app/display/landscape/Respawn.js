@@ -3,8 +3,7 @@ import Resources from '../../resources/Resources.js';
 import { guid } from '../../utils';
 import { Tank } from '../index';
 import RespawnStore from '../../stores/RespawnStore';
-
-//import DisplayStore from '../../stores/DisplayStore';
+import DisplayStore from '../../stores/DisplayStore';
 
 export default class Respawn extends Sprite {
     constructor(name) {
@@ -35,9 +34,13 @@ export default class Respawn extends Sprite {
 
         RespawnStore.addFreelyListener((freelyRespawns) => {
             if (freelyRespawns[this.guid]) {
-                this.respawnMyUnit(freelyRespawns[this.guid]);
+                this._respawnMyUnit(freelyRespawns[this.guid]);
             }
         });
+
+        console.log('Создан респаун %o', this);
+
+        this._respawnMyUnit();
     }
 
     destructor() {}
@@ -50,7 +53,11 @@ export default class Respawn extends Sprite {
     /**
      * Пересоздать юнита связанного с текущей respawn-точкой
      */
-    respawnMyUnit(unitProps) {
-        console.log('Пересоздаем юнит типа %o на респауне № %o ', unitProps.type, this.guid);
+    _respawnMyUnit(unitProps) {
+        console.log('Пересоздаем юнит типа %o на респауне № %o в координатах %o %o // bounds: %o', unitProps && unitProps.type, this.guid, this.x, this.y, this.getBounds());
+        let tank = new Tank("blue-tank.png", true);
+        tank.position.set(this.x, this.y);
+        tank.respawnGUID = this.guid;
+        DisplayStore.create(tank);
     }
 }

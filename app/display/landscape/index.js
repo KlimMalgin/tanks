@@ -1,4 +1,5 @@
 
 import Wall from './Wall';
+import Respawn from './Respawn';
 
-export { Wall };
+export { Wall, Respawn };

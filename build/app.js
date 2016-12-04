@@ -188,7 +188,8 @@
 				},
 				{
 					"surface": "ground",
-					"building": "respawn"
+					"building": "",
+					"respawn": "respawn"
 				}
 			],
 			[
@@ -359,7 +360,7 @@
 	                    if (map[x] && map[x][y] && map[x][y].respawn) {
 	                        respawnTile = new _display.Respawn(textureFile(map[x][y].respawn));
 	                        respawnTile.position.set(coord.x + respawnTile.width / 2, coord.y + respawnTile.height / 2);
-	                        _DisplayStore2.default.create(respawnTile, this.respawnsLayer);
+	                        _DisplayStore2.default.create(respawnTile);
 	                    }
 	                }
 	            }
@@ -37898,15 +37899,20 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.Wall = undefined;
+	exports.Respawn = exports.Wall = undefined;
 
 	var _Wall = __webpack_require__(188);
 
 	var _Wall2 = _interopRequireDefault(_Wall);
 
+	var _Respawn = __webpack_require__(203);
+
+	var _Respawn2 = _interopRequireDefault(_Respawn);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.Wall = _Wall2.default;
+	exports.Respawn = _Respawn2.default;
 
 /***/ },
 /* 188 */
@@ -38963,9 +38969,11 @@
 	    }, {
 	        key: '_fire',
 	        value: function _fire() {
+	            var weapSpartPos = this._weaponStartPosition(this.rotatePosition);
 	            // TODO: Рефакторинг! Сделать Weapon.create, который будет вызывать DisplayStore
-	            var bullet = _Weapon2.default.fire('Bullet', this.rotatePosition, 8, this._weaponStartPosition(this.rotatePosition), this);
+	            var bullet = _Weapon2.default.fire('Bullet', this.rotatePosition, 8, weapSpartPos, this);
 	            if (bullet) {
+	                console.log('Fire: %o', weapSpartPos);
 	                _DisplayStore2.default.create(bullet);
 	            } else {
 	                console.log('Снаряд не создан');
@@ -38985,17 +38993,22 @@
 	                hd2 = this.height / 2;
 
 	            // Разрешен только выезд на поле из-за его пределов, если танк вдруг там оказался
-	            if (wd2 > x && x > this.x || _config.config.stageWidth - wd2 < x && x < this.x) {
+	            if (wd2 >= x && x > this.x || _config.config.stageWidth - wd2 <= x && x < this.x) {
+	                //console.log('X: Разрешен только выезд на поле из-за его пределов, если танк вдруг там оказался x: %o, y: %o, wd2: %o, hd2: %o, stageWidth: %o, stageHeight: %o', x, y, wd2, hd2, config.stageWidth, config.stageHeight);
 	                this.x = x;
 	            }
 	            // Аналогично
-	            else if (hd2 > y && y > this.y || _config.config.stageHeight - hd2 < y && y < this.y) {
+	            else if (hd2 >= y && y > this.y || _config.config.stageHeight - hd2 <= y && y < this.y) {
+	                    //console.log('Y: Разрешен только выезд на поле из-за его пределов, если танк вдруг там оказался x: %o, y: %o, wd2: %o, hd2: %o, stageWidth: %o, stageHeight: %o', x, y, wd2, hd2, config.stageWidth, config.stageHeight);
 	                    this.y = y;
 	                }
 	                // Когда танк находится в пределах поля - можно перемещаться в любых направлениях
-	                else if (wd2 <= x && _config.config.stageWidth - wd2 >= x && hd2 <= y && _config.config.stageHeight - hd2 >= y) {
-	                        this.y = y;
+	                else if (x != this.x && wd2 <= x && _config.config.stageWidth - wd2 >= x) {
+	                        //console.log('X: Когда танк находится в пределах поля - можно перемещаться в любых направлениях x: %o, y: %o, wd2: %o, hd2: %o, stageWidth: %o, stageHeight: %o', x, y, wd2, hd2, config.stageWidth, config.stageHeight);
 	                        this.x = x;
+	                    } else if (y != this.y && hd2 <= y && _config.config.stageHeight - hd2 >= y) {
+	                        //console.log('Y: Когда танк находится в пределах поля - можно перемещаться в любых направлениях x: %o, y: %o, wd2: %o, hd2: %o, stageWidth: %o, stageHeight: %o', x, y, wd2, hd2, config.stageWidth, config.stageHeight);
+	                        this.y = y;
 	                    }
 	        }
 
@@ -39035,7 +39048,7 @@
 	            if (collisionList.length) {
 	                //console.log('Коллизия Танк-Танк ', collisionList);
 	                collisionList.forEach(function (collisionObject) {
-	                    //console.log('Коллизия %o %o %o %o', collisionObject.collision, this.rotatePosition, collisionObject.collision.xDirection, collisionObject.collision.yDirection);
+	                    console.log('Коллизия %o %o %o %o', collisionObject.collision, _this3.rotatePosition, collisionObject.collision.xDirection, collisionObject.collision.yDirection);
 	                    if (_this3.rotatePosition == collisionObject.collision.xDirection || _this3.rotatePosition == collisionObject.collision.yDirection) {
 	                        _this3.stop();
 	                    }
@@ -39256,7 +39269,7 @@
 	        _this.type = 'bullet';
 
 	        _this.guid = (0, _utils.guid)();
-	        //console.log('bullet guid: ', this.guid, this);
+	        console.log('bullet guid: ', _this.guid, _this);
 
 	        _this.parentUnit = parentUnit;
 
@@ -39689,7 +39702,7 @@
 	            buildings = level.buildings(),
 	            respawn = level.respawn();
 
-	        _this.addChild(ground);
+	        //this.addChild(ground);
 	        _this.addChild(buildings);
 	        _this.addChild(respawn);
 
@@ -39735,7 +39748,7 @@
 	                tank.enableBotMode();
 	                tank.enableFireMode();
 	                _DisplayStore2.default.create(tank);
-	            }, 3000);
+	            }, 4000);
 	        }
 	    }, {
 	        key: 'addWall',
@@ -39754,6 +39767,203 @@
 	}(_display.ScaledContainer);
 
 	exports.default = App;
+
+/***/ },
+/* 203 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _pixi = __webpack_require__(5);
+
+	var _Resources = __webpack_require__(189);
+
+	var _Resources2 = _interopRequireDefault(_Resources);
+
+	var _utils = __webpack_require__(190);
+
+	var _index = __webpack_require__(182);
+
+	var _RespawnStore = __webpack_require__(204);
+
+	var _RespawnStore2 = _interopRequireDefault(_RespawnStore);
+
+	var _DisplayStore = __webpack_require__(195);
+
+	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Respawn = function (_Sprite) {
+	    _inherits(Respawn, _Sprite);
+
+	    function Respawn(name) {
+	        _classCallCheck(this, Respawn);
+
+	        var _this = _possibleConstructorReturn(this, (Respawn.__proto__ || Object.getPrototypeOf(Respawn)).call(this, _Resources2.default.getTexture(name)));
+
+	        _this.type = 'respawn';
+
+	        _this.guid = (0, _utils.guid)();
+
+	        _this.anchor.x = 0.5;
+	        _this.anchor.y = 0.5;
+
+	        _this.loop = false;
+	        _this.animationSpeed = 0.21;
+
+	        /**
+	         * Создаем постоянную onDraw-функцию с привязанным контекстом для
+	         * дальнейшего добавления/удаления её в сторе
+	         */
+	        _this.onDrawWrapper = _this.onDraw.bind(_this);
+
+	        // В случае уничтожения танка
+	        /*DisplayStore.addDestroyListener((objectInstance, cnt) => {
+	            (cnt || this).removeChild(objectInstance);
+	            objectInstance.destructor();
+	            objectInstance.destroy();
+	        });*/
+
+	        _RespawnStore2.default.addFreelyListener(function (freelyRespawns) {
+	            if (freelyRespawns[_this.guid]) {
+	                _this._respawnMyUnit(freelyRespawns[_this.guid]);
+	            }
+	        });
+
+	        console.log('Создан респаун %o', _this);
+
+	        _this._respawnMyUnit();
+	        return _this;
+	    }
+
+	    _createClass(Respawn, [{
+	        key: 'destructor',
+	        value: function destructor() {}
+
+	        /**
+	         * Действия которые должны выполниться с объектов при перерисовке сцены
+	         */
+
+	    }, {
+	        key: 'onDraw',
+	        value: function onDraw() {}
+
+	        /**
+	         * Пересоздать юнита связанного с текущей respawn-точкой
+	         */
+
+	    }, {
+	        key: '_respawnMyUnit',
+	        value: function _respawnMyUnit(unitProps) {
+	            console.log('Пересоздаем юнит типа %o на респауне № %o в координатах %o %o // bounds: %o', unitProps && unitProps.type, this.guid, this.x, this.y, this.getBounds());
+	            var tank = new _index.Tank("blue-tank.png", true);
+	            tank.position.set(this.x, this.y);
+	            tank.respawnGUID = this.guid;
+	            _DisplayStore2.default.create(tank);
+	        }
+	    }]);
+
+	    return Respawn;
+	}(_pixi.Sprite);
+
+	exports.default = Respawn;
+
+/***/ },
+/* 204 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _events = __webpack_require__(185);
+
+	var _events2 = _interopRequireDefault(_events);
+
+	var _AppConstants = __webpack_require__(186);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	 * Respawn Store
+	 * Получает/хранит данные об уничтоженных юнитах.
+	 * Распределяет этих юнитов по respawn-точкам.
+	 *
+	 * @units
+	 *  массив юнитов, которые еще не переродились
+	 *
+	 */
+	var RespawnStore = function (_EventEmitter) {
+	  _inherits(RespawnStore, _EventEmitter);
+
+	  function RespawnStore() {
+	    var _ref;
+
+	    _classCallCheck(this, RespawnStore);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    var _this = _possibleConstructorReturn(this, (_ref = RespawnStore.__proto__ || Object.getPrototypeOf(RespawnStore)).call.apply(_ref, [this].concat(args)));
+
+	    _this.freelyRespawns = [];
+	    return _this;
+	  }
+
+	  _createClass(RespawnStore, [{
+	    key: 'emitRespawnFreely',
+	    value: function emitRespawnFreely(unit) {
+	      /* Тут надо фильтрануть те поля из unit, которые нужны для хранения,
+	      например type, respawnGUID  и положить объект с ними в this.freelyRespawns
+	      При пересоздании юнита - respawn-точка возьмет эти параметры и создаст юнита по ним
+	      */
+
+	      if (!this.freelyRespawns[unit.respawnGUID]) {
+	        this.freelyRespawns = _defineProperty({}, unit.respawnGUID, {
+	          respawnGUID: unit.respawnGUID,
+	          type: unit.type
+	        });
+	      }
+
+	      this.emit(_AppConstants.RESPAWN_FREELY, this.freelyRespawns);
+	    }
+	  }, {
+	    key: 'addFreelyListener',
+	    value: function addFreelyListener(callback) {
+	      this.on(_AppConstants.RESPAWN_FREELY, callback);
+	    }
+	  }]);
+
+	  return RespawnStore;
+	}(_events2.default);
+
+	exports.default = new RespawnStore();
 
 /***/ }
 /******/ ]);

@@ -22,7 +22,7 @@ export default class Bullet extends Sprite {
         this.type = 'bullet';
 
         this.guid = guid();
-        //console.log('bullet guid: ', this.guid, this);
+        console.log('bullet guid: ', this.guid, this);
 
         this.parentUnit = parentUnit;
 
