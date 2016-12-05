@@ -48,11 +48,11 @@
 
 	var _config = __webpack_require__(1);
 
-	var _Renderer = __webpack_require__(201);
+	var _Renderer = __webpack_require__(203);
 
 	var _Renderer2 = _interopRequireDefault(_Renderer);
 
-	var _App = __webpack_require__(202);
+	var _App = __webpack_require__(204);
 
 	var _App2 = _interopRequireDefault(_App);
 
@@ -294,6 +294,8 @@
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	//import { DisplayGroup } from 'pixi-display';
+
 
 	var _pixi = __webpack_require__(5);
 
@@ -315,21 +317,34 @@
 	    function LevelBuilder(levelData) {
 	        _classCallCheck(this, LevelBuilder);
 
-	        this._createLevelElements(levelData);
+	        this.levelData = levelData;
+
+	        //debugger;
+	        //console.log('DisplayGroup: ', DisplayGroup);
+	        this._createLayers();
+	        //this._createLevelElements(levelData);
 	    }
 
 	    _createClass(LevelBuilder, [{
-	        key: '_createLevelElements',
-	        value: function _createLevelElements(levelData) {
-	            var surfaceTile = null,
-	                buildingTile = null,
-	                respawnTile = null,
-	                containerWidth = levelData.width * levelData.tileSize,
-	                containerHeight = levelData.height * levelData.tileSize;
+	        key: '_createLayers',
+	        value: function _createLayers() {
+	            var containerWidth = this.levelData.width * this.levelData.tileSize,
+	                containerHeight = this.levelData.height * this.levelData.tileSize;
 
 	            this.backgroundLayer = new _display.ScaledContainer(containerWidth, containerHeight);
 	            this.buildingsLayer = new _display.ScaledContainer(containerWidth, containerHeight);
 	            this.respawnsLayer = new _display.ScaledContainer(containerWidth, containerHeight);
+	        }
+	    }, {
+	        key: 'createLevelElements',
+	        value: function createLevelElements() {
+	            var levelData = this.levelData,
+	                surfaceTile = null,
+	                buildingTile = null,
+	                respawnTile = null;
+
+	            /*let bgDG = new DisplayGroup(10, true),
+	                buildDG = new DisplayGroup(-5, true);*/
 
 	            console.log('tileSize: ', levelData.tileSize);
 
@@ -347,6 +362,8 @@
 	                    if (map[x] && map[x][y] && map[x][y].surface) {
 	                        surfaceTile = new _pixi.Sprite(_Resources2.default.getTexture(textureFile(map[x][y].surface)));
 	                        surfaceTile.position.set(coord.x, coord.y);
+
+	                        //surfaceTile.displayGroup = bgDG;
 	                        // Фон не реализует никаких действий, поэтому можно добавить его напрямую в контейнер
 	                        this.backgroundLayer.addChild(surfaceTile);
 	                    }
@@ -354,6 +371,7 @@
 	                    if (map[x] && map[x][y] && map[x][y].building) {
 	                        buildingTile = new _display.Wall(textureFile(map[x][y].building));
 	                        buildingTile.position.set(coord.x + buildingTile.width / 2, coord.y + buildingTile.height / 2);
+	                        //buildingTile.displayGroup = buildDG;
 	                        _DisplayStore2.default.create(buildingTile, this.buildingsLayer);
 	                    }
 
@@ -366,7 +384,7 @@
 
 	                        // todo: хак для сохранения позиции респауна на поле. Внутри респауна почему-то всегда нулевой position-объект
 	                        //respawnTile.startPosition = { x: rX, y: rY };
-	                        _DisplayStore2.default.create(respawnTile);
+	                        _DisplayStore2.default.create(respawnTile, this.respawnsLayer);
 	                    }
 	                }
 	            }
@@ -37335,7 +37353,7 @@
 
 	var _landscape = __webpack_require__(187);
 
-	var _Tank = __webpack_require__(196);
+	var _Tank = __webpack_require__(198);
 
 	var _Tank2 = _interopRequireDefault(_Tank);
 
@@ -37911,7 +37929,7 @@
 
 	var _Wall2 = _interopRequireDefault(_Wall);
 
-	var _Respawn = __webpack_require__(203);
+	var _Respawn = __webpack_require__(196);
 
 	var _Respawn2 = _interopRequireDefault(_Respawn);
 
@@ -38752,13 +38770,216 @@
 
 	var _utils = __webpack_require__(190);
 
+	var _index = __webpack_require__(182);
+
+	var _RespawnStore = __webpack_require__(197);
+
+	var _RespawnStore2 = _interopRequireDefault(_RespawnStore);
+
+	var _DisplayStore = __webpack_require__(195);
+
+	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Respawn = function (_Sprite) {
+	    _inherits(Respawn, _Sprite);
+
+	    function Respawn(name, coord) {
+	        _classCallCheck(this, Respawn);
+
+	        var _this = _possibleConstructorReturn(this, (Respawn.__proto__ || Object.getPrototypeOf(Respawn)).call(this, _Resources2.default.getTexture(name)));
+
+	        _this.type = 'respawn';
+
+	        _this.guid = (0, _utils.guid)();
+
+	        _this.anchor.x = 0.5;
+	        _this.anchor.y = 0.5;
+
+	        _this.loop = false;
+	        _this.animationSpeed = 0.21;
+
+	        // todo: хак для сохранения позиции респауна на поле. Внутри респауна почему-то всегда нулевой position-объект
+	        _this.startPosition = {
+	            x: coord.x + _this.width / 2,
+	            y: coord.y + _this.height / 2
+	        };
+
+	        /**
+	         * Создаем постоянную onDraw-функцию с привязанным контекстом для
+	         * дальнейшего добавления/удаления её в сторе
+	         */
+	        _this.onDrawWrapper = _this.onDraw.bind(_this);
+
+	        // В случае уничтожения танка
+	        /*DisplayStore.addDestroyListener((objectInstance, cnt) => {
+	            (cnt || this).removeChild(objectInstance);
+	            objectInstance.destructor();
+	            objectInstance.destroy();
+	        });*/
+
+	        _RespawnStore2.default.addFreelyListener(function (freelyRespawns) {
+	            if (freelyRespawns[_this.guid]) {
+	                _this._respawnMyUnit(freelyRespawns[_this.guid]);
+	            }
+	        });
+
+	        console.log('Создан респаун %o', _this);
+
+	        _this._respawnMyUnit();
+	        return _this;
+	    }
+
+	    _createClass(Respawn, [{
+	        key: 'destructor',
+	        value: function destructor() {}
+
+	        /**
+	         * Действия которые должны выполниться с объектов при перерисовке сцены
+	         */
+
+	    }, {
+	        key: 'onDraw',
+	        value: function onDraw() {}
+
+	        /**
+	         * Пересоздать юнита связанного с текущей respawn-точкой
+	         */
+
+	    }, {
+	        key: '_respawnMyUnit',
+	        value: function _respawnMyUnit(unitProps) {
+	            console.log('Пересоздаем юнит типа %o на респауне № %o в координатах %o %o // bounds: %o', unitProps && unitProps.type, this.guid, this.startPosition.x, this.startPosition.y, this.getBounds());
+	            var tank = new _index.Tank("blue-tank.png", true);
+	            tank.position.set(this.startPosition.x, this.startPosition.y);
+	            tank.respawnGUID = this.guid;
+	            _DisplayStore2.default.create(tank);
+	        }
+	    }]);
+
+	    return Respawn;
+	}(_pixi.Sprite);
+
+	exports.default = Respawn;
+
+/***/ },
+/* 197 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _events = __webpack_require__(185);
+
+	var _events2 = _interopRequireDefault(_events);
+
+	var _AppConstants = __webpack_require__(186);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	 * Respawn Store
+	 * Получает/хранит данные об уничтоженных юнитах.
+	 * Распределяет этих юнитов по respawn-точкам.
+	 *
+	 * @units
+	 *  массив юнитов, которые еще не переродились
+	 *
+	 */
+	var RespawnStore = function (_EventEmitter) {
+	  _inherits(RespawnStore, _EventEmitter);
+
+	  function RespawnStore() {
+	    var _ref;
+
+	    _classCallCheck(this, RespawnStore);
+
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    var _this = _possibleConstructorReturn(this, (_ref = RespawnStore.__proto__ || Object.getPrototypeOf(RespawnStore)).call.apply(_ref, [this].concat(args)));
+
+	    _this.freelyRespawns = [];
+	    return _this;
+	  }
+
+	  _createClass(RespawnStore, [{
+	    key: 'emitRespawnFreely',
+	    value: function emitRespawnFreely(unit) {
+	      /* Тут надо фильтрануть те поля из unit, которые нужны для хранения,
+	      например type, respawnGUID  и положить объект с ними в this.freelyRespawns
+	      При пересоздании юнита - respawn-точка возьмет эти параметры и создаст юнита по ним
+	      */
+
+	      if (!this.freelyRespawns[unit.respawnGUID]) {
+	        this.freelyRespawns = _defineProperty({}, unit.respawnGUID, {
+	          respawnGUID: unit.respawnGUID,
+	          type: unit.type
+	        });
+	      }
+
+	      this.emit(_AppConstants.RESPAWN_FREELY, this.freelyRespawns);
+	    }
+	  }, {
+	    key: 'addFreelyListener',
+	    value: function addFreelyListener(callback) {
+	      this.on(_AppConstants.RESPAWN_FREELY, callback);
+	    }
+	  }]);
+
+	  return RespawnStore;
+	}(_events2.default);
+
+	exports.default = new RespawnStore();
+
+/***/ },
+/* 198 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _pixi = __webpack_require__(5);
+
+	var _Resources = __webpack_require__(189);
+
+	var _Resources2 = _interopRequireDefault(_Resources);
+
+	var _utils = __webpack_require__(190);
+
 	var _AnimationStore = __webpack_require__(194);
 
 	var _AnimationStore2 = _interopRequireDefault(_AnimationStore);
 
 	var _config = __webpack_require__(1);
 
-	var _Weapon = __webpack_require__(197);
+	var _Weapon = __webpack_require__(199);
 
 	var _Weapon2 = _interopRequireDefault(_Weapon);
 
@@ -39122,7 +39343,7 @@
 	exports.default = Tank;
 
 /***/ },
-/* 197 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39131,7 +39352,7 @@
 	  value: true
 	});
 
-	var _Weapon = __webpack_require__(198);
+	var _Weapon = __webpack_require__(200);
 
 	var _Weapon2 = _interopRequireDefault(_Weapon);
 
@@ -39140,7 +39361,7 @@
 	exports.default = _Weapon2.default;
 
 /***/ },
-/* 198 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39155,7 +39376,7 @@
 	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
 
-	var _Ammo = __webpack_require__(199);
+	var _Ammo = __webpack_require__(201);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -39199,7 +39420,7 @@
 	exports.default = Weapon;
 
 /***/ },
-/* 199 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39209,7 +39430,7 @@
 	});
 	exports.Bullet = undefined;
 
-	var _Bullet = __webpack_require__(200);
+	var _Bullet = __webpack_require__(202);
 
 	var _Bullet2 = _interopRequireDefault(_Bullet);
 
@@ -39218,7 +39439,7 @@
 	exports.Bullet = _Bullet2.default;
 
 /***/ },
-/* 200 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39408,7 +39629,7 @@
 	exports.default = Bullet;
 
 /***/ },
-/* 201 */
+/* 203 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39630,7 +39851,7 @@
 	exports.default = Renderer;
 
 /***/ },
-/* 202 */
+/* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39643,7 +39864,7 @@
 
 	var _display = __webpack_require__(182);
 
-	var _Tank = __webpack_require__(196);
+	var _Tank = __webpack_require__(198);
 
 	var _Tank2 = _interopRequireDefault(_Tank);
 
@@ -39708,9 +39929,11 @@
 	            buildings = level.buildings(),
 	            respawn = level.respawn();
 
-	        //this.addChild(ground);
+	        _this.addChild(ground);
 	        _this.addChild(buildings);
 	        _this.addChild(respawn);
+
+	        level.createLevelElements();
 
 	        //this.addTanks();
 	        //this.createPlayer();
@@ -39773,209 +39996,6 @@
 	}(_display.ScaledContainer);
 
 	exports.default = App;
-
-/***/ },
-/* 203 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _pixi = __webpack_require__(5);
-
-	var _Resources = __webpack_require__(189);
-
-	var _Resources2 = _interopRequireDefault(_Resources);
-
-	var _utils = __webpack_require__(190);
-
-	var _index = __webpack_require__(182);
-
-	var _RespawnStore = __webpack_require__(204);
-
-	var _RespawnStore2 = _interopRequireDefault(_RespawnStore);
-
-	var _DisplayStore = __webpack_require__(195);
-
-	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Respawn = function (_Sprite) {
-	    _inherits(Respawn, _Sprite);
-
-	    function Respawn(name, coord) {
-	        _classCallCheck(this, Respawn);
-
-	        var _this = _possibleConstructorReturn(this, (Respawn.__proto__ || Object.getPrototypeOf(Respawn)).call(this, _Resources2.default.getTexture(name)));
-
-	        _this.type = 'respawn';
-
-	        _this.guid = (0, _utils.guid)();
-
-	        _this.anchor.x = 0.5;
-	        _this.anchor.y = 0.5;
-
-	        _this.loop = false;
-	        _this.animationSpeed = 0.21;
-
-	        // todo: хак для сохранения позиции респауна на поле. Внутри респауна почему-то всегда нулевой position-объект
-	        _this.startPosition = {
-	            x: coord.x + _this.width / 2,
-	            y: coord.y + _this.height / 2
-	        };
-
-	        /**
-	         * Создаем постоянную onDraw-функцию с привязанным контекстом для
-	         * дальнейшего добавления/удаления её в сторе
-	         */
-	        _this.onDrawWrapper = _this.onDraw.bind(_this);
-
-	        // В случае уничтожения танка
-	        /*DisplayStore.addDestroyListener((objectInstance, cnt) => {
-	            (cnt || this).removeChild(objectInstance);
-	            objectInstance.destructor();
-	            objectInstance.destroy();
-	        });*/
-
-	        _RespawnStore2.default.addFreelyListener(function (freelyRespawns) {
-	            if (freelyRespawns[_this.guid]) {
-	                _this._respawnMyUnit(freelyRespawns[_this.guid]);
-	            }
-	        });
-
-	        console.log('Создан респаун %o', _this);
-
-	        _this._respawnMyUnit();
-	        return _this;
-	    }
-
-	    _createClass(Respawn, [{
-	        key: 'destructor',
-	        value: function destructor() {}
-
-	        /**
-	         * Действия которые должны выполниться с объектов при перерисовке сцены
-	         */
-
-	    }, {
-	        key: 'onDraw',
-	        value: function onDraw() {}
-
-	        /**
-	         * Пересоздать юнита связанного с текущей respawn-точкой
-	         */
-
-	    }, {
-	        key: '_respawnMyUnit',
-	        value: function _respawnMyUnit(unitProps) {
-	            console.log('Пересоздаем юнит типа %o на респауне № %o в координатах %o %o // bounds: %o', unitProps && unitProps.type, this.guid, this.startPosition.x, this.startPosition.y, this.getBounds());
-	            var tank = new _index.Tank("blue-tank.png", true);
-	            tank.position.set(this.startPosition.x, this.startPosition.y);
-	            tank.respawnGUID = this.guid;
-	            _DisplayStore2.default.create(tank);
-	        }
-	    }]);
-
-	    return Respawn;
-	}(_pixi.Sprite);
-
-	exports.default = Respawn;
-
-/***/ },
-/* 204 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _events = __webpack_require__(185);
-
-	var _events2 = _interopRequireDefault(_events);
-
-	var _AppConstants = __webpack_require__(186);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	/**
-	 * Respawn Store
-	 * Получает/хранит данные об уничтоженных юнитах.
-	 * Распределяет этих юнитов по respawn-точкам.
-	 *
-	 * @units
-	 *  массив юнитов, которые еще не переродились
-	 *
-	 */
-	var RespawnStore = function (_EventEmitter) {
-	  _inherits(RespawnStore, _EventEmitter);
-
-	  function RespawnStore() {
-	    var _ref;
-
-	    _classCallCheck(this, RespawnStore);
-
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-
-	    var _this = _possibleConstructorReturn(this, (_ref = RespawnStore.__proto__ || Object.getPrototypeOf(RespawnStore)).call.apply(_ref, [this].concat(args)));
-
-	    _this.freelyRespawns = [];
-	    return _this;
-	  }
-
-	  _createClass(RespawnStore, [{
-	    key: 'emitRespawnFreely',
-	    value: function emitRespawnFreely(unit) {
-	      /* Тут надо фильтрануть те поля из unit, которые нужны для хранения,
-	      например type, respawnGUID  и положить объект с ними в this.freelyRespawns
-	      При пересоздании юнита - respawn-точка возьмет эти параметры и создаст юнита по ним
-	      */
-
-	      if (!this.freelyRespawns[unit.respawnGUID]) {
-	        this.freelyRespawns = _defineProperty({}, unit.respawnGUID, {
-	          respawnGUID: unit.respawnGUID,
-	          type: unit.type
-	        });
-	      }
-
-	      this.emit(_AppConstants.RESPAWN_FREELY, this.freelyRespawns);
-	    }
-	  }, {
-	    key: 'addFreelyListener',
-	    value: function addFreelyListener(callback) {
-	      this.on(_AppConstants.RESPAWN_FREELY, callback);
-	    }
-	  }]);
-
-	  return RespawnStore;
-	}(_events2.default);
-
-	exports.default = new RespawnStore();
 
 /***/ }
 /******/ ]);

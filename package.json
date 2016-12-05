@@ -27,6 +27,7 @@
     "brfs": "^1.4.3",
     "express": "^4.14.0",
     "json-loader": "^0.5.4",
+    "pixi-display": "^1.0.1",
     "pixi.js": "^4.2.2",
     "transform-loader": "^0.2.3"
   },

@@ -41,10 +41,11 @@ export default class App extends ScaledContainer {
             buildings = level.buildings(),
             respawn = level.respawn();
 
-        //this.addChild(ground);
+        this.addChild(ground);
         this.addChild(buildings);
         this.addChild(respawn);
 
+        level.createLevelElements();
 
         //this.addTanks();
         //this.createPlayer();
