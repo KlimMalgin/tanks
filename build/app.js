@@ -39091,15 +39091,17 @@
 	            _AnimationStore2.default.removeChangeListener(this.onDrawWrapper);
 	            _utils.CollisionManager.remove(this);
 
-	            _utils.Keyboard.removeAllListeners('down');
-	            _utils.Keyboard.removeAllListeners('downRelease');
-	            _utils.Keyboard.removeAllListeners('up');
-	            _utils.Keyboard.removeAllListeners('upRelease');
-	            _utils.Keyboard.removeAllListeners('left');
-	            _utils.Keyboard.removeAllListeners('leftRelease');
-	            _utils.Keyboard.removeAllListeners('right');
-	            _utils.Keyboard.removeAllListeners('rightRelease');
-	            _utils.Keyboard.removeAllListeners('space');
+	            if (this.managed) {
+	                _utils.Keyboard.removeAllListeners('down');
+	                _utils.Keyboard.removeAllListeners('downRelease');
+	                _utils.Keyboard.removeAllListeners('up');
+	                _utils.Keyboard.removeAllListeners('upRelease');
+	                _utils.Keyboard.removeAllListeners('left');
+	                _utils.Keyboard.removeAllListeners('leftRelease');
+	                _utils.Keyboard.removeAllListeners('right');
+	                _utils.Keyboard.removeAllListeners('rightRelease');
+	                _utils.Keyboard.removeAllListeners('space');
+	            }
 	        }
 
 	        /**
@@ -39972,7 +39974,7 @@
 
 	        //this.addTanks();
 	        //this.createPlayer();
-	        //this.tanksGenerator();
+	        _this.tanksGenerator();
 	        //this.addWall();
 	        return _this;
 	    }

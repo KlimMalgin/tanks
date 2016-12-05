@@ -89,15 +89,17 @@ export default class Tank extends AnimatedSprite {
         AnimationStore.removeChangeListener(this.onDrawWrapper);
         CollisionManager.remove(this);
 
-        Keyboard.removeAllListeners('down');
-        Keyboard.removeAllListeners('downRelease');
-        Keyboard.removeAllListeners('up');
-        Keyboard.removeAllListeners('upRelease');
-        Keyboard.removeAllListeners('left');
-        Keyboard.removeAllListeners('leftRelease');
-        Keyboard.removeAllListeners('right');
-        Keyboard.removeAllListeners('rightRelease');
-        Keyboard.removeAllListeners('space');
+        if (this.managed) {
+            Keyboard.removeAllListeners('down');
+            Keyboard.removeAllListeners('downRelease');
+            Keyboard.removeAllListeners('up');
+            Keyboard.removeAllListeners('upRelease');
+            Keyboard.removeAllListeners('left');
+            Keyboard.removeAllListeners('leftRelease');
+            Keyboard.removeAllListeners('right');
+            Keyboard.removeAllListeners('rightRelease');
+            Keyboard.removeAllListeners('space');
+        }
     }
 
     /**
