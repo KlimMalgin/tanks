@@ -27,7 +27,9 @@ export default class Tank extends AnimatedSprite {
         this.type = 'tank';
 
         this.guid = guid();
-        console.log('tank guid: ', this.guid, this);
+
+        window._myTank = this;
+        console.log('tank guid: %o window._myTank = %o', this.guid, this);
 
         this.anchor.x = 0.5;
         this.anchor.y = 0.5;
@@ -64,6 +66,17 @@ export default class Tank extends AnimatedSprite {
          */
         this.onDrawWrapper = this.onDraw.bind(this);
 
+        /**
+         * Сохраняем для респаун-точки
+         */
+        this.$name = name;
+
+        /**
+         * Танк является управляемым или нет. Управляемый для
+         * текущего игрока, неуправляемый - другие игроки или боты.
+         */
+        this.managed = managed;
+
         CollisionManager.add(this);
 
         managed && this._listenKeyboard();
@@ -75,6 +88,16 @@ export default class Tank extends AnimatedSprite {
     destructor() {
         AnimationStore.removeChangeListener(this.onDrawWrapper);
         CollisionManager.remove(this);
+
+        Keyboard.removeAllListeners('down');
+        Keyboard.removeAllListeners('downRelease');
+        Keyboard.removeAllListeners('up');
+        Keyboard.removeAllListeners('upRelease');
+        Keyboard.removeAllListeners('left');
+        Keyboard.removeAllListeners('leftRelease');
+        Keyboard.removeAllListeners('right');
+        Keyboard.removeAllListeners('rightRelease');
+        Keyboard.removeAllListeners('space');
     }
 
     /**

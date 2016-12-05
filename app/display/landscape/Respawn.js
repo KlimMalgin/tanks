@@ -46,7 +46,12 @@ export default class Respawn extends Sprite {
 
         console.log('Создан респаун %o', this);
 
-        this._respawnMyUnit();
+        this._respawnMyUnit({
+
+            // TODO: Должно генериться из настроек уровня для текущей команды
+            name: "blue-tank.png",
+            managed: true
+        });
     }
 
     destructor() {}
@@ -61,7 +66,7 @@ export default class Respawn extends Sprite {
      */
     _respawnMyUnit(unitProps) {
         console.log('Пересоздаем юнит типа %o на респауне № %o в координатах %o %o // bounds: %o', unitProps && unitProps.type, this.guid, this.startPosition.x, this.startPosition.y, this.getBounds());
-        let tank = new Tank("blue-tank.png", true);
+        let tank = new Tank(unitProps.name, unitProps.managed);
         tank.position.set(this.startPosition.x, this.startPosition.y);
         tank.respawnGUID = this.guid;
         DisplayStore.create(tank);

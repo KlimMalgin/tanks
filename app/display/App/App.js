@@ -3,6 +3,7 @@ import { ScaledContainer } from '../../display';
 import Tank from '../Tank/Tank';
 import { Wall } from '../landscape';
 import DisplayStore from '../../stores/DisplayStore';
+import RespawnStore from '../../stores/RespawnStore';
 
 import { testLevel, levelFactory } from '../../level';
 
@@ -33,6 +34,7 @@ export default class App extends ScaledContainer {
             (cnt || this).removeChild(objectInstance);
             objectInstance.destructor();
             objectInstance.destroy();
+            RespawnStore.emitRespawnFreely(objectInstance);
         });
 
 

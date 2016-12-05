@@ -38833,7 +38833,12 @@
 
 	        console.log('Создан респаун %o', _this);
 
-	        _this._respawnMyUnit();
+	        _this._respawnMyUnit({
+
+	            // TODO: Должно генериться из настроек уровня для текущей команды
+	            name: "blue-tank.png",
+	            managed: true
+	        });
 	        return _this;
 	    }
 
@@ -38857,7 +38862,7 @@
 	        key: '_respawnMyUnit',
 	        value: function _respawnMyUnit(unitProps) {
 	            console.log('Пересоздаем юнит типа %o на респауне № %o в координатах %o %o // bounds: %o', unitProps && unitProps.type, this.guid, this.startPosition.x, this.startPosition.y, this.getBounds());
-	            var tank = new _index.Tank("blue-tank.png", true);
+	            var tank = new _index.Tank(unitProps.name, unitProps.managed);
 	            tank.position.set(this.startPosition.x, this.startPosition.y);
 	            tank.respawnGUID = this.guid;
 	            _DisplayStore2.default.create(tank);
@@ -38935,7 +38940,9 @@
 	      if (!this.freelyRespawns[unit.respawnGUID]) {
 	        this.freelyRespawns = _defineProperty({}, unit.respawnGUID, {
 	          respawnGUID: unit.respawnGUID,
-	          type: unit.type
+	          type: unit.type,
+	          managed: unit.managed,
+	          name: unit.$name
 	        });
 	      }
 
@@ -39019,7 +39026,9 @@
 	        _this.type = 'tank';
 
 	        _this.guid = (0, _utils.guid)();
-	        console.log('tank guid: ', _this.guid, _this);
+
+	        window._myTank = _this;
+	        console.log('tank guid: %o window._myTank = %o', _this.guid, _this);
 
 	        _this.anchor.x = 0.5;
 	        _this.anchor.y = 0.5;
@@ -39056,6 +39065,17 @@
 	         */
 	        _this.onDrawWrapper = _this.onDraw.bind(_this);
 
+	        /**
+	         * Сохраняем для респаун-точки
+	         */
+	        _this.$name = name;
+
+	        /**
+	         * Танк является управляемым или нет. Управляемый для
+	         * текущего игрока, неуправляемый - другие игроки или боты.
+	         */
+	        _this.managed = managed;
+
 	        _utils.CollisionManager.add(_this);
 
 	        managed && _this._listenKeyboard();
@@ -39070,6 +39090,16 @@
 	        value: function destructor() {
 	            _AnimationStore2.default.removeChangeListener(this.onDrawWrapper);
 	            _utils.CollisionManager.remove(this);
+
+	            _utils.Keyboard.removeAllListeners('down');
+	            _utils.Keyboard.removeAllListeners('downRelease');
+	            _utils.Keyboard.removeAllListeners('up');
+	            _utils.Keyboard.removeAllListeners('upRelease');
+	            _utils.Keyboard.removeAllListeners('left');
+	            _utils.Keyboard.removeAllListeners('leftRelease');
+	            _utils.Keyboard.removeAllListeners('right');
+	            _utils.Keyboard.removeAllListeners('rightRelease');
+	            _utils.Keyboard.removeAllListeners('space');
 	        }
 
 	        /**
@@ -39874,6 +39904,10 @@
 
 	var _DisplayStore2 = _interopRequireDefault(_DisplayStore);
 
+	var _RespawnStore = __webpack_require__(197);
+
+	var _RespawnStore2 = _interopRequireDefault(_RespawnStore);
+
 	var _level = __webpack_require__(2);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -39922,6 +39956,7 @@
 	            (cnt || _this).removeChild(objectInstance);
 	            objectInstance.destructor();
 	            objectInstance.destroy();
+	            _RespawnStore2.default.emitRespawnFreely(objectInstance);
 	        });
 
 	        var level = (0, _level.levelFactory)(_level.testLevel),
