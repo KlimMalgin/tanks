@@ -168,6 +168,16 @@
 			"wall": "wall1.png",
 			"respawn": "wall2.png"
 		},
+		"teams": {
+			"0": {
+				"unitSprite": "blueTank",
+				"managed": true
+			},
+			"1": {
+				"unitSprite": "greenTank",
+				"managed": false
+			}
+		},
 		"map": [
 			[
 				{
@@ -189,7 +199,10 @@
 				{
 					"surface": "ground",
 					"building": "",
-					"respawn": "respawn"
+					"respawn": {
+						"sprite": "respawn",
+						"team": 0
+					}
 				}
 			],
 			[
@@ -239,7 +252,11 @@
 			[
 				{
 					"surface": "ground",
-					"building": ""
+					"building": "",
+					"respawn": {
+						"sprite": "respawn",
+						"team": 1
+					}
 				},
 				{
 					"surface": "ground",
@@ -269,7 +286,11 @@
 				},
 				{
 					"surface": "ground",
-					"building": ""
+					"building": "",
+					"respawn": {
+						"sprite": "respawn",
+						"team": 1
+					}
 				},
 				{
 					"surface": "ground",
@@ -278,6 +299,15 @@
 				{
 					"surface": "ground",
 					"building": ""
+				}
+			],
+			[],
+			[
+				{
+					"respawn": {
+						"sprite": "respawn",
+						"team": 1
+					}
 				}
 			]
 		]
