@@ -51,7 +51,7 @@ export default class App extends ScaledContainer {
 
         //this.addTanks();
         //this.createPlayer();
-        this.tanksGenerator();
+        //this.tanksGenerator();
         //this.addWall();
     }
 

@@ -6,16 +6,18 @@
     "spriteHash": {
         "ground": "tile.png",
         "greenTank": "green-tank.png",
-        "blueTank": "green-tank.png",
+        "blueTank": "blue-tank.png",
         "wall": "wall1.png",
         "respawn": "wall2.png"
     },
     "teams": {
         "0": {
+            "respawnSprite": "respawn",
             "unitSprite": "blueTank",
             "managed": true
         },
         "1": {
+            "respawnSprite": "respawn",
             "unitSprite": "greenTank",
             "managed": false
         }
@@ -42,7 +44,6 @@
                 "surface": "ground",
                 "building": "",
                 "respawn": {
-                    "sprite": "respawn",
                     "team": 0
                 }
             }
@@ -96,7 +97,6 @@
                 "surface": "ground",
                 "building": "",
                 "respawn": {
-                    "sprite": "respawn",
                     "team": 1
                 }
             },
@@ -128,11 +128,7 @@
             },
             {
                 "surface": "ground",
-                "building": "",
-                "respawn": {
-                    "sprite": "respawn",
-                    "team": 1
-                }
+                "building": ""
             },
             {
                 "surface": "ground",
@@ -143,13 +139,49 @@
                 "building": ""
             }
         ],
-        [],
         [
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
             {
                 "respawn": {
-                    "sprite": "respawn",
                     "team": 1
                 }
+            }
+        ],
+        [
+            {
+                "surface": "ground"
+            },
+            {},
+            {
+                "surface": "ground"
+            },
+            {},
+            {
+                "surface": "ground"
+            },
+            {},
+            {
+                "surface": "ground"
+            }
+        ],
+        [
+            {},
+            {
+                "surface": "ground"
+            },
+            {
+                "respawn": {
+                    "team": 1
+                }
+            },
+            {},
+            {
+                "surface": "ground"
             }
         ]
     ]

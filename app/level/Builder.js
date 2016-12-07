@@ -29,15 +29,13 @@ export default class LevelBuilder {
             buildingTile = null,
             respawnTile = null;
 
-        /*let bgDG = new DisplayGroup(10, true),
-            buildDG = new DisplayGroup(-5, true);*/
-
+        let teams = levelData.teams;
 
 
         console.log('tileSize: ', levelData.tileSize);
 
-        for (var y = 0; y<levelData.width; y++) {
-            for (var x = 0; x<levelData.height; x++) {
+        for (var y = 0; y<levelData.height; y++) {
+            for (var x = 0; x<levelData.width; x++) {
                 let coord = {
                         x: x * levelData.tileSize,
                         y: y * levelData.tileSize
@@ -65,8 +63,10 @@ export default class LevelBuilder {
                 }
 
                 if (map[x] && map[x][y] && map[x][y].respawn) {
-                    let rX, rY;
-                    respawnTile = new Respawn(textureFile(map[x][y].respawn), coord);
+                    let rX, rY,
+                        team = teams[map[x][y].respawn.team];
+
+                    respawnTile = new Respawn(textureFile(team.respawnSprite), textureFile(team.unitSprite), coord, team.managed);
                     rX = coord.x + (respawnTile.width / 2),
                     rY = coord.y + (respawnTile.height / 2);
                     respawnTile.position.set(rX, rY);

@@ -6,8 +6,8 @@ import RespawnStore from '../../stores/RespawnStore';
 import DisplayStore from '../../stores/DisplayStore';
 
 export default class Respawn extends Sprite {
-    constructor(name, coord) {
-        super(Resources.getTexture(name));
+    constructor(respawnName, unitName, coord, managed) {
+        super(Resources.getTexture(respawnName));
 
         this.type = 'respawn';
 
@@ -49,8 +49,8 @@ export default class Respawn extends Sprite {
         this._respawnMyUnit({
 
             // TODO: Должно генериться из настроек уровня для текущей команды
-            name: "blue-tank.png",
-            managed: true
+            name: unitName,
+            managed: managed
         });
     }
 
@@ -69,6 +69,10 @@ export default class Respawn extends Sprite {
         let tank = new Tank(unitProps.name, unitProps.managed);
         tank.position.set(this.startPosition.x, this.startPosition.y);
         tank.respawnGUID = this.guid;
+        if (!unitProps.managed) {
+            tank.enableBotMode();
+            tank.enableFireMode();
+        }
         DisplayStore.create(tank);
     }
 }
