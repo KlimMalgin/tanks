@@ -95,14 +95,14 @@
         [
             {
                 "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
                 "building": "",
                 "respawn": {
                     "team": 1
                 }
-            },
-            {
-                "surface": "ground",
-                "building": ""
             },
             {
                 "surface": "ground",
@@ -174,12 +174,12 @@
             {
                 "surface": "ground"
             },
+            {},
             {
                 "respawn": {
                     "team": 1
                 }
             },
-            {},
             {
                 "surface": "ground"
             }

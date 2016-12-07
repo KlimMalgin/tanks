@@ -51,7 +51,7 @@ export default class Respawn extends Sprite {
             // TODO: Должно генериться из настроек уровня для текущей команды
             name: unitName,
             managed: managed
-        });
+        }, 0);
     }
 
     destructor() {}
@@ -64,15 +64,17 @@ export default class Respawn extends Sprite {
     /**
      * Пересоздать юнита связанного с текущей respawn-точкой
      */
-    _respawnMyUnit(unitProps) {
-        console.log('Пересоздаем юнит типа %o на респауне № %o в координатах %o %o // bounds: %o', unitProps && unitProps.type, this.guid, this.startPosition.x, this.startPosition.y, this.getBounds());
-        let tank = new Tank(unitProps.name, unitProps.managed);
-        tank.position.set(this.startPosition.x, this.startPosition.y);
-        tank.respawnGUID = this.guid;
-        if (!unitProps.managed) {
-            tank.enableBotMode();
-            tank.enableFireMode();
-        }
-        DisplayStore.create(tank);
+    _respawnMyUnit(unitProps, delay = 2500) {
+        setTimeout(() => {
+            console.log('Пересоздаем юнит типа %o на респауне № %o в координатах %o %o // bounds: %o', unitProps && unitProps.type, this.guid, this.startPosition.x, this.startPosition.y, this.getBounds());
+            let tank = new Tank(unitProps.name, unitProps.managed);
+            tank.position.set(this.startPosition.x, this.startPosition.y);
+            tank.respawnGUID = this.guid;
+            /*if (!unitProps.managed) {
+                tank.enableBotMode();
+                tank.enableFireMode();
+            }*/
+            DisplayStore.create(tank);
+        }, delay);
     }
 }

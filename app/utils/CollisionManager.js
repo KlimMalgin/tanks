@@ -110,9 +110,17 @@ class CollisionManager {
 
                 //There's definitely a collision happening
                 //hit = true;
+                let collisionSide = null;
+
+                if      (vx >= vy && Math.abs(vx) >= Math.abs(vy)) { collisionSide = "left"; }
+                else if (vx <= vy && Math.abs(vx) >= Math.abs(vy)) { collisionSide = "right"; }
+                else if (vx <= vy && Math.abs(vx) <= Math.abs(vy)) { collisionSide = "up"; }
+                else if (vx >= vy && Math.abs(vx) <= Math.abs(vy)) { collisionSide = "down"; }
+
                 hit = {
                     vx,
                     vy,
+                    collisionSide: collisionSide,
                     xDirection: vx <= 0 ? 'right' : 'left',
                     yDirection: vy <= 0 ? 'down' : 'up'
                 };

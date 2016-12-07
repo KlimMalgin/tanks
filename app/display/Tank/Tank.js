@@ -266,11 +266,8 @@ export default class Tank extends AnimatedSprite {
         if (collisionList.length) {
             //console.log('Коллизия Танк-Танк ', collisionList);
             collisionList.forEach((collisionObject) => {
-                console.log('Коллизия %o %o %o %o', collisionObject.collision, this.rotatePosition, collisionObject.collision.xDirection, collisionObject.collision.yDirection);
-                if (this.rotatePosition == collisionObject.collision.xDirection ||
-                    this.rotatePosition == collisionObject.collision.yDirection) {
-                        this.stop();
-                    }
+                console.log('Коллизия %o tankDirection: %o collision: %o vx: %o vy: %o', collisionObject.collision, this.rotatePosition, collisionObject.collision.collisionSide, collisionObject.collision.vx, collisionObject.collision.vy);
+                if (this.rotatePosition == collisionObject.collision.collisionSide) { this.stop(); }
             });
         }
     }
