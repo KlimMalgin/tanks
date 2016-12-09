@@ -5,7 +5,7 @@ import { Wall } from '../landscape';
 import DisplayStore from '../../stores/DisplayStore';
 import RespawnStore from '../../stores/RespawnStore';
 
-import { testLevel, levelFactory } from '../../level';
+import { LevelCompiler, testLevelData, levelFactory } from '../../level';
 
 /**
  * Main App Display Object
@@ -38,7 +38,7 @@ export default class App extends ScaledContainer {
         });
 
 
-        let level = levelFactory(testLevel),
+        let level = levelFactory(new LevelCompiler(testLevelData)),
             ground = level.ground(),
             buildings = level.buildings(),
             respawn = level.respawn();

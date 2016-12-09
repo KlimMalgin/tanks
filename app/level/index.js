@@ -1,13 +1,14 @@
 
-import testLevel from './data.json';
+import testLevelData from './data.json';
 import LevelBuilder from './Builder';
+import LevelCompiler from './LevelCompiler';
 
 let levelParams = {
-    stageWidth: testLevel.width * testLevel.tileSize,
-    stageHeight: testLevel.height * testLevel.tileSize
+    stageWidth: testLevelData.width * testLevelData.tileSize,
+    stageHeight: testLevelData.height * testLevelData.tileSize
 };
 
-export { testLevel, levelParams };
+export { LevelCompiler, testLevelData, levelParams };
 
 export function levelFactory(levelData) {
     return new LevelBuilder(levelData);

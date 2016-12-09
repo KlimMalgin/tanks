@@ -14,12 +14,14 @@
         "0": {
             "respawnSprite": "respawn",
             "unitSprite": "blueTank",
-            "managed": true
+            "managed": true,
+            "team": 0
         },
         "1": {
             "respawnSprite": "respawn",
             "unitSprite": "greenTank",
-            "managed": false
+            "managed": false,
+            "team": 1
         }
     },
     "map": [

@@ -5,18 +5,15 @@ import Resources from '../resources/Resources';
 import DisplayStore from '../stores/DisplayStore';
 
 export default class LevelBuilder {
-    constructor(levelData) {
-        this.levelData = levelData;
+    constructor(level) {
+        this.level = level;
 
-        //debugger;
-        //console.log('DisplayGroup: ', DisplayGroup);
         this._createLayers();
-        //this._createLevelElements(levelData);
     }
 
     _createLayers() {
-        let containerWidth = this.levelData.width * this.levelData.tileSize,
-            containerHeight = this.levelData.height * this.levelData.tileSize;
+        let containerWidth = this.level.data.width * this.level.data.tileSize,
+            containerHeight = this.level.data.height * this.level.data.tileSize;
 
         this.backgroundLayer = new ScaledContainer(containerWidth, containerHeight);
         this.buildingsLayer = new ScaledContainer(containerWidth, containerHeight);
@@ -24,7 +21,7 @@ export default class LevelBuilder {
     }
 
     createLevelElements() {
-        let levelData = this.levelData,
+        let levelData = this.level.data,
             surfaceTile = null,
             buildingTile = null,
             respawnTile = null;
