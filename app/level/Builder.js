@@ -22,14 +22,12 @@ export default class LevelBuilder {
 
     createLevelElements() {
         let levelData = this.level.data,
+            level = this.level,
             surfaceTile = null,
             buildingTile = null,
             respawnTile = null;
 
         let teams = levelData.teams;
-
-
-        console.log('tileSize: ', levelData.tileSize);
 
         for (var y = 0; y<levelData.height; y++) {
             for (var x = 0; x<levelData.width; x++) {
@@ -40,7 +38,7 @@ export default class LevelBuilder {
                     map = levelData.map,
                     textureFile = (name) => levelData.spriteHash[name];
 
-                if (map[x] && map[x][y] && map[x][y].surface) {
+                if (this.level.hasSurface(x, y)) {
                     surfaceTile = new Sprite(Resources.getTexture(textureFile(map[x][y].surface)));
                     surfaceTile.position.set(coord.x, coord.y);
 

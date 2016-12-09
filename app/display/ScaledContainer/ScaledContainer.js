@@ -70,7 +70,7 @@ export default class ScaledContainer extends Container {
         this.position.y = 0;      //this.position.y = offsetY;
         this.scale = scale;
 
-        console.log('ScaledContainer::resizeHandler', rw, rh, offsetX, offsetY, scale);
+        //console.log('ScaledContainer::resizeHandler', rw, rh, offsetX, offsetY, scale);
     }
 
 }
