@@ -42,32 +42,30 @@ export default class LevelBuilder {
                     surfaceTile = new Sprite(Resources.getTexture(textureFile(map[x][y].surface)));
                     surfaceTile.position.set(coord.x, coord.y);
 
-                    //surfaceTile.displayGroup = bgDG;
                     // Фон не реализует никаких действий, поэтому можно добавить его напрямую в контейнер
                     this.backgroundLayer.addChild(surfaceTile);
                 }
 
-                if (map[x] && map[x][y] && map[x][y].building) {
+                if (this.level.hasBuilding(x, y)) {
                     buildingTile = new Wall(textureFile(map[x][y].building));
                     buildingTile.position.set(
                         coord.x + (buildingTile.width / 2),
                         coord.y + (buildingTile.height / 2)
                     );
-                    //buildingTile.displayGroup = buildDG;
+
                     DisplayStore.create(buildingTile, this.buildingsLayer);
                 }
 
-                if (map[x] && map[x][y] && map[x][y].respawn) {
+                if (this.level.hasRespawn(x, y)) {
                     let rX, rY,
-                        team = teams[map[x][y].respawn.team];
+                        teamId = map[x][y].respawn.teamId;
 
-                    respawnTile = new Respawn(textureFile(team.respawnSprite), textureFile(team.unitSprite), coord, team.managed);
+                    respawnTile = new Respawn(level.getTeamData(teamId), coord);
                     rX = coord.x + (respawnTile.width / 2),
                     rY = coord.y + (respawnTile.height / 2);
                     respawnTile.position.set(rX, rY);
 
                     // todo: хак для сохранения позиции респауна на поле. Внутри респауна почему-то всегда нулевой position-объект
-                    //respawnTile.startPosition = { x: rX, y: rY };
                     DisplayStore.create(respawnTile, this.respawnsLayer);
                 }
             }

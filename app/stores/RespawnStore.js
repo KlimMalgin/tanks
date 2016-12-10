@@ -28,9 +28,7 @@ class RespawnStore extends EventEmitter {
       this.freelyRespawns = {
         [unit.respawnGUID]: {
           respawnGUID: unit.respawnGUID,
-          type: unit.type,
-          managed: unit.managed,
-          name: unit.$name
+          teamData: unit.teamData
         }
       };
     }

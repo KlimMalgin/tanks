@@ -14,10 +14,10 @@ export default class Tank extends AnimatedSprite {
      * @param {String} name Текстовое наименование спрайта
      * @param {Boolean} managed Управляемый танк или нет {true|false}
      */
-    constructor(name, managed) {
+    constructor(teamData) {
         let frames = [];
 
-        frames.push(Resources.getTexture(name));
+        frames.push(Resources.getTexture(teamData.unitSprite));
         frames.push(Resources.getTexture('bang1.png'));
         frames.push(Resources.getTexture('bang2.png'));
         frames.push(Resources.getTexture('bang3.png'));
@@ -69,17 +69,22 @@ export default class Tank extends AnimatedSprite {
         /**
          * Сохраняем для респаун-точки
          */
-        this.$name = name;
+        //this.$name = name;
+
+        /**
+         * Данные о команде в которой находится танк
+         */
+        this.teamData = teamData;
 
         /**
          * Танк является управляемым или нет. Управляемый для
          * текущего игрока, неуправляемый - другие игроки или боты.
          */
-        this.managed = managed;
+        this.managed = teamData.managed;
 
         CollisionManager.add(this);
 
-        managed && this._listenKeyboard();
+        teamData.managed && this._listenKeyboard();
         AnimationStore.addChangeListener(this.onDrawWrapper);
 
         this.onComplete = this._afterAnimation;

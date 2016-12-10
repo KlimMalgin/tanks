@@ -6,8 +6,8 @@ import RespawnStore from '../../stores/RespawnStore';
 import DisplayStore from '../../stores/DisplayStore';
 
 export default class Respawn extends Sprite {
-    constructor(respawnName, unitName, coord, managed) {
-        super(Resources.getTexture(respawnName));
+    constructor(teamData, coord) {   //  respawnName, unitName, coord, managed
+        super(Resources.getTexture(teamData.respawnSprite));
 
         this.type = 'respawn';
 
@@ -40,18 +40,13 @@ export default class Respawn extends Sprite {
 
         RespawnStore.addFreelyListener((freelyRespawns) => {
             if (freelyRespawns[this.guid]) {
-                this._respawnMyUnit(freelyRespawns[this.guid]);
+                this._respawnMyUnit(freelyRespawns[this.guid].teamData);
             }
         });
 
         console.log('Создан респаун %o', this);
 
-        this._respawnMyUnit({
-
-            // TODO: Должно генериться из настроек уровня для текущей команды
-            name: unitName,
-            managed: managed
-        }, 0);
+        this._respawnMyUnit(teamData, 0);
     }
 
     destructor() {}
@@ -64,10 +59,10 @@ export default class Respawn extends Sprite {
     /**
      * Пересоздать юнита связанного с текущей respawn-точкой
      */
-    _respawnMyUnit(unitProps, delay = 2500) {
+    _respawnMyUnit(teamData, delay = 2500) {
         setTimeout(() => {
-            console.log('Пересоздаем юнит типа %o на респауне № %o в координатах %o %o // bounds: %o', unitProps && unitProps.type, this.guid, this.startPosition.x, this.startPosition.y, this.getBounds());
-            let tank = new Tank(unitProps.name, unitProps.managed);
+            //console.log('Пересоздаем юнит типа %o на респауне № %o в координатах %o %o // bounds: %o', unitProps && unitProps.type, this.guid, this.startPosition.x, this.startPosition.y, this.getBounds());
+            let tank = new Tank(teamData);
             tank.position.set(this.startPosition.x, this.startPosition.y);
             tank.respawnGUID = this.guid;
             /*if (!unitProps.managed) {
