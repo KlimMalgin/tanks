@@ -1,12 +1,3 @@
-
-
-
-/**
- * Helpers
- */
-//let textureFile = (name) => this.level.data.spriteHash[name];
-
-
 /**
  * Class LevelCompiler
  */

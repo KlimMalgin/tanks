@@ -2,10 +2,9 @@
  * Класс описывает одну из разновидностей снарядов - простую пулю.
  */
 import { Sprite } from 'pixi.js';
-import Resources from '../../resources/Resources.js';
+import Resources from '../../resources/Resources';
 import { config } from '../../config';
-import AnimationStore from '../../stores/AnimationStore';
-import DisplayStore from '../../stores/DisplayStore';
+import { DisplayStore, AnimationStore } from '../../stores';
 import { guid, CollisionManager } from '../../utils';
 
 export default class Bullet extends Sprite {

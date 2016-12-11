@@ -28,3 +28,16 @@ export const DESTROY_OBJECT = 'DESTROY_OBJECT';
  * связанный с respawn-точкой и можно его пересоздать.
  */
 export const RESPAWN_FREELY = 'RESPAWN_FREELY';
+
+/**
+ * Генерируется через GameStore.
+ * Уведомляет о создании команды
+ */
+export const CREATE_TEAM = 'CREATE_TEAM';
+
+/**
+ * Генерируется через GameStore.
+ * Уведомляет об обновлении команды
+ */
+export const UPDATE_TEAM = 'UPDATE_TEAM';
+

@@ -3,7 +3,7 @@
  * Все вызовы идут через этот класс.
  */
 import { Bullet } from '../display/Ammo';
-import DisplayStore from '../stores/DisplayStore';
+import { DisplayStore } from '../stores';
 
 export default class Weapon {
 
