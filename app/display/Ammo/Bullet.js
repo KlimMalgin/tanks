@@ -22,7 +22,15 @@ export default class Bullet extends Sprite {
         this.guid = guid();
         console.log('bullet guid: ', this.guid, this);
 
+        /**
+         * Данные об инициаторе выстрела
+         */
         this.parentUnit = weaponOptions.parentUnit;
+
+        /**
+         * Отдельно сохраняем teamData для снаряда. Нужно для стандартизации проверки коллизий
+         */
+        this.teamData = weaponOptions.parentUnit.teamData;
 
         this.anchor.x = 0.5;
         this.anchor.y = 0.5;
@@ -119,7 +127,7 @@ export default class Bullet extends Sprite {
          * Проверить столкновение текущего патрона со всеми танками на поле
          * @return {Boolean} Продолжать после выполнения этой функции проверять необходимость уничтожения (true) патрона или нет (false)
          */
-        let collisionList = CollisionManager.checkAll(this, [ 'tank', 'wall' ], [this.parentUnit]);
+        let collisionList = CollisionManager.checkAll(this, [ 'tank', 'wall' ], [this.parentUnit, 'self']);
 
         if (collisionList.length) {
             console.log('Коллизия Снаряд-Танк/Стена ', collisionList);

@@ -1,5 +1,3 @@
-
-
 /**
  * Класс для работы с коллизиями
  */
@@ -45,15 +43,17 @@ class CollisionManager {
         let result = [];
 
         typeForCheck.forEach((item) => {
+
             let checkingObjects = this.objects[item];
             if (checkingObjects) {
-                checkingObjects.forEach((value) => {
-                    let collision = this._test(object, value);
-                    if (!this._isExclude(value, exclude) && collision) {
-                        result.push(this._createCollisionObject(collision, value));
+                checkingObjects.forEach((subject) => {
+                    let collision = this._test(object, subject);
+                    if (!this._isExclude(subject, exclude, object.teamData) && collision) {
+                        result.push(this._createCollisionObject(collision, subject));
                     }
                 });
             }
+
         });
 
         return result;
@@ -62,12 +62,30 @@ class CollisionManager {
     /**
      * Проверит, исключается ли заданный объект из проверки коллизий
      */
-    _isExclude(object, exclude) {
+    _isExclude(subject, exclude, objectTeamData) {
         let result = false;
-        exclude.forEach(function (value) {
-            result = !result && object.guid == value.guid;
+        exclude.forEach(function (excludedItem) {
+            if (excludedItem == 'self' && subject.teamData) {
+                if (!result) {
+                    result = objectTeamData.teamId == subject.teamData.teamId;
+                }
+            } else {
+                if (!result) {
+                    result = subject.guid == excludedItem.guid;
+                }
+            }
         });
         return result;
+    }
+
+    /**
+     * Столкновение случилось с субъектом из "своей" команды?
+     */
+    _isMyTeam(object, subject) {
+        if (object.teamData.teamId === subject.teamData.teamId) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -143,7 +161,7 @@ class CollisionManager {
 
     /**
      * Создаст описание коллизии. Описание будет состоять из данных коллизии (collision)
-     * и субъекта с которым произошла коллизия (collisionSubject)
+     * и субъекта с которым произошла коллизия (subject)
      */
     _createCollisionObject(collision, subject) {
         return {
