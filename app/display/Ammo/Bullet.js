@@ -12,19 +12,18 @@ export default class Bullet extends Sprite {
 
     /**
      * Конструктор для пули
-     * @param {String} direction Направление выстрела
-     * @param {Number} speed Скорость патрона
-     * @param {Object} startPosition Содержит координаты стартовой позиции пули
+     * @param {Object} weaponOptions Данные для создания снаряда
      */
-    constructor(direction, speed, startPosition, parentUnit) {
-        super(Resources.getTexture(config.ammo.bullet));
+    constructor(weaponOptions) {
+        //direction, speed, startPosition, parentUnit
+        super(Resources.getTexture(weaponOptions.sprite));
 
         this.type = 'bullet';
 
         this.guid = guid();
         console.log('bullet guid: ', this.guid, this);
 
-        this.parentUnit = parentUnit;
+        this.parentUnit = weaponOptions.parentUnit;
 
         this.anchor.x = 0.5;
         this.anchor.y = 0.5;
@@ -45,13 +44,13 @@ export default class Bullet extends Sprite {
         /**
          * Начальное позиционирование относительно стрелявшего юнита
          */
-        this.x = startPosition.x;
-        this.y = startPosition.y;
+        this.x = weaponOptions.startPosition.x;
+        this.y = weaponOptions.startPosition.y;
 
         /**
          * Задаем направление движения
          */
-        this._setDirection(direction, speed);
+        this._setDirection(weaponOptions.direction, weaponOptions.speed);
 
         /**
          * Создаем постоянную onDraw-функцию с привязанным контекстом для

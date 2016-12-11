@@ -4,11 +4,12 @@ import LevelBuilder from './Builder';
 import LevelCompiler from './LevelCompiler';
 
 let levelParams = {
-    stageWidth: testLevelData.width * testLevelData.tileSize,
-    stageHeight: testLevelData.height * testLevelData.tileSize
-};
+        stageWidth: testLevelData.width * testLevelData.tileSize,
+        stageHeight: testLevelData.height * testLevelData.tileSize
+    },
+    levelInstance = new LevelCompiler(testLevelData);
 
-export { LevelCompiler, testLevelData, levelParams };
+export { levelInstance, levelParams };
 
 export function levelFactory(levelData) {
     return new LevelBuilder(levelData);

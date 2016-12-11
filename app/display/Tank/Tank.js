@@ -5,6 +5,7 @@ import AnimationStore from '../../stores/AnimationStore';
 import { config } from '../../config';
 import Weapon from '../../Weapon';
 import DisplayStore from '../../stores/DisplayStore';
+import { levelInstance } from '../../level';
 
 let { AnimatedSprite } = extras;
 
@@ -202,15 +203,12 @@ export default class Tank extends AnimatedSprite {
     }
 
     _fire() {
-        let weapSpartPos = this._weaponStartPosition(this.rotatePosition);
-        // TODO: Рефакторинг! Сделать Weapon.create, который будет вызывать DisplayStore
-        var bullet = Weapon.fire('Bullet', this.rotatePosition, 8, weapSpartPos, this);
-        if (bullet) {
-            console.log('Fire: %o', weapSpartPos);
-            DisplayStore.create(bullet);
-        } else {
-            console.log('Снаряд не создан');
-        }
+        Weapon.fire({
+            ...levelInstance.data.ammo.Bullet,
+            direction: this.rotatePosition,
+            startPosition: this._weaponStartPosition(this.rotatePosition),
+            parentUnit: this
+        });
     }
 
     /**

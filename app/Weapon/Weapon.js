@@ -3,27 +3,34 @@
  * Все вызовы идут через этот класс.
  */
 import { Bullet } from '../display/Ammo';
-
+import DisplayStore from '../stores/DisplayStore';
 
 export default class Weapon {
 
     /**
      * Сгенерирует выстрел. Создаст экземпляр заданного патрона, его скорость,
      * направление и прочее. И Разместит патрон на игровом поле.
-     * @param {String} type Разновидность патрона
-     * @param {String} direction Направление выстрела
-     * @param {Number} speed Скорость патрона
-     * @param {Object} startPosition Содержит координаты стартовой позиции пули
+     * @param {Object} weaponOptions Объект с данными для создания снаряда. Содержит:
+     *      - Данные из config-объекта текущего уровня
+     *      - direction {String} Направление выстрела
+     *      - startPosition {Object} Координаты стартовой точки выстрела
+     *      - parentUnit {Object} Инициатор выстрела
      */
-    static fire(type, ...args) {
-        switch (type) {
+    static fire(weaponOptions) {
+        let ammo = null;
+        switch (weaponOptions.type) {
             case 'Bullet':
-                return new Bullet(...args);
+                ammo = new Bullet(weaponOptions);
+                break;
 
             default:
                 console.error('Такого снаряда не существует!');
         }
 
-        return null;
+        if (ammo) {
+            DisplayStore.create(ammo);
+        }
+
+        return ammo;
     }
 }

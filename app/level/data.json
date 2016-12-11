@@ -3,6 +3,13 @@
     "width": 9,
     "height": 7,
     "tileSize": 84,
+    "ammo": {
+        "Bullet": {
+            "sprite": "fire.png",
+            "type": "Bullet",
+            "speed": 8
+        }
+    },
     "spriteHash": {
         "ground": "tile.png",
         "greenTank": "green-tank.png",
