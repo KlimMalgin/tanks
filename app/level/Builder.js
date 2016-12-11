@@ -1,5 +1,4 @@
 import { Sprite } from 'pixi.js';
-//import { DisplayGroup } from 'pixi-display';
 import { ScaledContainer, Wall, Respawn } from '../display';
 import Resources from '../resources/Resources';
 import DisplayStore from '../stores/DisplayStore';
@@ -28,6 +27,11 @@ export default class LevelBuilder {
             respawnTile = null;
 
         let teams = levelData.teams;
+
+        for (let team in teams) {
+            if (!teams.hasOwnProperty(team)) continue;
+            console.log('>> ', team);
+        }
 
         for (var y = 0; y<levelData.height; y++) {
             for (var x = 0; x<levelData.width; x++) {
