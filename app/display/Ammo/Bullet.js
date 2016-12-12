@@ -4,7 +4,7 @@
 import { Sprite } from 'pixi.js';
 import Resources from '../../resources/Resources';
 import { config } from '../../config';
-import { DisplayStore, AnimationStore } from '../../stores';
+import { DisplayStore, AnimationStore, GameStore } from '../../stores';
 import { guid, CollisionManager } from '../../utils';
 
 export default class Bullet extends Sprite {
@@ -127,11 +127,26 @@ export default class Bullet extends Sprite {
          * Проверить столкновение текущего патрона со всеми танками на поле
          * @return {Boolean} Продолжать после выполнения этой функции проверять необходимость уничтожения (true) патрона или нет (false)
          */
-        let collisionList = CollisionManager.checkAll(this, [ 'tank', 'wall' ], [this.parentUnit, 'self']);
+        let collisionList = CollisionManager.checkAll(this, [ 'tank', 'wall' ], [this.parentUnit, 'self']),
+            myTeam = this.teamData;
 
         if (collisionList.length) {
             console.log('Коллизия Снаряд-Танк/Стена ', collisionList);
             collisionList.forEach((collisionObject) => {
+                if (collisionObject.subject.teamData) {
+                    // Зафиксировать kill для команды стреляющего
+                    GameStore.update({
+                        teamId: this.teamId,
+                        // Статический каррированый метод для инкремента
+                        kill: GameStore.increment(1)
+                    });
+
+                    // Зафиксировать die для команды субъекта
+                    GameStore.update({
+                        teamId: collisionObject.subject.teamData.teamId,
+                        die: GameStore.increment(1)
+                    });
+                }
                 collisionObject.subject.animatedDestroy();
             });
             DisplayStore.destroy(this);

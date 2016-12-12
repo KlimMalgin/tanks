@@ -1,7 +1,7 @@
 import { Sprite } from 'pixi.js';
 import { ScaledContainer, Wall, Respawn } from '../display';
 import Resources from '../resources/Resources';
-import DisplayStore from '../stores/DisplayStore';
+import { DisplayStore, GameStore } from '../stores';
 
 export default class LevelBuilder {
     constructor(level) {
@@ -20,17 +20,17 @@ export default class LevelBuilder {
     }
 
     createLevelElements() {
-        let levelData = this.level.data,
-            level = this.level,
+        let level = this.level,
+            levelData = level.data,
             surfaceTile = null,
             buildingTile = null,
-            respawnTile = null;
+            respawnTile = null,
+            teams = {};
 
-        let teams = levelData.teams;
-
-        for (let team in teams) {
-            if (!teams.hasOwnProperty(team)) continue;
-            console.log('>> ', team);
+        for (let key in levelData.teams) {
+            if (!levelData.teams.hasOwnProperty(key)) continue;
+            teams[key] = level.getTeamData(levelData.teams[key].teamId);
+            GameStore.create(teams[key]);
         }
 
         for (var y = 0; y<levelData.height; y++) {
@@ -64,7 +64,7 @@ export default class LevelBuilder {
                     let rX, rY,
                         teamId = map[x][y].respawn.teamId;
 
-                    respawnTile = new Respawn(level.getTeamData(teamId), coord);
+                    respawnTile = new Respawn(teams[teamId], coord);
                     rX = coord.x + (respawnTile.width / 2),
                     rY = coord.y + (respawnTile.height / 2);
                     respawnTile.position.set(rX, rY);
