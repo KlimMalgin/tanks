@@ -40,6 +40,8 @@ class GameStore extends EventEmitter {
         } else {
             console.error("Такой команды не существует!")
         }
+
+        console.log('TEAMS: %o', this.teams);
     }
 
     addCreateListener(callback) {

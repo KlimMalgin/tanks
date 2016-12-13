@@ -27,6 +27,7 @@ export default class LevelBuilder {
             respawnTile = null,
             teams = {};
 
+
         for (let key in levelData.teams) {
             if (!levelData.teams.hasOwnProperty(key)) continue;
             teams[key] = level.getTeamData(levelData.teams[key].teamId);

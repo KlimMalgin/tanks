@@ -136,7 +136,7 @@ export default class Bullet extends Sprite {
                 if (collisionObject.subject.teamData) {
                     // Зафиксировать kill для команды стреляющего
                     GameStore.update({
-                        teamId: this.teamId,
+                        teamId: this.teamData.teamId,
                         // Статический каррированый метод для инкремента
                         kill: GameStore.increment(1)
                     });
