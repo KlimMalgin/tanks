@@ -39,11 +39,26 @@
             },
             {
                 "surface": "ground",
-                "building": ""
+                "building": "",
+                "respawn": {
+                    "teamId": 0,
+                    "isPlayer": true
+                }
             },
             {
                 "surface": "ground",
                 "building": "wall"
+            },
+            {
+                "surface": "ground",
+                "building": ""
+            },
+            {
+                "surface": "ground",
+                "building": "",
+                "respawn": {
+                    "teamId": 0
+                }
             },
             {
                 "surface": "ground",
@@ -108,10 +123,7 @@
             },
             {
                 "surface": "ground",
-                "building": "",
-                "respawn": {
-                    "teamId": 1
-                }
+                "building": ""
             },
             {
                 "surface": "ground",
@@ -191,6 +203,20 @@
             },
             {
                 "surface": "ground"
+            }
+        ],
+        [
+            {
+                "surface": "ground"
+            },
+            {
+                "surface": "ground"
+            },
+            {
+                "surface": "ground",
+                "respawn": {
+                    "teamId": 1
+                }
             }
         ]
     ]

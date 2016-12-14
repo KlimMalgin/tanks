@@ -11,8 +11,7 @@ let { AnimatedSprite } = extras;
 export default class Tank extends AnimatedSprite {
 
     /**
-     * @param {String} name Текстовое наименование спрайта
-     * @param {Boolean} managed Управляемый танк или нет {true|false}
+     * @param {Object} teamData config-объект для танка. Содержит данные танка и команды.
      */
     constructor(teamData) {
         let frames = [];
@@ -80,11 +79,11 @@ export default class Tank extends AnimatedSprite {
          * Танк является управляемым или нет. Управляемый для
          * текущего игрока, неуправляемый - другие игроки или боты.
          */
-        this.managed = teamData.managed;
+        this.isPlayer = teamData.isPlayer;
 
         CollisionManager.add(this);
 
-        teamData.managed && this._listenKeyboard();
+        teamData.isPlayer && this._listenKeyboard();
         AnimationStore.addChangeListener(this.onDrawWrapper);
 
         this.onComplete = this._afterAnimation;
@@ -94,7 +93,7 @@ export default class Tank extends AnimatedSprite {
         AnimationStore.removeChangeListener(this.onDrawWrapper);
         CollisionManager.remove(this);
 
-        if (this.managed) {
+        if (this.isPlayer) {
             Keyboard.removeAllListeners('down');
             Keyboard.removeAllListeners('downRelease');
             Keyboard.removeAllListeners('up');

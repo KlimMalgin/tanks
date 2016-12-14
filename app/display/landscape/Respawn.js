@@ -65,7 +65,7 @@ export default class Respawn extends Sprite {
             let tank = new Tank(teamData);
             tank.position.set(this.startPosition.x, this.startPosition.y);
             tank.respawnGUID = this.guid;
-            if (!teamData.managed) {
+            if (!teamData.isPlayer) {
                 tank.enableBotMode();
                 tank.enableFireMode();
             }

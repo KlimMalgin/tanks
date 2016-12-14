@@ -25,14 +25,10 @@ export default class LevelBuilder {
             surfaceTile = null,
             buildingTile = null,
             respawnTile = null,
-            teams = {};
-
-
-        for (let key in levelData.teams) {
-            if (!levelData.teams.hasOwnProperty(key)) continue;
-            teams[key] = level.getTeamData(levelData.teams[key].teamId);
-            GameStore.create(teams[key]);
-        }
+            teams = level.mapTeams((teamData) => {
+                GameStore.create(teamData);
+                return teamData;
+            });
 
         for (var y = 0; y<levelData.height; y++) {
             for (var x = 0; x<levelData.width; x++) {
@@ -63,9 +59,14 @@ export default class LevelBuilder {
 
                 if (this.level.hasRespawn(x, y)) {
                     let rX, rY,
-                        teamId = map[x][y].respawn.teamId;
+                        teamId = map[x][y].respawn.teamId,
+                        // TODO: Вот так костыльно объединяем конфигурацию команды с конфигурацией индивидуального респауна
+                        respawnConfig = {
+                            ...teams[teamId],
+                            ...map[x][y].respawn
+                        };
 
-                    respawnTile = new Respawn(teams[teamId], coord);
+                    respawnTile = new Respawn(respawnConfig, coord);
                     rX = coord.x + (respawnTile.width / 2),
                     rY = coord.y + (respawnTile.height / 2);
                     respawnTile.position.set(rX, rY);
