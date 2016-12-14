@@ -6,7 +6,9 @@ class LevelCompiler {
         this.data = levelData;
     }
 
-    // В указанных координатах есть описание поверхности?
+    /**
+     * В указанных координатах описана поверхность карты (земля, снег, песок и т.д.)
+     */
     hasSurface(x, y) {
         let map = this.data.map;
         if (map[x] && map[x][y] && map[x][y].surface) {
@@ -15,6 +17,9 @@ class LevelCompiler {
         return false;
     }
 
+    /**
+     * В указанных координатах описаны постройки, либо другие объекты (деревья, ящики и др.)
+     */
     hasBuilding(x, y) {
         let map = this.data.map;
         if (map[x] && map[x][y] && map[x][y].building) {
@@ -23,6 +28,9 @@ class LevelCompiler {
         return false;
     }
 
+    /**
+     * В указанных координатах есть описание респаун точки
+     */
     hasRespawn(x, y) {
         let map = this.data.map;
         if (map[x] && map[x][y] && map[x][y].respawn) {
@@ -60,6 +68,22 @@ class LevelCompiler {
         }
 
         return result;
+    }
+
+    /**
+     * Проверяет - победила команда, данные которой указаны или нет
+     * @param {Object} teamData Текущее состояние команды
+     */
+    handleVictory(teamData) {
+        let team = this.data.levelComplete.condition.team,
+            killLimit = team.kill.more;
+
+        // TODO: Хардкодный расчет победы
+        if (teamData.kill >= killLimit) {
+            return true;
+        }
+
+        return false;
     }
 
     _textureFile = (name) => this.data.spriteHash[name]

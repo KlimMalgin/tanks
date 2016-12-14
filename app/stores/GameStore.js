@@ -40,8 +40,6 @@ class GameStore extends EventEmitter {
         } else {
             console.error("Такой команды не существует!")
         }
-
-        console.log('TEAMS: %o', this.teams);
     }
 
     addCreateListener(callback) {
@@ -68,7 +66,7 @@ class GameStore extends EventEmitter {
      * будут вычислены и метод вернет объект со значениями
      *
      * TODO: Функция требует рефакторинга. Получилась какая-то магия.
-     * TODO: Как узнать какого типа параметр нужен для updateData[key]) и сколько?
+     * TODO: Как узнать какого типа параметр нужен для updateData[key]) и сколько их нужно?
      */
     _calculate(currentData, updateData) {
         let result = {

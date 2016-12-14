@@ -3,11 +3,13 @@ import { ScaledContainer, Wall, Respawn } from '../display';
 import Resources from '../resources/Resources';
 import { DisplayStore, GameStore } from '../stores';
 
+
 export default class LevelBuilder {
     constructor(level) {
         this.level = level;
 
         this._createLayers();
+        this._initLevelHandlers();
     }
 
     _createLayers() {
@@ -76,6 +78,14 @@ export default class LevelBuilder {
                 }
             }
         }
+    }
+
+    _initLevelHandlers() {
+
+        GameStore.addUpdateListener((newTeamData) => {
+            console.log('TEAM: %o %o die: %o kill: %o victory: %o', newTeamData.teamId, newTeamData, newTeamData.die, newTeamData.kill, this.level.handleVictory(newTeamData));
+        });
+
     }
 
     ground() {

@@ -17,6 +17,15 @@
         "wall": "wall1.png",
         "respawn": "wall2.png"
     },
+    "levelComplete": {
+        "condition": {
+            "team": {
+                "kill": {
+                    "more": 50
+                }
+            }
+        }
+    },
     "teams": {
         "0": {
             "respawnSprite": "respawn",
