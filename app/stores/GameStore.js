@@ -1,5 +1,5 @@
 import EventEmitter from 'events';
-import { CREATE_TEAM, UPDATE_TEAM } from '../constants/AppConstants';
+import { CREATE_TEAM, UPDATE_TEAM, GAMEOVER } from '../constants/AppConstants';
 import { isFunction } from '../utils';
 
 
@@ -14,6 +14,11 @@ class GameStore extends EventEmitter {
          * Команды, задействованные в текущей игре
          */
         this.teams = {};
+
+        /**
+         * Игра окончена или нет
+         */
+        this.gameoverState = false;
     }
 
     /**
@@ -42,12 +47,28 @@ class GameStore extends EventEmitter {
         }
     }
 
+    /**
+     * Генерирует событие окончания раунда
+     */
+    gameover() {
+        this.gameoverState = true;
+        this.emit(GAMEOVER, this.gameoverState);
+    }
+
+    addGameoverListener(callback) {
+        this.on(GAMEOVER, callback);
+    }
+
     addCreateListener(callback) {
         this.on(CREATE_TEAM, callback);
     }
 
     addUpdateListener(callback) {
         this.on(UPDATE_TEAM, callback);
+    }
+
+    removeGameoverListeners() {
+        this.removeAllListeners(GAMEOVER);
     }
 
     /**

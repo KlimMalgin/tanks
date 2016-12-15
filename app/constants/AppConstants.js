@@ -41,3 +41,8 @@ export const CREATE_TEAM = 'CREATE_TEAM';
  */
 export const UPDATE_TEAM = 'UPDATE_TEAM';
 
+/**
+ * Генерируется через GameStore.
+ * Событие окончания игры.
+ */
+export const GAMEOVER = 'GAMEOVER';

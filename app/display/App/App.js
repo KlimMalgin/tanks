@@ -1,10 +1,7 @@
 import { ScaledContainer } from '../../display';
-//import Background from '../Background/Background.js';
 import Tank from '../Tank/Tank';
 import { Wall } from '../landscape';
-import DisplayStore from '../../stores/DisplayStore';
-import RespawnStore from '../../stores/RespawnStore';
-
+import { RespawnStore, DisplayStore } from '../../stores';
 import { levelInstance, levelFactory } from '../../level';
 
 /**

@@ -9,7 +9,9 @@
 import {config} from './config';
 import Renderer from './Renderer/Renderer';
 import App from './display/App/App';
+import GameOver from './display/App/GameOver';
 import Resources from './resources/Resources';
+import { GameStore } from './stores';
 //import AnimationStore from './stores/AnimationStore';
 //import TWEEN from 'tween.js';
 
@@ -33,5 +35,10 @@ Resources.load(() => {
     const app = new App(config.stageWidth, config.stageHeight);
     renderer.addRenderable(app);
     renderer.start();
+});
 
+GameStore.addGameoverListener(() => {
+    let go = new GameOver(config.stageWidth, config.stageHeight);
+    renderer.removeRenderable(app);
+    renderer.addRenderable(go);
 });

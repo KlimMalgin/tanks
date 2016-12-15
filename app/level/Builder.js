@@ -84,6 +84,12 @@ export default class LevelBuilder {
 
         GameStore.addUpdateListener((newTeamData) => {
             console.log('TEAM: %o %o die: %o kill: %o victory: %o', newTeamData.teamId, newTeamData, newTeamData.die, newTeamData.kill, this.level.handleVictory(newTeamData));
+
+            if (this.level.handleVictory(newTeamData)) {
+                GameStore.gameover();
+                GameStore.removeGameoverListeners();
+            }
+
         });
 
     }
