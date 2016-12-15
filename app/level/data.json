@@ -21,7 +21,7 @@
         "condition": {
             "team": {
                 "kill": {
-                    "more": 50
+                    "more": 10
                 }
             }
         }

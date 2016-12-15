@@ -3,7 +3,7 @@ import Resources from '../../resources/Resources.js';
 import { Keyboard, guid, CollisionManager } from '../../utils';
 import { config } from '../../config';
 import Weapon from '../../Weapon';
-import { DisplayStore, AnimationStore } from '../../stores';
+import { DisplayStore, AnimationStore, GameStore } from '../../stores';
 import { levelInstance } from '../../level';
 
 let { AnimatedSprite } = extras;
@@ -284,18 +284,21 @@ export default class Tank extends AnimatedSprite {
             changeDirectionMs = 1500;
 
         let intrId = setInterval(() => {
-            this.stop();
-            if (xyRand() == 1) this.go('up');
-            else if (xyRand() == 2) this.go('right');
-            else if (xyRand() == 3) this.go('down');
-            else if (xyRand() == 4) this.go('left');
-        }, changeDirectionMs);
+                this.stop();
+                if (xyRand() == 1) this.go('up');
+                else if (xyRand() == 2) this.go('right');
+                else if (xyRand() == 3) this.go('down');
+                else if (xyRand() == 4) this.go('left');
+            }, changeDirectionMs);
 
         // TODO: Нужно сделать once-подписку в сторах!!
         DisplayStore.addDestroyListener((objectInstance) => {
             if (objectInstance.guid == this.guid) {
                 clearInterval(intrId);
             }
+        });
+        GameStore.addGameoverListener(() => {
+            clearInterval(intrId);
         });
     }
 
@@ -305,14 +308,17 @@ export default class Tank extends AnimatedSprite {
     enableFireMode() {
         let fireMs = 1500,
             intrId = setInterval(() => {
-            this._fire();
-        }, fireMs);
+                this._fire();
+            }, fireMs);
 
-        // TODO: Нужно сделать once-подписку в сторах!!
+        // TODO: once-подписка не подходит, нужно отписываться при уничтожении
         DisplayStore.addDestroyListener((objectInstance) => {
             if (objectInstance.guid == this.guid) {
                 clearInterval(intrId);
             }
+        });
+        GameStore.addGameoverListener(() => {
+            clearInterval(intrId);
         });
     }
 

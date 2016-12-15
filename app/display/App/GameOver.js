@@ -5,6 +5,9 @@ export default class GameOver extends ScaledContainer {
 
     constructor(...args) {
         super(...args);
+
+        //this.alpha = 0.5;
+
         this.createText(...args);
     }
 

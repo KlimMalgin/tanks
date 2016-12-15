@@ -35,6 +35,10 @@ class DisplayStore extends EventEmitter {
     addDestroyListener(callback) {
         this.on(DESTROY_OBJECT, callback);
     }
+
+    onceDestroyListener(callback) {
+        this.once(DESTROY_OBJECT, callback);
+    }
 }
 
 export default new DisplayStore();

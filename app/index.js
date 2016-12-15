@@ -15,15 +15,19 @@ import { GameStore } from './stores';
 //import AnimationStore from './stores/AnimationStore';
 //import TWEEN from 'tween.js';
 
+let appScreens = {
+    level: null,
+    gameover: null
+};
 
 const renderer = new Renderer(config.stageWidth, config.stageHeight);
-const app = document.getElementById('app');
+const applicationContainer = document.getElementById('app');
 
-app.setAttribute("style","width:"+config.stageWidth+"px;height:"+config.stageHeight+"px;");
-app.style.width=config.stageWidth+'px';
-app.style.height=config.stageHeight+'px';
+applicationContainer.setAttribute("style","width:"+config.stageWidth+"px;height:"+config.stageHeight+"px;");
+applicationContainer.style.width=config.stageWidth+'px';
+applicationContainer.style.height=config.stageHeight+'px';
 
-app.appendChild(renderer.view);
+applicationContainer.appendChild(renderer.view);
 
 //AnimationStore.addChangeListener(() => TWEEN.update());
 
@@ -32,13 +36,14 @@ console.time('Resources');
 Resources.load(() => {
     console.timeEnd('Resources');
 
-    const app = new App(config.stageWidth, config.stageHeight);
-    renderer.addRenderable(app);
+    appScreens.level = new App(config.stageWidth, config.stageHeight);
+    renderer.addRenderable(appScreens.level);
     renderer.start();
 });
 
 GameStore.addGameoverListener(() => {
-    let go = new GameOver(config.stageWidth, config.stageHeight);
-    renderer.removeRenderable(app);
-    renderer.addRenderable(go);
+    renderer.stop();
+    appScreens.gameover = new GameOver(config.stageWidth, config.stageHeight);
+    renderer.removeRenderable(appScreens.level);
+    renderer.addRenderable(appScreens.gameover);
 });

@@ -59,6 +59,10 @@ class GameStore extends EventEmitter {
         this.on(GAMEOVER, callback);
     }
 
+    onceGameoverListener(callback) {
+        this.once(GAMEOVER, callback);
+    }
+
     addCreateListener(callback) {
         this.on(CREATE_TEAM, callback);
     }
