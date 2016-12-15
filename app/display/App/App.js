@@ -38,11 +38,13 @@ export default class App extends ScaledContainer {
         let level = levelFactory(levelInstance),
             ground = level.ground(),
             buildings = level.buildings(),
-            respawn = level.respawn();
+            respawn = level.respawn(),
+            info = level.info();
 
         this.addChild(ground);
         this.addChild(buildings);
         this.addChild(respawn);
+        this.addChild(info);
 
         level.createLevelElements();
 

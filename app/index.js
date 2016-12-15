@@ -36,6 +36,9 @@ console.time('Resources');
 Resources.load(() => {
     console.timeEnd('Resources');
 
+    /*appScreens.gameover = new GameOver(config.stageWidth, config.stageHeight);
+    renderer.addRenderable(appScreens.gameover);*/
+
     appScreens.level = new App(config.stageWidth, config.stageHeight);
     renderer.addRenderable(appScreens.level);
     renderer.start();
