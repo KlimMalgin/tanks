@@ -30,8 +30,10 @@ export default class Wall extends AnimatedSprite {
         this.loop = false;
         this.animationSpeed = 0.21;
 
-        //this.width = this.width / 2;
-        //this.height = this.height / 2;
+        /**
+         * Объект находится в процессе удаления
+         */
+        this.isDestroyProcess = false;
 
         /**
          * Создаем постоянную onDraw-функцию с привязанным контекстом для
@@ -60,6 +62,7 @@ export default class Wall extends AnimatedSprite {
      * Запустит анимацию уничтожения, по окончанию которой объект будет уничтожен
      */
     animatedDestroy() {
+        this.isDestroyProcess = true;
         this.play();
     }
 

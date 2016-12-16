@@ -36,8 +36,15 @@ export default class Tank extends AnimatedSprite {
         this.loop = false;
         this.animationSpeed = 0.21;
 
-        //this.width = this.width / 2;
-        //this.height = this.height / 2;
+        /**
+         * Дает понять, что объект является юнитом
+         */
+        this.isUnit = true;
+
+        /**
+         * Объект находится в процессе удаления
+         */
+        this.isDestroyProcess = false;
 
         /**
          * Текущий угол поворота танка
@@ -112,32 +119,34 @@ export default class Tank extends AnimatedSprite {
      * @param {Number} velocity Ускорение. По умолчанию == 2
      */
     go(direction, velocity = 2) {
-        var rotateAngle = Math.PI / 2;
-        this.stop();
-        switch (direction) {
-            case 'up':
-                this.rotation = rotateAngle * 0;
-                this.rotatePosition = direction;
-                this.vy -= velocity;
-                break;
+        if (this.isDestroyProcess == false) {
+            var rotateAngle = Math.PI / 2;
+            this.stop();
+            switch (direction) {
+                case 'up':
+                    this.rotation = rotateAngle * 0;
+                    this.rotatePosition = direction;
+                    this.vy -= velocity;
+                    break;
 
-            case 'down':
-                this.rotation = rotateAngle * -2;
-                this.rotatePosition = direction;
-                this.vy += velocity;
-                break;
+                case 'down':
+                    this.rotation = rotateAngle * -2;
+                    this.rotatePosition = direction;
+                    this.vy += velocity;
+                    break;
 
-            case 'left':
-                this.rotation = rotateAngle * -1;
-                this.rotatePosition = direction;
-                this.vx -= velocity;
-                break;
+                case 'left':
+                    this.rotation = rotateAngle * -1;
+                    this.rotatePosition = direction;
+                    this.vx -= velocity;
+                    break;
 
-            case 'right':
-                this.rotation = rotateAngle * 1;
-                this.rotatePosition = direction;
-                this.vx += velocity;
-                break;
+                case 'right':
+                    this.rotation = rotateAngle * 1;
+                    this.rotatePosition = direction;
+                    this.vx += velocity;
+                    break;
+            }
         }
     }
 
@@ -164,6 +173,7 @@ export default class Tank extends AnimatedSprite {
      */
     animatedDestroy() {
         // TODO: Не останавливает движение?
+        this.isDestroyProcess = true;
         this.stop();
         this.play();
     }
@@ -201,12 +211,14 @@ export default class Tank extends AnimatedSprite {
     }
 
     _fire() {
-        Weapon.fire({
-            ...levelInstance.data.ammo.Bullet,
-            direction: this.rotatePosition,
-            startPosition: this._weaponStartPosition(this.rotatePosition),
-            parentUnit: this
-        });
+        if (this.isDestroyProcess == false) {
+            Weapon.fire({
+                ...levelInstance.data.ammo.Bullet,
+                direction: this.rotatePosition,
+                startPosition: this._weaponStartPosition(this.rotatePosition),
+                parentUnit: this
+            });
+        }
     }
 
     /**

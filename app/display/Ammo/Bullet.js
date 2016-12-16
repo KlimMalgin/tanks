@@ -127,13 +127,12 @@ export default class Bullet extends Sprite {
          * Проверить столкновение текущего патрона со всеми танками на поле
          * @return {Boolean} Продолжать после выполнения этой функции проверять необходимость уничтожения (true) патрона или нет (false)
          */
-        let collisionList = CollisionManager.checkAll(this, [ 'tank', 'wall' ], [this.parentUnit, 'self']),
-            myTeam = this.teamData;
+        let collisionList = CollisionManager.checkAll(this, [ 'tank', 'wall' ], [this.parentUnit, 'self']);
 
         if (collisionList.length) {
             console.log('Коллизия Снаряд-Танк/Стена ', collisionList);
             collisionList.forEach((collisionObject) => {
-                if (collisionObject.subject.teamData) {
+                if (collisionObject.subject.isUnit && !collisionObject.subject.isDestroyProcess) {
                     // Зафиксировать kill для команды стреляющего
                     GameStore.update({
                         teamId: this.teamData.teamId,
