@@ -6,10 +6,7 @@ export default class GameOver extends ScaledContainer {
     constructor(...args) {
         super(...args);
 
-        //this.alpha = 0.5;
-
         this.createText(...args);
-        //this.createScoreText(...args);
     }
 
     createText(...args) {
@@ -39,38 +36,4 @@ export default class GameOver extends ScaledContainer {
         this.addChild(richText);
     }
 
-    createScoreText(...args) {
-        var styleGreen = {
-                fontFamily : 'Arial',
-                fontSize : '16px',
-                fontWeight : 'bold',
-                fill : '#00ED00',
-                stroke : '#4a1850',
-                strokeThickness : 5
-            },
-            styleBlue = {
-                fontFamily : 'Arial',
-                fontSize : '16px',
-                fontWeight : 'bold',
-                fill : '#a0bff5',
-                stroke : '#4a1850',
-                strokeThickness : 5
-            };
-
-        let scoreTextGreen = new Text('54', styleGreen),
-            scoreTextBlue = new Text('54', styleBlue);
-
-        scoreTextGreen.anchor.x = 0.5;
-        scoreTextGreen.anchor.y = 0.5;
-        scoreTextGreen.x = 150;
-        scoreTextGreen.y = 15;
-
-        scoreTextBlue.anchor.x = 0.5;
-        scoreTextBlue.anchor.y = 0.5;
-        scoreTextBlue.x = args[0] - 150;
-        scoreTextBlue.y = 15;
-
-        this.addChild(scoreTextGreen);
-        this.addChild(scoreTextBlue);
-    }
 }
