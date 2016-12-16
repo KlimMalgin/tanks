@@ -172,7 +172,7 @@ export default class Tank extends AnimatedSprite {
      * Запустит анимацию уничтожения, по окончанию которой объект будет уничтожен
      */
     animatedDestroy() {
-        // TODO: Не останавливает движение?
+        this._disableModes();
         this.isDestroyProcess = true;
         this.stop();
         this.play();
@@ -295,44 +295,29 @@ export default class Tank extends AnimatedSprite {
             // Каждые 5 сек меняем направление движения
             changeDirectionMs = 1500;
 
-        let intrId = setInterval(() => {
+        this.botModeIntervalId = setInterval(() => {
                 this.stop();
                 if (xyRand() == 1) this.go('up');
                 else if (xyRand() == 2) this.go('right');
                 else if (xyRand() == 3) this.go('down');
                 else if (xyRand() == 4) this.go('left');
             }, changeDirectionMs);
-
-        // TODO: Нужно сделать once-подписку в сторах!!
-        DisplayStore.addDestroyListener((objectInstance) => {
-            if (objectInstance.guid == this.guid) {
-                clearInterval(intrId);
-            }
-        });
-        GameStore.addGameoverListener(() => {
-            clearInterval(intrId);
-        });
     }
 
     /**
      * Включает режим стрельбы каждые 1.5 сек
      */
     enableFireMode() {
-        let fireMs = 1500,
-            intrId = setInterval(() => {
-                this._fire();
-            }, fireMs);
+        let fireMs = 1500;
 
-        // TODO: once-подписка не подходит, нужно отписываться при уничтожении
-        DisplayStore.addDestroyListener((objectInstance) => {
-            if (objectInstance.guid == this.guid) {
-                clearInterval(intrId);
-            }
-        });
-        GameStore.addGameoverListener(() => {
-            clearInterval(intrId);
-        });
+        this.fireModeIntervalId = setInterval(() => {
+            this._fire();
+        }, fireMs);
     }
 
+    _disableModes() {
+        this.fireModeIntervalId && clearInterval(this.fireModeIntervalId);
+        this.botModeIntervalId  && clearInterval(this.botModeIntervalId);
+    }
 
 }
