@@ -4,6 +4,16 @@ import Resources from '../resources/Resources';
 import { DisplayStore, GameStore } from '../stores';
 
 
+/**
+ *
+ * TODO: Builder должен уничтожать все дерево объектов текущего уровня по событию gameover!
+ *
+ *
+ *
+ *
+ */
+
+
 export default class LevelBuilder {
     constructor(level) {
         this.level = level;
@@ -20,7 +30,6 @@ export default class LevelBuilder {
         this.buildingsLayer = new ScaledContainer(containerWidth, containerHeight);
         this.respawnsLayer = new ScaledContainer(containerWidth, containerHeight);
         this.infoLayer = new ScaledContainer(containerWidth, containerHeight);
-
     }
 
     createLevelElements() {
@@ -130,16 +139,10 @@ export default class LevelBuilder {
         scoreTextBlue.x = 150;
         scoreTextBlue.y = 15;
 
-        //this.addChild(scoreTextGreen);
-        //this.addChild(scoreTextBlue);
-
-
         this.infoLayer.addChild(scoreTextGreen);
         this.infoLayer.addChild(scoreTextBlue);
 
         GameStore.addUpdateListener((newTeamData) => {
-            //console.log('TEAM: %o %o die: %o kill: %o victory: %o', newTeamData.teamId, newTeamData, newTeamData.die, newTeamData.kill, this.level.handleVictory(newTeamData));
-
             // TODO: Хардкод обновления очков на карте
             if (newTeamData.teamId == 0) {
                 scoreTextBlue.text = newTeamData.kill;
@@ -148,7 +151,6 @@ export default class LevelBuilder {
             if (newTeamData.teamId == 1) {
                 scoreTextGreen.text = newTeamData.kill;
             }
-
         });
     }
 
